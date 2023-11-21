@@ -4,7 +4,7 @@ namespace FIHS.Models
 {
     public class Conversation
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public DateTime Timestamp { get; set; }
         public string ApplicationUserId { get; set; }
         [JsonIgnore]

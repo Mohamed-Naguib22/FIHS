@@ -3,6 +3,8 @@ using FIHS.Dtos;
 using FIHS.Interfaces;
 using FIHS.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using static System.Net.WebRequestMethods;
 
 namespace FIHS.Services
 {
@@ -19,10 +21,21 @@ namespace FIHS.Services
             _userImageService = userImageService;
             _mapper = mapper;
         }
-
-        public async Task<UserDto> UpdateProfileAsync(string userId, UpdateProfileModel model)
+        public async Task<UserDto> GetProfileAsync(string refreshToken)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+
+            if (user == null)
+                return new UserDto { Message = "Invalid token." };
+
+            var userDto = _mapper.Map<UserDto>(user);
+            userDto.ProfilePicture = "https://localhost:7184" + user.ProfilePicture;
+            return userDto;
+        }
+
+        public async Task<UserDto> UpdateProfileAsync(string refreshToken, UpdateProfileModel model)
+        {
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
 
             if (user == null)
                 return new UserDto { Message = "Invalid token." };
@@ -44,9 +57,9 @@ namespace FIHS.Services
             var userDto = _mapper.Map<UserDto>(user);
             return userDto;
         }
-        public async Task<bool> DeleteAccountAsync(string userId)
+        public async Task<bool> DeleteAccountAsync(string refreshToken)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
 
             if (user == null)
                 return false;
@@ -58,9 +71,9 @@ namespace FIHS.Services
 
             return true;
         }
-        public async Task<bool> SetImageAsync(string userId, IFormFile imgFile)
+        public async Task<bool> SetImageAsync(string refreshToken, IFormFile imgFile)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
 
             if (user == null)
                 return false;
@@ -74,9 +87,9 @@ namespace FIHS.Services
 
             return true;
         }
-        public async Task<bool> DeleteImageAsync(string userId)
+        public async Task<bool> DeleteImageAsync(string refreshToken)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
 
             if (user == null)
                 return false;

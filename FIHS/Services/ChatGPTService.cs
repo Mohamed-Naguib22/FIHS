@@ -3,6 +3,8 @@ using OpenAI_API.Completions;
 using OpenAI_API;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FIHS.Interfaces;
+using NuGet.Common;
 
 namespace FIHS.Services
 {
@@ -10,18 +12,28 @@ namespace FIHS.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly string APIKey = "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";
-        public ChatGPTService(ApplicationDbContext context, UserManager<ApplicationUser> userManager) 
+        private readonly IConfiguration _configuration;
+
+        public ChatGPTService(ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration) 
         {
             _context= context;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
-        public async Task<bool> StartNewConversationAsync(string userId)
+        public async Task<bool> StartNewConversationAsync(string refreshToken)
         {
+            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+
+            if (user == null)
+                return false;
+
             var conversation = new Conversation
             {
-                ApplicationUserId = userId,
+                Id = Guid.NewGuid().ToString(),
+                ApplicationUserId = user.Id,
                 Timestamp= DateTime.UtcNow,
             };
 
@@ -31,11 +43,12 @@ namespace FIHS.Services
             return true;
         }
 
-        public async Task<string> AskQuestionAsync(QuestionModel questionModel, int conversationId, string userId)
+        public async Task<string> AskQuestionAsync(QuestionModel questionModel, string conversationId, string refreshToken)
         {
             try
             {
-                var openAI = new OpenAIAPI(APIKey);
+                var apiKey = _configuration["ApiKeys:ChatGPT"];
+                var openAI = new OpenAIAPI(apiKey);
                 var completion = new CompletionRequest
                 {
                     Prompt = questionModel.Question,
@@ -45,7 +58,7 @@ namespace FIHS.Services
 
                 var result = await openAI.Completions.CreateCompletionAsync(completion);
 
-                var user = await _userManager.FindByIdAsync(userId);
+                var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
 
                 if (user == null)
                     return string.Empty;
@@ -85,7 +98,7 @@ namespace FIHS.Services
                 return string.Empty;
             }
         }
-        public async Task<IEnumerable<Message>> GetConversationAsync(int conversationId)
+        public async Task<IEnumerable<Message>> GetConversationAsync(string conversationId)
         {
             var messages = await _context.Messages.
                 Where(m => m.ConversationId == conversationId)

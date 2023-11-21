@@ -3,13 +3,9 @@ using CarShopAPI.Helpers;
 using FIHS.Dtos;
 using FIHS.Interfaces;
 using FIHS.Models;
-using FIHS.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace FIHS.Controllers
 {
@@ -26,22 +22,34 @@ namespace FIHS.Controllers
             _userService = userService;
             _userManager = userManager;
         }
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfileAsync()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
 
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _userService.GetProfileAsync(refreshToken);
+
+            if (!string.IsNullOrEmpty(result.Message))
+                return BadRequest(result.Message);
+
+            return Ok(result);
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileModel model)
         {
             var refreshToken = Request.Cookies["refreshToken"];
-            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
-            var userId = user?.Id;
-            //var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-            //if (userId == null)
-            //    return BadRequest("Invalid token");
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
 
             var modelValidation = ValidationHelper<UpdateProfileModel>.Validate(model);
             if (!string.IsNullOrEmpty(modelValidation))
                 return BadRequest(modelValidation);
 
-            var result = await _userService.UpdateProfileAsync(userId, model);
+            var result = await _userService.UpdateProfileAsync(refreshToken, model);
 
             if (!string.IsNullOrEmpty(result.Message))
                 return BadRequest(result.Message);
@@ -51,11 +59,12 @@ namespace FIHS.Controllers
         [HttpDelete("deleteAccount")]
         public async Task<IActionResult> DeleteAccountAsync()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-            if (userId == null)
-                return BadRequest("Invalid token");
+            var refreshToken = Request.Cookies["refreshToken"];
 
-            var result = await _userService.DeleteAccountAsync(userId);
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _userService.DeleteAccountAsync(refreshToken);
 
             if (!result)
                 return BadRequest("Something went wrong");
@@ -65,9 +74,10 @@ namespace FIHS.Controllers
         [HttpPost("setImage")]
         public async Task<IActionResult> SetImageAsync([FromForm] IFormFile imgFile)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-            if (userId == null)
-                return BadRequest("Invalid token");
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
 
             if (imgFile == null || imgFile.Length == 0)
                 return BadRequest("Image file is required.");
@@ -78,21 +88,22 @@ namespace FIHS.Controllers
             if (imgFile.Length > _maxAllowedImageSize)
                 return BadRequest("Max allowed image size is 1MB");
 
-            var result = await _userService.SetImageAsync(userId, imgFile);
+            var result = await _userService.SetImageAsync(refreshToken, imgFile);
 
             if (!result)
-                return BadRequest("Field to set the image.");
+                return BadRequest("Faild to set the image.");
 
             return Ok("Image set successfully");
         }
         [HttpDelete("deleteImage")]
         public async Task<IActionResult> DeleteImageAsync()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-            if (userId == null)
-                return BadRequest("Invalid token");
+            var refreshToken = Request.Cookies["refreshToken"];
 
-            var result = await _userService.DeleteImageAsync(userId);
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _userService.DeleteImageAsync(refreshToken);
 
             if (!result)
                 return BadRequest("Something went wrong");

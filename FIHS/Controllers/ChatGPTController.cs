@@ -3,7 +3,7 @@ using OpenAI_API.Completions;
 using OpenAI_API;
 using FIHS.Models;
 using Microsoft.AspNetCore.Authorization;
-using FIHS.Services;
+using FIHS.Interfaces;
 
 namespace FIHS.Controllers
 {
@@ -20,11 +20,12 @@ namespace FIHS.Controllers
         [HttpGet("newConversation")]
         public async Task<IActionResult> StartNewConversationAsync()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-            if (userId == null)
-                return BadRequest("Invalid token");
+            var refreshToken = Request.Cookies["refreshToken"];
 
-            var result = await _chatGPTService.StartNewConversationAsync(userId);
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _chatGPTService.StartNewConversationAsync(refreshToken);
 
             if (!result)
                 return BadRequest("Something went wrong");
@@ -32,13 +33,19 @@ namespace FIHS.Controllers
             return Ok("Lest's Talk!!");
         }
         [HttpPost("ask/{conversationId}")]
-        public async Task<IActionResult> AskQuestionAsync([FromForm] QuestionModel questionModel, int conversationId)
+        public async Task<IActionResult> AskQuestionAsync([FromForm] QuestionModel questionModel, string conversationId)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-            if (userId == null)
-                return BadRequest("Invalid token");
+            if(!Guid.TryParse(conversationId, out Guid result))
+            {
+                return BadRequest("Invalid conversion Id");
+            }
 
-            var answer = await _chatGPTService.AskQuestionAsync(questionModel, conversationId, userId);
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var answer = await _chatGPTService.AskQuestionAsync(questionModel, conversationId, refreshToken);
 
             if (string.IsNullOrEmpty(answer))
             {
@@ -48,7 +55,7 @@ namespace FIHS.Controllers
             return Ok(answer);
         }
         [HttpGet("conversation/{conversationId}")]
-        public async Task<IActionResult> GetConversationAsync(int conversationId)
+        public async Task<IActionResult> GetConversationAsync(string conversationId)
         {
             var messages = await _chatGPTService.GetConversationAsync(conversationId);
 
