@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIHS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231122194629_PlantTypesTbl2")]
+    partial class PlantTypesTbl2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,11 +177,6 @@ namespace FIHS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("HarvistingSeason")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -196,11 +194,6 @@ namespace FIHS.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("PlantingSeason")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
                     b.Property<string>("SunlightReqs")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -212,21 +205,6 @@ namespace FIHS.Migrations
                         .IsUnique();
 
                     b.ToTable("Plants");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
-                {
-                    b.Property<int>("PlantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SoilId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlantId", "SoilId");
-
-                    b.HasIndex("SoilId");
-
-                    b.ToTable("PlantSoilTypes");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.PlantType", b =>
@@ -263,78 +241,6 @@ namespace FIHS.Migrations
                         .IsUnique();
 
                     b.ToTable("PlantTypes");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
-                {
-                    b.Property<int>("PlantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlantTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlantId", "PlantTypeId");
-
-                    b.HasIndex("PlantTypeId");
-
-                    b.ToTable("PlantTypesOfPlant");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Plant.Soil", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CationExchangeCapacity")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.Property<string>("Drainage")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.Property<string>("ImgUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MoistureRetention")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.Property<string>("NutrientContent")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.Property<string>("OrganicMatter")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.Property<string>("Structure")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.Property<string>("Texture")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.Property<string>("pHLevel")
-                        .IsRequired()
-                        .HasMaxLength(124)
-                        .HasColumnType("nvarchar(124)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Soils");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -527,44 +433,6 @@ namespace FIHS.Migrations
                         .IsRequired();
 
                     b.Navigation("Conversation");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
-                {
-                    b.HasOne("FIHS.Models.Plant.Plant", "Plant")
-                        .WithMany()
-                        .HasForeignKey("PlantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FIHS.Models.Plant.Soil", "Soil")
-                        .WithMany()
-                        .HasForeignKey("SoilId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Plant");
-
-                    b.Navigation("Soil");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
-                {
-                    b.HasOne("FIHS.Models.Plant.Plant", "Plant")
-                        .WithMany()
-                        .HasForeignKey("PlantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FIHS.Models.Plant.PlantType", "PlantType")
-                        .WithMany()
-                        .HasForeignKey("PlantTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Plant");
-
-                    b.Navigation("PlantType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
