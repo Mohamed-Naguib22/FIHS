@@ -12,6 +12,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var MohamedAlaaConnection = builder.Configuration.GetConnectionString("mohamedalaaConnection");
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
@@ -25,7 +26,7 @@ builder.Services.AddScoped<IChatGPTService, ChatGPTService>();
 builder.Services.AddScoped<IImageService<ApplicationUser>, UserImageService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)
+    options.UseSqlServer(MohamedAlaaConnection)
 );
 
 builder.Services.AddAuthentication(options =>

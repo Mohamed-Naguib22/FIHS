@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIHS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231124085032_SoilTbl")]
+    partial class SoilTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,21 +215,6 @@ namespace FIHS.Migrations
                         .IsUnique();
 
                     b.ToTable("Plants");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
-                {
-                    b.Property<int>("PlantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SoilId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlantId", "SoilId");
-
-                    b.HasIndex("SoilId");
-
-                    b.ToTable("PlantSoilTypes");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.PlantType", b =>
@@ -527,25 +515,6 @@ namespace FIHS.Migrations
                         .IsRequired();
 
                     b.Navigation("Conversation");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
-                {
-                    b.HasOne("FIHS.Models.Plant.Plant", "Plant")
-                        .WithMany()
-                        .HasForeignKey("PlantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FIHS.Models.Plant.Soil", "Soil")
-                        .WithMany()
-                        .HasForeignKey("SoilId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Plant");
-
-                    b.Navigation("Soil");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
