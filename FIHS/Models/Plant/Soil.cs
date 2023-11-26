@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FIHS.Models.Plant
 {
@@ -28,8 +29,8 @@ namespace FIHS.Models.Plant
         public string ImgUrl { get; set; }
         [NotMapped]
         public FormFile ImageFile { get; set; }
-        [ValidateNever, NotMapped]
-        public IEnumerable<Plant> Plants { get; set; }
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ICollection<PlantSoilTypes> Plants { get; set; }
 
 
     }
