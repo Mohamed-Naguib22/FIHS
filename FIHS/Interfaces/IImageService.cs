@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FIHS.Interfaces
 {
-    public interface IImageService<T> where T : class
+    public interface IImageService
     {
-        public void SetImage(T model, IFormFile? imgFile);
-        public void DeleteImage(T model);
+        public string SetImage(string ImgUrl, IFormFile? imgFile);
+        public void DeleteImage(string? ImgUrl);
     }
 }

@@ -1,13 +1,16 @@
 using FHIS.Services;
 using FIHS.Helpers;
 using FIHS.Interfaces;
+using FIHS.Interfaces.IPlant;
 using FIHS.Models;
 using FIHS.Services;
+using FIHS.Services.PlantservicesImp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +25,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 builder.Services.AddScoped<IChatGPTService, ChatGPTService>();
-builder.Services.AddScoped<IImageService<ApplicationUser>, UserImageService>();
+builder.Services.AddScoped<IImageService, UserImageService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(MohamedAlaaConnection)
@@ -50,7 +54,19 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
-
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+builder.Services.AddControllers(opt =>
+{
+    opt.AllowEmptyInputInBodyModelBinding = true;
+});
+//builder.Services.AddControllers()
+//        .AddJsonOptions(options =>
+//        {
+//            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+//        });
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();

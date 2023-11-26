@@ -9,7 +9,8 @@ namespace FIHS.Models.Plant
         [Index(nameof(Name),IsUnique = true)]
     public class Plant
     {
-        public int Id { get; set; }
+        [JsonIgnore]
+        public int? Id { get; set; }
         [Required,MaxLength(50),MinLength(2)]
         public string Name { get; set; }
         [Required, MaxLength(50), MinLength(5)]
@@ -22,7 +23,7 @@ namespace FIHS.Models.Plant
         public double AverageYield { get; set; }
         [Required, MaxLength(128), MinLength(2)]
         public string SunlightReqs { get; set; }
-        [Required, MaxLength(128), MinLength(2)]
+        [Required]
         public double IrrigationReqs { get; set; }
         [Required, MaxLength(128), MinLength(2)]
         public string PlantingSeason { get; set; }
@@ -35,10 +36,10 @@ namespace FIHS.Models.Plant
 
         [NotMapped]
         public IFormFile ImgFile { get; set; }
-        [ValidateNever, NotMapped]
-        public ICollection<PlantsTypesOfPlant> PlantTypes { get; set; }
-        [ValidateNever, NotMapped]
-        public IEnumerable<Soil> Soils { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public virtual ICollection<PlantsTypesOfPlant> PlantTypes { get; set; }
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public virtual IEnumerable<PlantSoilTypes> Soils { get; set; }
 
 
 

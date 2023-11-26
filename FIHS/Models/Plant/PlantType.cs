@@ -18,7 +18,7 @@ namespace FIHS.Models.Plant
         public string SpreadRange { get; set; }
         [Required, MaxLength(100)]
         public string LifeCycle { get; set; }
-        [ValidateNever,NotMapped,JsonIgnore]
+        [ValidateNever,JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ICollection<PlantsTypesOfPlant> Plants { get; set; }
     }
 }

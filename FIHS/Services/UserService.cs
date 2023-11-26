@@ -11,11 +11,11 @@ namespace FIHS.Services
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IImageService<ApplicationUser> _userImageService;
+        private readonly IImageService _userImageService;
         private readonly IMapper _mapper;
 
         public UserService(UserManager<ApplicationUser> userManager, 
-            IImageService<ApplicationUser> userImageService, IMapper mapper)
+            IImageService userImageService, IMapper mapper)
         {
             _userManager = userManager;
             _userImageService = userImageService;
@@ -78,7 +78,7 @@ namespace FIHS.Services
             if (user == null)
                 return false;
 
-            _userImageService.SetImage(user, imgFile);
+            user.ProfilePicture = _userImageService.SetImage(user.ProfilePicture, imgFile);
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -94,7 +94,7 @@ namespace FIHS.Services
             if (user == null)
                 return false;
 
-            _userImageService.DeleteImage(user);
+            _userImageService.DeleteImage(user.ProfilePicture);
 
             user.ProfilePicture = "\\images\\No_Image.png";
 
