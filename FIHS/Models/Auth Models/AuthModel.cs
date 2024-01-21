@@ -6,7 +6,10 @@ namespace FIHS.Models
     {
         [JsonIgnore]
         public string? Message { get; set; }
+        [JsonIgnore]
+        public bool Succeeded { get; set; }
         public bool IsAuthenticated { get; set; }
+        public bool EmailConfirmed { get; set; }
         public string? Username { get; set; }
         public string? Email { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

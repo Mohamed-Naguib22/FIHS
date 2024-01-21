@@ -3,12 +3,12 @@ using FIHS.Models;
 
 namespace FHIS.Services
 {
-    public class UserImageService : IImageService
+    public class ImageService : IImageService
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private const string DefaultImagePath = "\\images\\No_Image.png";
         private const string ImageFolderPath = "\\images\\";
-        public UserImageService(IWebHostEnvironment webHostEnvironment)
+        public ImageService(IWebHostEnvironment webHostEnvironment)
         {
             _webHostEnvironment = webHostEnvironment;
         }
@@ -26,7 +26,6 @@ namespace FHIS.Services
                 string imgExtension = Path.GetExtension(imgFile.FileName);
                 string imgName = imgGuid + imgExtension;
                 string imgUrl = ImageFolderPath + imgName;
-
 
                 string imgPath = _webHostEnvironment.WebRootPath + imgUrl;
                 using var imgStream = new FileStream(imgPath, FileMode.Create);

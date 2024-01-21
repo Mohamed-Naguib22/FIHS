@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using OpenAI_API.Completions;
-using OpenAI_API;
-using FIHS.Models;
 using Microsoft.AspNetCore.Authorization;
 using FIHS.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using FIHS.Models.ChatGPT;
 
 namespace FIHS.Controllers
 {
@@ -17,49 +16,73 @@ namespace FIHS.Controllers
         {
             _chatGPTService = chatGPTService;
         }
-        [HttpGet("newConversation")]
-        public async Task<IActionResult> StartNewConversationAsync()
+        [HttpGet("newChat")]
+        public async Task<IActionResult> NewChatAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
             if (string.IsNullOrEmpty(refreshToken))
                 return BadRequest("Token is required!");
 
-            var result = await _chatGPTService.StartNewConversationAsync(refreshToken);
+            var result = await _chatGPTService.NewChatAsync(refreshToken);
 
-            if (!result)
-                return BadRequest("Something went wrong");
-
-            return Ok("Lest's Talk!!");
+            return Ok(result);
         }
-        [HttpPost("ask/{conversationId}")]
-        public async Task<IActionResult> AskQuestionAsync([FromForm] QuestionModel questionModel, string conversationId)
+        [HttpPost("ask/{chatId}")]
+        public async Task<IActionResult> AskQuestionAsync([FromForm] QuestionModel questionModel, string chatId)
         {
-            if(!Guid.TryParse(conversationId, out Guid result))
-            {
-                return BadRequest("Invalid conversion Id");
-            }
+            if (string.IsNullOrEmpty(chatId) || !Guid.TryParse(chatId, out _))
+                return BadRequest("Invalid chat Id");
+
+            if (questionModel == null)
+                return BadRequest("Querstion is required!");
 
             var refreshToken = Request.Cookies["refreshToken"];
 
             if (string.IsNullOrEmpty(refreshToken))
                 return BadRequest("Token is required!");
 
-            var answer = await _chatGPTService.AskQuestionAsync(questionModel, conversationId, refreshToken);
+            var result = await _chatGPTService.AskQuestionAsync(questionModel, chatId, refreshToken);
 
-            if (string.IsNullOrEmpty(answer))
-            {
-                return StatusCode(503, "Chat GPT service is unavailable");
-            }
+            if (!string.IsNullOrEmpty(result.Message))
+                return StatusCode(result.StatusCode, result.Message);
 
-            return Ok(answer);
+            return Ok(result);
         }
-        [HttpGet("conversation/{conversationId}")]
-        public async Task<IActionResult> GetConversationAsync(string conversationId)
+        [HttpGet("userChats")]
+        public async Task<IActionResult> GetUserChatsAsync()
         {
-            var messages = await _chatGPTService.GetConversationAsync(conversationId);
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var chats = await _chatGPTService.GetUserChatsAsync(refreshToken);
+
+            return Ok(chats);
+        }
+        [HttpGet("getChat/{chatId}")]
+        public async Task<IActionResult> GetChatAsync(string chatId)
+        {
+            if (string.IsNullOrEmpty(chatId) || !Guid.TryParse(chatId, out _))
+                return BadRequest("Invalid chat Id");
+
+            var messages = await _chatGPTService.GetChatAsync(chatId);
 
             return Ok(messages);
+        }
+        [HttpDelete("deleteChat/{chatId}")]
+        public async Task<IActionResult> DeleteChatAsync(string chatId)
+        {
+            if (string.IsNullOrEmpty(chatId) || !Guid.TryParse(chatId, out _))
+                return BadRequest("Invalid chat Id");
+
+            var result = await _chatGPTService.DeleteChatAsync(chatId);
+
+            if (result.IsNullOrEmpty())
+                return NotFound("Chat is not found");
+
+            return Ok(result);
         }
     }
 }

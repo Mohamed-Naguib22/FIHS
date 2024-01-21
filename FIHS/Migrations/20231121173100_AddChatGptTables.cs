@@ -12,7 +12,7 @@ namespace FIHS.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Conversations",
+                name: "Chats",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -21,9 +21,9 @@ namespace FIHS.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Conversations", x => x.Id);
+                    table.PrimaryKey("PK_Chats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Conversations_Users_ApplicationUserId",
+                        name: "FK_Chats_Users_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalSchema: "security",
                         principalTable: "Users",
@@ -40,28 +40,28 @@ namespace FIHS.Migrations
                     Sender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ConversationId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ChatId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Conversations_ConversationId",
-                        column: x => x.ConversationId,
-                        principalTable: "Conversations",
+                        name: "FK_Messages_Chats_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conversations_ApplicationUserId",
-                table: "Conversations",
+                name: "IX_Chats_ApplicationUserId",
+                table: "Chats",
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ConversationId",
+                name: "IX_Messages_ChatId",
                 table: "Messages",
-                column: "ConversationId");
+                column: "ChatId");
         }
 
         /// <inheritdoc />
@@ -71,7 +71,7 @@ namespace FIHS.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "Conversations");
+                name: "Chats");
         }
     }
 }

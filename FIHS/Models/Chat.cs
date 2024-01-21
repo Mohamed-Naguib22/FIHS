@@ -2,10 +2,11 @@
 
 namespace FIHS.Models
 {
-    public class Conversation
+    public class Chat
     {
         public string Id { get; set; }
         public DateTime Timestamp { get; set; }
+        [JsonIgnore]
         public string ApplicationUserId { get; set; }
         [JsonIgnore]
         public ApplicationUser ApplicationUser { get; set; }

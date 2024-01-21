@@ -4,8 +4,9 @@ namespace FIHS.Dtos
 {
     public class ResetPasswordModel
     {
-        [StringLength(128)]
-        public string CurrentPassword { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
+        public string Token { get; set; }
         [StringLength(128)]
         public string NewPassword { get; set; }
     }

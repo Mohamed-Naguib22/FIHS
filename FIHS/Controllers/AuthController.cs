@@ -24,14 +24,52 @@ namespace FIHS.Controllers
 
             var result = await _authService.RegisterAysnc(model);
 
-            if (!result.IsAuthenticated)
+            if (!result.Succeeded)
+                return BadRequest(result.Message);
+
+            return Ok("Please check your email to verify you account");
+        }
+        [HttpPost("verifyAccout")]
+        public async Task<IActionResult> VerifyAccountAsync([FromBody] VerifyAccountModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _authService.VerifyAccountAsync(model);
+
+            if (!result.Succeeded)
                 return BadRequest(result.Message);
 
             SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
             return Ok(result);
         }
+        [HttpPost("forgetPassword")]
+        public async Task<IActionResult> ForgetPasswordAsync([FromBody] ForgetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            var result = await _authService.ForgetPasswordAsync(model);
+
+            //if (!result)
+            //    return BadRequest("User not found");
+
+            return Ok(result);
+        }
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _authService.ResetPasswordAsync(model);
+
+            if (!string.IsNullOrEmpty(result.Message))
+                return BadRequest(result.Message);
+
+            return Ok("Password reset successfully");
+        }
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] TokenrRequestModel model)
         {
@@ -48,14 +86,14 @@ namespace FIHS.Controllers
 
             return Ok(result);
         }
-        [HttpPut("resetPassword")]
-        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordModel model)
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
             if (userId == null)
                 return BadRequest("Invalid token");
 
-            var result = await _authService.ResetPasswordAsync(userId, model);
+            var result = await _authService.ChangePasswordAsync(userId, model);
 
             if (!result.IsAuthenticated)
                 return BadRequest(result.Message);

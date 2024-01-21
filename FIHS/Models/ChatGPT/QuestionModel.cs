@@ -1,4 +1,4 @@
-﻿namespace FIHS.Models
+﻿namespace FIHS.Models.ChatGPT
 {
     public class QuestionModel
     {

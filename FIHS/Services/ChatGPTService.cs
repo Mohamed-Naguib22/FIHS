@@ -4,107 +4,91 @@ using OpenAI_API;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FIHS.Interfaces;
-using NuGet.Common;
+using FIHS.Models.ChatGPT;
+using ChatGPT.Net;
+using System.Linq;
 
 namespace FIHS.Services
 {
-    public class ChatGPTService : IChatGPTService
+    public class ChatGPTService : BaseService, IChatGPTService
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
-
-        public ChatGPTService(ApplicationDbContext context, 
-            UserManager<ApplicationUser> userManager,
-            IConfiguration configuration) 
+        public ChatGPTService(IConfiguration configuration, 
+            ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager) : base(context, userManager)
         {
-            _context= context;
-            _userManager = userManager;
             _configuration = configuration;
         }
-
-        public async Task<bool> StartNewConversationAsync(string refreshToken)
+        private async Task<ApplicationUser?> GetUserByRefreshToken(string refreshToken)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+            return await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+        }
+        public async Task<Chat> NewChatAsync(string refreshToken)
+        {
+            var user = await GetUserByRefreshToken(refreshToken);
 
-            if (user == null)
-                return false;
-
-            var conversation = new Conversation
+            var chat = new Chat
             {
                 Id = Guid.NewGuid().ToString(),
-                ApplicationUserId = user.Id,
                 Timestamp= DateTime.UtcNow,
+                ApplicationUserId = user.Id
             };
 
-            await _context.Conversations.AddAsync(conversation);
+            await _context.Chats.AddAsync(chat);
             await _context.SaveChangesAsync();
             
-            return true;
+            return chat;
         }
 
-        public async Task<string> AskQuestionAsync(QuestionModel questionModel, string conversationId, string refreshToken)
+        public async Task<AnswerModel> AskQuestionAsync(QuestionModel model, string chatId, string refreshToken)
         {
-            try
-            {
-                var apiKey = _configuration["ApiKeys:ChatGPT"];
-                var openAI = new OpenAIAPI(apiKey);
-                var completion = new CompletionRequest
-                {
-                    Prompt = questionModel.Question,
-                    Model = OpenAI_API.Models.Model.DavinciText,
-                    MaxTokens = 500
-                };
+            var chat = await _context.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
 
-                var result = await openAI.Completions.CreateCompletionAsync(completion);
+            if (chat == null)
+                return new AnswerModel { Message = "Chat is not found", StatusCode = 404 };
 
-                var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+            var user = await GetUserByRefreshToken(refreshToken);
 
-                if (user == null)
-                    return string.Empty;
+            if (chat.ApplicationUserId != user.Id)
+                return new AnswerModel { Message = "Unauthorized access", StatusCode = 401 };
 
-                if (result?.Completions != null && result.Completions.Count > 0)
-                {
-                    var answer = result.Completions[0].Text;
+            var apiKey = _configuration["ApiKeys:ChatGPT"];
+            var openAi = new ChatGpt(apiKey);
+            var answer = await openAi.Ask(model.Question);
 
-                    var question = new Message
-                    {
-                        ConversationId = conversationId,
-                        Content = questionModel.Question,
-                        Sender = user.UserName,
-                        Timestamp = DateTime.UtcNow
-                    };
+            var questionMessage = new Message("Chatbot", model.Question, chatId);
+            var answerMessage = new Message(user.UserName, answer, chatId);
 
-                    var response = new Message
-                    {
-                        ConversationId = conversationId,
-                        Content = answer,
-                        Sender = "Chatbot",
-                        Timestamp = DateTime.UtcNow
-                    };
+            await _context.Messages.AddRangeAsync(questionMessage, answerMessage);
 
-                    await _context.Messages.AddAsync(question);
-                    await _context.Messages.AddAsync(response);
-                    await _context.SaveChangesAsync();
-                    return answer;
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
-            catch
-            {
-                return string.Empty;
-            }
+            await _context.SaveChangesAsync();
+            return new AnswerModel { Answer = answer }; 
         }
-        public async Task<IEnumerable<Message>> GetConversationAsync(string conversationId)
+
+        public async Task<IEnumerable<Chat>> GetUserChatsAsync(string refreshToken)
         {
-            var messages = await _context.Messages.
-                Where(m => m.ConversationId == conversationId)
-                .ToListAsync();
+            var user = await GetUserByRefreshToken(refreshToken);
+            var chats = await _context.Chats.Where(c=>c.ApplicationUserId == user.Id).ToListAsync();
+
+            return chats;
+        }
+        public async Task<IEnumerable<Message>> GetChatAsync(string chatId)
+        {
+            var messages = await _context.Messages.Where(m => m.ChatId == chatId).ToListAsync();
 
             return messages;
+        }
+        public async Task<string> DeleteChatAsync(string chatId)
+        {
+            var chat = await _context.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
+
+            if (chat == null)
+                return string.Empty;
+
+            _context.Chats.Remove(chat);
+            await _context.SaveChangesAsync();
+
+            return "The chat deleted successfully";
         }
     }
 }

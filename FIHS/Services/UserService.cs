@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FHIS.Services;
 using FIHS.Dtos;
 using FIHS.Interfaces;
 using FIHS.Models;
@@ -8,22 +9,19 @@ using static System.Net.WebRequestMethods;
 
 namespace FIHS.Services
 {
-    public class UserService : IUserService
+    public class UserService : BaseService, IUserService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IImageService _userImageService;
-        private readonly IMapper _mapper;
-
         public UserService(UserManager<ApplicationUser> userManager, 
-            IImageService userImageService, IMapper mapper)
+            IImageService imageService, IMapper mapper) : base (null, userManager, mapper, imageService)
         {
-            _userManager = userManager;
-            _userImageService = userImageService;
-            _mapper = mapper;
+        }
+        private async Task<ApplicationUser?> GetUserByRefreshToken(string refreshToken)
+        {
+            return await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
         }
         public async Task<UserDto> GetProfileAsync(string refreshToken)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+            var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return new UserDto { Message = "Invalid token." };
@@ -32,10 +30,9 @@ namespace FIHS.Services
             userDto.ProfilePicture = "https://localhost:7184" + user.ProfilePicture;
             return userDto;
         }
-
         public async Task<UserDto> UpdateProfileAsync(string refreshToken, UpdateProfileModel model)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+            var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return new UserDto { Message = "Invalid token." };
@@ -59,7 +56,7 @@ namespace FIHS.Services
         }
         public async Task<bool> DeleteAccountAsync(string refreshToken)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+            var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return false;
@@ -73,12 +70,12 @@ namespace FIHS.Services
         }
         public async Task<bool> SetImageAsync(string refreshToken, IFormFile imgFile)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+            var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return false;
 
-            user.ProfilePicture = _userImageService.SetImage(user.ProfilePicture, imgFile);
+            user.ProfilePicture = _imageService.SetImage(user.ProfilePicture, imgFile);
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -89,12 +86,12 @@ namespace FIHS.Services
         }
         public async Task<bool> DeleteImageAsync(string refreshToken)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+            var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return false;
 
-            _userImageService.DeleteImage(user.ProfilePicture);
+            _imageService.DeleteImage(user.ProfilePicture);
 
             user.ProfilePicture = "\\images\\No_Image.png";
 

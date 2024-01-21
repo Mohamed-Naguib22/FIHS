@@ -7,6 +7,7 @@ using FIHS.Services;
 using FIHS.Services.PlantservicesImp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,22 +16,29 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var MohamedAlaaConnection = builder.Configuration.GetConnectionString("mohamedalaaConnection");
+//var MohamedAlaaConnection = builder.Configuration.GetConnectionString("mohamedalaaConnection");
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>
-    (options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    (options => {
+        options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
+        options.SignIn.RequireConfirmedAccount = true;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 builder.Services.AddScoped<IChatGPTService, ChatGPTService>();
-builder.Services.AddScoped<IImageService, UserImageService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(MohamedAlaaConnection)
+    options.UseSqlServer(connectionString)
 );
 
 builder.Services.AddAuthentication(options =>
@@ -72,6 +80,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSwaggerGen();
+builder.Services.AddMemoryCache();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -25,8 +25,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<PlantsTypesOfPlant>().HasKey(ptypes => new { ptypes.PlantId, ptypes.PlantTypeId });
         modelBuilder.Entity<PlantSoilTypes>().HasKey(ps => new { ps.PlantId, ps.SoilId });
     }
-    public DbSet<Conversation> Conversations { get; set; }
+    public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Article> Articles { get; set; }
+    public DbSet<ArticleSection> ArticleSections { get; set; }
     public DbSet<Plant> Plants { get; set; }
     public DbSet<PlantType> PlantTypes { get; set; }
     public DbSet<PlantsTypesOfPlant> PlantTypesOfPlant { get; set;}

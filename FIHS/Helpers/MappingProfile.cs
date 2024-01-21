@@ -10,6 +10,8 @@ namespace FIHS.Helpers
         public MappingProfile() 
         {
             CreateMap<ApplicationUser, UserDto>();
+            CreateMap<RegisterModel, ApplicationUser>().ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src => "\\images\\No_Image.png"));
+            CreateMap<ArticleDto, Article>().ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
             CreateMap<Plant, PlantDto>();
             CreateMap<PlantsTypesOfPlant, PlantTypeDto>().IncludeMembers(src=>src.PlantType);
             CreateMap<PlantType, PlantTypeDto>();
