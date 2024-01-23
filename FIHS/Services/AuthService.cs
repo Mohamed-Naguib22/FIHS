@@ -92,6 +92,28 @@ namespace FIHS.Services
             return new AuthModel(user, jwtSecurityToken, refreshToken, new List<string> { "User" });
         }
 
+        public async Task<AuthModel> ResendVerificationCodeAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                return new AuthModel { Succeeded = false, Message = "Email is not found" };
+
+            if (_memoryCache.TryGetValue($"{user.Id}_VerificationCode", out string cachedCode))
+            {
+                await _emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your verification code is {cachedCode}");
+                return new AuthModel { Succeeded = true };
+            }
+
+            string verificationCode = GenerateRandomCode();
+
+            await _emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your verification code is {verificationCode}");
+
+            _memoryCache.Set($"{user.Id}_VerificationCode", verificationCode, _CodeExpiration);
+
+            return new AuthModel { Succeeded = true };
+        }
+
         public async Task<ResetTokenModel> ForgetPasswordAsync(ForgetPasswordModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -291,6 +313,7 @@ namespace FIHS.Services
                 CreatedOn = DateTime.UtcNow
             };
         }
+
         private static string GenerateRandomCode()
         {
             var random = new Random();

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIHS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231121173100_AddChatGptTables")]
-    partial class AddChatGptTables
+    [Migration("20240123221543_AddPesticidesAndFertilizerTables")]
+    partial class AddPesticidesAndFertilizerTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,26 +103,7 @@ namespace FIHS.Migrations
                     b.ToTable("Users", "security");
                 });
 
-            modelBuilder.Entity("FIHS.Models.Conversation", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Conversations");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Message", b =>
+            modelBuilder.Entity("FIHS.Models.Article", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -130,26 +111,325 @@ namespace FIHS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ImgUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ConversationId")
+                    b.Property<string>("Overview")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Sender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTime>("PublicationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConversationId");
+                    b.ToTable("Articles");
+                });
 
-                    b.ToTable("Messages");
+            modelBuilder.Entity("FIHS.Models.ArticleSection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.ToTable("ArticleSections");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Fertilizer.Fertilizer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Manufactuer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NutrientContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsageInstructions")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<double>("price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Fertilizers");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Pesticide.Pesticide", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Manufactuer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Toxicity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsageInstructions")
+                        .HasMaxLength(800)
+                        .HasColumnType("nvarchar(800)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Pesticides");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<double>("AverageYield")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CommonUses")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("CulivationTips")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("HarvistingSeason")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("IrrigationReqs")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NutritionalValue")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("PlantingSeason")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("SunlightReqs")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Plants");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
+                {
+                    b.Property<int>("PlantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SoilId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlantId", "SoilId");
+
+                    b.HasIndex("SoilId");
+
+                    b.ToTable("PlantSoilTypes");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.PlantType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("HeightRange")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LifeCycle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SpreadRange")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("PlantTypes");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
+                {
+                    b.Property<int>("PlantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlantTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlantId", "PlantTypeId");
+
+                    b.HasIndex("PlantTypeId");
+
+                    b.ToTable("PlantTypesOfPlant");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.Soil", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CationExchangeCapacity")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("Drainage")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MoistureRetention")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("NutrientContent")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("OrganicMatter")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("Structure")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("Texture")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("pHLevel")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Soils");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -322,26 +602,53 @@ namespace FIHS.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
-            modelBuilder.Entity("FIHS.Models.Conversation", b =>
+            modelBuilder.Entity("FIHS.Models.ArticleSection", b =>
                 {
-                    b.HasOne("FIHS.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Conversations")
-                        .HasForeignKey("ApplicationUserId")
+                    b.HasOne("FIHS.Models.Article", "Article")
+                        .WithMany("ArticleSections")
+                        .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Article");
                 });
 
-            modelBuilder.Entity("FIHS.Models.Message", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
                 {
-                    b.HasOne("FIHS.Models.Conversation", "Conversation")
-                        .WithMany("Messages")
-                        .HasForeignKey("ConversationId")
+                    b.HasOne("FIHS.Models.Plant.Plant", "Plant")
+                        .WithMany("Soils")
+                        .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Conversation");
+                    b.HasOne("FIHS.Models.Plant.Soil", "Soil")
+                        .WithMany("Plants")
+                        .HasForeignKey("SoilId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plant");
+
+                    b.Navigation("Soil");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
+                {
+                    b.HasOne("FIHS.Models.Plant.Plant", "Plant")
+                        .WithMany("PlantTypes")
+                        .HasForeignKey("PlantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FIHS.Models.Plant.PlantType", "PlantType")
+                        .WithMany("Plants")
+                        .HasForeignKey("PlantTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plant");
+
+                    b.Navigation("PlantType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -395,14 +702,26 @@ namespace FIHS.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FIHS.Models.ApplicationUser", b =>
+            modelBuilder.Entity("FIHS.Models.Article", b =>
                 {
-                    b.Navigation("Conversations");
+                    b.Navigation("ArticleSections");
                 });
 
-            modelBuilder.Entity("FIHS.Models.Conversation", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("PlantTypes");
+
+                    b.Navigation("Soils");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.PlantType", b =>
+                {
+                    b.Navigation("Plants");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Plant.Soil", b =>
+                {
+                    b.Navigation("Plants");
                 });
 #pragma warning restore 612, 618
         }

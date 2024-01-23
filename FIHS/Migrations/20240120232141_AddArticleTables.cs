@@ -11,15 +11,6 @@ namespace FIHS.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Sender",
-                table: "Messages",
-                type: "nvarchar(128)",
-                maxLength: 128,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
             migrationBuilder.CreateTable(
                 name: "Articles",
                 columns: table => new
@@ -72,15 +63,6 @@ namespace FIHS.Migrations
 
             migrationBuilder.DropTable(
                 name: "Articles");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Sender",
-                table: "Messages",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(128)",
-                oldMaxLength: 128);
         }
     }
 }

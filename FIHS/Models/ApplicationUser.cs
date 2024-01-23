@@ -18,6 +18,5 @@ namespace FIHS.Models
         [MaxLength(256), DataType(DataType.ImageUrl)]
         public string? ProfilePicture { get; set; }
         public List<RefreshToken>? RefreshTokens { get; set; }
-        public IEnumerable<Chat>? Conversations { get; set; }
     }
 }

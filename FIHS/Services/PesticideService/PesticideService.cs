@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Services.PesticideService
 {
-     
+
     public class PesticideService : IPesticide
     {
         private readonly IMapper _mapper;
@@ -33,7 +33,7 @@ namespace FIHS.Services.PesticideService
 
         public async Task<PesticideReturnDto> DeleteAsync(Pesticide pesticide)
         {
-             _context.Remove(pesticide);
+            _context.Remove(pesticide);
             await _context.SaveChangesAsync();
             var pesticideDto = _mapper.Map<PesticideReturnDto>(pesticide);
             return pesticideDto;
@@ -41,8 +41,8 @@ namespace FIHS.Services.PesticideService
 
         public async Task<IEnumerable<PesticideReturnDto>> GetAllPesticideAsync()
         {
-            var pesticides= await _context.Pesticides.ToListAsync();
-          var pesticideDto = _mapper.Map<IEnumerable<PesticideReturnDto>>(pesticides);
+            var pesticides = await _context.Pesticides.ToListAsync();
+            var pesticideDto = _mapper.Map<IEnumerable<PesticideReturnDto>>(pesticides);
 
             return pesticideDto;
         }
@@ -61,19 +61,19 @@ namespace FIHS.Services.PesticideService
             return pesticideDto;
         }
 
-        public async Task<PesticideReturnDto> UpdateAsync(PesticideDto dto ,int id)
+        public async Task<PesticideReturnDto> UpdateAsync(PesticideDto dto, int id)
         {
             var pesticide = await GetByIdAsync(id);
-            pesticide.Name = dto.Name??pesticide.Name ;
-            pesticide.Manufactuer =  dto.Manufactuer??pesticide.Manufactuer;
-            pesticide.Price = dto.Price ?? pesticide.Price    ;
+            pesticide.Name = dto.Name ?? pesticide.Name;
+            pesticide.Manufactuer = dto.Manufactuer ?? pesticide.Manufactuer;
+            pesticide.Price = dto.Price ?? pesticide.Price;
             pesticide.Description = dto.Description ?? pesticide.Description;
             pesticide.Type = dto.Type ?? pesticide.Type;
-            pesticide.Toxicity = dto.Toxicity ?? pesticide.Toxicity;  
-            pesticide.ImageURL = _imageService.SetImage(dto.ImageURL, pesticide.ImageURL) ??pesticide.ImageURL ;
-             _context.Update(pesticide);
+            pesticide.Toxicity = dto.Toxicity ?? pesticide.Toxicity;
+            pesticide.ImageURL = _imageService.SetImage(dto.ImageURL, pesticide.ImageURL) ?? pesticide.ImageURL;
+            _context.Update(pesticide);
             await _context.SaveChangesAsync();
-           
+
             var pesticidesDto = _mapper.Map<PesticideReturnDto>(pesticide);
             return pesticidesDto;
 

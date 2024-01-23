@@ -166,56 +166,6 @@ namespace FIHS.Migrations
                     b.ToTable("ArticleSections");
                 });
 
-            modelBuilder.Entity("FIHS.Models.Chat", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Chats");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ChatId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sender")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>
                 {
                     b.Property<int?>("Id")
@@ -584,28 +534,6 @@ namespace FIHS.Migrations
                     b.Navigation("Article");
                 });
 
-            modelBuilder.Entity("FIHS.Models.Chat", b =>
-                {
-                    b.HasOne("FIHS.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Conversations")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Message", b =>
-                {
-                    b.HasOne("FIHS.Models.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-                });
-
             modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
                 {
                     b.HasOne("FIHS.Models.Plant.Plant", "Plant")
@@ -695,19 +623,9 @@ namespace FIHS.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FIHS.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Conversations");
-                });
-
             modelBuilder.Entity("FIHS.Models.Article", b =>
                 {
                     b.Navigation("ArticleSections");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Chat", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>

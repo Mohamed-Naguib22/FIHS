@@ -30,8 +30,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<Pesticide>().HasIndex(n => n.Name).IsUnique();
         modelBuilder.Entity<Fertilizer>().HasIndex(n => n.Name).IsUnique();
     }
-    public DbSet<Chat> Chats { get; set; }
-    public DbSet<Message> Messages { get; set; }
     public DbSet<Article> Articles { get; set; }
     public DbSet<ArticleSection> ArticleSections { get; set; }
     public DbSet<Plant> Plants { get; set; }
