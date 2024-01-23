@@ -1,4 +1,6 @@
 ﻿using FIHS.Models;
+using FIHS.Models.Fertilizer;
+using FIHS.Models.Pesticide;
 using FIHS.Models.Plant;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -24,6 +26,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", "security");
         modelBuilder.Entity<PlantsTypesOfPlant>().HasKey(ptypes => new { ptypes.PlantId, ptypes.PlantTypeId });
         modelBuilder.Entity<PlantSoilTypes>().HasKey(ps => new { ps.PlantId, ps.SoilId });
+        /*        properties for fertilizer & pestocide*/
+        modelBuilder.Entity<Pesticide>().HasIndex(n => n.Name).IsUnique();
+        modelBuilder.Entity<Fertilizer>().HasIndex(n => n.Name).IsUnique();
     }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
@@ -33,5 +38,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<PlantType> PlantTypes { get; set; }
     public DbSet<PlantsTypesOfPlant> PlantTypesOfPlant { get; set;}
     public DbSet<Soil> Soils { get; set; }
-
+    public DbSet<Pesticide> Pesticides { get; set; }
+    public DbSet<Fertilizer> Fertilizers { get; set; }
 }

@@ -1,9 +1,13 @@
 using FHIS.Services;
 using FIHS.Helpers;
 using FIHS.Interfaces;
+using FIHS.Interfaces.IFertilizer;
+using FIHS.Interfaces.IPesticide;
 using FIHS.Interfaces.IPlant;
 using FIHS.Models;
 using FIHS.Services;
+using FIHS.Services.FertilizerService;
+using FIHS.Services.PesticideService;
 using FIHS.Services.PlantservicesImp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +23,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 //var MohamedAlaaConnection = builder.Configuration.GetConnectionString("mohamedalaaConnection");
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+builder.Services.Configure<Sender>(builder.Configuration.GetSection("Sender"));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>
     (options => {
@@ -36,6 +41,8 @@ builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IPesticide, PesticideService>();
+builder.Services.AddScoped<IFertilizer, FertilizerService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -46,11 +53,11 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(o =>
+.AddJwtBearer(options =>
 {
-    o.RequireHttpsMetadata = false;
-    o.SaveToken = false;
-    o.TokenValidationParameters = new TokenValidationParameters
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = false;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
         ValidateIssuer = true,
@@ -62,6 +69,12 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+//AddFacebook(options =>
+//{
+//    options.AppId = "3012531528881382";
+//    options.AppSecret = "0e6e6b85744d6255aaafa794c624a100";
+//});
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -70,12 +83,12 @@ builder.Services.AddControllers(opt =>
 {
     opt.AllowEmptyInputInBodyModelBinding = true;
 });
-//builder.Services.AddControllers()
-//        .AddJsonOptions(options =>
-//        {
-//            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-//        });
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
+//builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(typeof(Program));

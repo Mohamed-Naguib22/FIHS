@@ -1,27 +1,24 @@
-﻿using AutoMapper;
-using CarShopAPI.Helpers;
+﻿using CarShopAPI.Helpers;
 using FIHS.Dtos;
 using FIHS.Interfaces;
-using FIHS.Models;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly List<string> _allowedExtensions = new() { ".jpg", ".png", "jpeg" };
+        private readonly List<string> _allowedExtensions = new() { ".jpg", ".png", ".jpeg" };
         private const long _maxAllowedImageSize = 1048576;
-        public UserController(IUserService userService, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _userManager = userManager;
         }
+
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfileAsync()
         {
@@ -32,12 +29,13 @@ namespace FIHS.Controllers
 
             var result = await _userService.GetProfileAsync(refreshToken);
 
-            if (!string.IsNullOrEmpty(result.Message))
+            if (!result.Succeeded)
                 return BadRequest(result.Message);
 
             return Ok(result);
         }
-        [HttpPut("update")]
+
+        [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileModel model)
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -51,12 +49,13 @@ namespace FIHS.Controllers
 
             var result = await _userService.UpdateProfileAsync(refreshToken, model);
 
-            if (!string.IsNullOrEmpty(result.Message))
+            if (!result.Succeeded)
                 return BadRequest(result.Message);
 
             return Ok(result);
         }
-        [HttpDelete("deleteAccount")]
+
+        [HttpDelete("delete-account")]
         public async Task<IActionResult> DeleteAccountAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -66,12 +65,13 @@ namespace FIHS.Controllers
 
             var result = await _userService.DeleteAccountAsync(refreshToken);
 
-            if (!result)
-                return BadRequest("Something went wrong");
+            if (!result.Succeeded)
+                return BadRequest(result.Message);
 
             return Ok("Deleted successfully");
         }
-        [HttpPost("setImage")]
+
+        [HttpPost("set-image")]
         public async Task<IActionResult> SetImageAsync([FromForm] IFormFile imgFile)
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -90,12 +90,13 @@ namespace FIHS.Controllers
 
             var result = await _userService.SetImageAsync(refreshToken, imgFile);
 
-            if (!result)
-                return BadRequest("Faild to set the image.");
+            if (!result.Succeeded)
+                return BadRequest(result.Message);
 
             return Ok("Image set successfully");
         }
-        [HttpDelete("deleteImage")]
+
+        [HttpDelete("delete-image")]
         public async Task<IActionResult> DeleteImageAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -105,8 +106,8 @@ namespace FIHS.Controllers
 
             var result = await _userService.DeleteImageAsync(refreshToken);
 
-            if (!result)
-                return BadRequest("Something went wrong");
+            if (!result.Succeeded)
+                return BadRequest(result.Message);
 
             return Ok("Image deleted successfully");
         }

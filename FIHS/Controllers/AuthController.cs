@@ -52,8 +52,8 @@ namespace FIHS.Controllers
 
             var result = await _authService.ForgetPasswordAsync(model);
 
-            //if (!result)
-            //    return BadRequest("User not found");
+            if (!result.Succeeded)
+                return BadRequest(result.Message);
 
             return Ok(result);
         }
@@ -65,7 +65,7 @@ namespace FIHS.Controllers
 
             var result = await _authService.ResetPasswordAsync(model);
 
-            if (!string.IsNullOrEmpty(result.Message))
+            if (!result.Succeeded)
                 return BadRequest(result.Message);
 
             return Ok("Password reset successfully");

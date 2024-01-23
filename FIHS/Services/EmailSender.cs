@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Net.Mail;
 using System.Net;
+using FIHS.Helpers;
+using Microsoft.Extensions.Options;
 
 namespace FIHS.Services
 {
     public class EmailSender : IEmailSender
     {
+        private readonly Sender _sender;
+        public EmailSender(IOptions<Sender> sender)
+        {
+            _sender= sender.Value;
+        }
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            //var fromMail = "GoCartWebsite@outlook.com";
-            //var fromPassword = "M1692002m@";
-            var fromMail = "mohamednageb20172@outlook.com";
-            var fromPassword = "M1692002m@";
+            var fromMail = _sender.FromMail;
+            var fromPassword = _sender.FromPassword;
 
             var message = new MailMessage();
             message.From = new MailAddress(fromMail);
@@ -20,14 +25,14 @@ namespace FIHS.Services
             message.Body = $"<html><body>{htmlMessage}</body></html>";
             message.IsBodyHtml = true;
 
-            var smtpClient = new SmtpClient("smtp-mail.outlook.com")
+            var smtpClient = new SmtpClient(_sender.Client)
             {
-                Port = 587,
+                Port = _sender.Port,
                 Credentials = new NetworkCredential(fromMail, fromPassword),
                 EnableSsl = true
             };
 
-            smtpClient.Send(message);
+            await smtpClient.SendMailAsync(message);
         }
     }
 

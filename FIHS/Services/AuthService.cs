@@ -11,11 +11,9 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Encodings.Web;
 
 namespace FIHS.Services
 {
@@ -32,7 +30,7 @@ namespace FIHS.Services
             IOptions<JWT> jwt,
             IEmailSender emailSender,
             IMemoryCache memoryCache,
-            IMapper mapper) : base (null, userManager, mapper, null)
+            IMapper mapper) : base(context: null, userManager, mapper)
         {
             _roleManager = roleManager;
             _jwt = jwt.Value;
@@ -41,10 +39,10 @@ namespace FIHS.Services
         }
         public async Task<AuthModel> RegisterAysnc(RegisterModel model)
         {
-            if (await _userManager.FindByEmailAsync(model.Email) is not null)
+            if (await _userManager.FindByEmailAsync(model.Email) != null)
                 return new AuthModel { Succeeded = false, Message = "Email is already registered!" };
 
-            if (await _userManager.FindByEmailAsync(model.Username) is not null)
+            if (await _userManager.FindByEmailAsync(model.Username) != null)
                 return new AuthModel { Succeeded = false, Message = "Username is already registered!" };
 
             var user = _mapper.Map<ApplicationUser>(model);
@@ -91,24 +89,15 @@ namespace FIHS.Services
 
             await _userManager.UpdateAsync(user);
 
-            return new AuthModel
-            {
-                Email = user.Email,
-                Username = user.UserName,
-                EmailConfirmed = user.EmailConfirmed,
-                IsAuthenticated = true,
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                ExpiresOn = jwtSecurityToken.ValidTo,
-                Roles = new List<string> { "User" },
-                RefreshToken = refreshToken.Token,
-                RefreshTokenExpiration = refreshToken.ExpiresOn,
-                Succeeded = true
-            };
+            return new AuthModel(user, jwtSecurityToken, refreshToken, new List<string> { "User" });
         }
 
         public async Task<ResetTokenModel> ForgetPasswordAsync(ForgetPasswordModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return new ResetTokenModel { Succeeded = false, Message = "Email is incorrect" };
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -123,7 +112,7 @@ namespace FIHS.Services
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
-                return new AuthModel { Succeeded = false, Message = "User not found" };
+                return new AuthModel { Succeeded = false, Message = "Email is incorrect" };
 
             var tokenIsValid = await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider,
                 "ResetPassword", model.Token);
@@ -143,44 +132,27 @@ namespace FIHS.Services
 
         public async Task<AuthModel> LoginAsync(TokenrRequestModel model)
         {
-            var authModel = new AuthModel();
-
 			var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.EmailConfirmed)
-            {
-                authModel.Message = "Email or Password is incorrect";
-                return authModel;
-            }
+                return new AuthModel { Succeeded = false, Message = "Email or Password is incorrect" };
 
             var jwtSecurityToken = await CreateJwtToken(user);
-			var rolesList = await _userManager.GetRolesAsync(user);
-
-            authModel.Email = user.Email;
-            authModel.Username = user.UserName;
-            authModel.EmailConfirmed = user.EmailConfirmed;
-			authModel.IsAuthenticated = true;
-            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            authModel.ExpiresOn = jwtSecurityToken.ValidTo;
-            authModel.Roles = rolesList.ToList();
+			var roles = await _userManager.GetRolesAsync(user);
 
             if (user.RefreshTokens.Any(t => t.IsActive))
             {
                 var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
-                authModel.RefreshToken = activeRefreshToken.Token;
-                authModel.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
+                return new AuthModel(user, jwtSecurityToken, activeRefreshToken, roles.ToList());
             }
             else
             {
                 var refreshToken = GenerateRefreshToken();
-                authModel.RefreshToken = refreshToken.Token;
-                authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
                 user.RefreshTokens.Add(refreshToken);
                 await _userManager.UpdateAsync(user);
+                return new AuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
             }
-
-            return authModel;
-		}
+        }
         public async Task<string> AddRoleAysnc(AddRoleModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
@@ -197,15 +169,13 @@ namespace FIHS.Services
         }
         public async Task<AuthModel> ChangePasswordAsync(string userId, ChangePasswordModel model)
         {
-            var authModel = new AuthModel();
-
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
-                return new AuthModel { Message = "Invalid token." };
+                return new AuthModel { Succeeded = false, Message = "Invalid token." };
 
             if (!await _userManager.CheckPasswordAsync(user, model.CurrentPassword))
-                return new AuthModel { Message = "Password is incorrect." };
+                return new AuthModel { Succeeded = false, Message = "Password is incorrect." };
 
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
@@ -213,74 +183,47 @@ namespace FIHS.Services
             {
                 var errors = result.Errors.Select(r => r.Description).ToList();
                 string errorMessage = string.Join(", ", errors);
-                return new AuthModel { Message = errorMessage };
+                return new AuthModel { Succeeded = false, Message = errorMessage };
             }
 
             var jwtSecurityToken = await CreateJwtToken(user);
-            var rolesList = await _userManager.GetRolesAsync(user);
-
-            authModel.Email = user.Email;
-            authModel.Username = user.UserName;
-            authModel.IsAuthenticated = true;
-            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            authModel.ExpiresOn = jwtSecurityToken.ValidTo;
-            authModel.Roles = rolesList.ToList();
+            var roles = await _userManager.GetRolesAsync(user);
 
             if (user.RefreshTokens.Any(t => t.IsActive))
             {
                 var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
-                authModel.RefreshToken = activeRefreshToken.Token;
-                authModel.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
+                return new AuthModel(user, jwtSecurityToken, activeRefreshToken, roles.ToList());
             }
             else
             {
                 var refreshToken = GenerateRefreshToken();
-                authModel.RefreshToken = refreshToken.Token;
-                authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
                 user.RefreshTokens.Add(refreshToken);
                 await _userManager.UpdateAsync(user);
+                return new AuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
             }
-
-            return authModel;
         }
         public async Task<AuthModel> RefreshTokenAsync(string token)
         {
-            var authModel = new AuthModel();
-
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
             
             if (user == null)
-            {
-                authModel.Message = "Invalid Token";
-                return authModel;
-            }
+                return new AuthModel { Succeeded = false, Message = "Invalid Token" };
 
             var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
 
             if (!refreshToken.IsActive)
-            {
-                authModel.Message = "Inactive Token";
-                return authModel;
-            }
+                return new AuthModel { Succeeded = false, Message = "Inactive Token" };
 
-            refreshToken.RevokedOn = DateTime.UtcNow;
+            refreshToken.RevokedOn = DateTime.Now;
 
             var newRefreshToken = GenerateRefreshToken();
             user.RefreshTokens.Add(newRefreshToken);
             await _userManager.UpdateAsync(user);
 
-            var jwtToken = await CreateJwtToken(user);
+            var jwtSecurityToken = await CreateJwtToken(user);
             var roles = await _userManager.GetRolesAsync(user);
 
-            authModel.IsAuthenticated = true;
-            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            authModel.Email = user.Email;
-            authModel.Username = user.UserName;
-            authModel.Roles = roles.ToList();
-            authModel.RefreshToken = newRefreshToken.Token;
-            authModel.RefreshTokenExpiration = newRefreshToken.ExpiresOn;
-
-            return authModel;
+            return new AuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
         }
         public async Task<bool> RevokeTokenAsync(string token)
         {

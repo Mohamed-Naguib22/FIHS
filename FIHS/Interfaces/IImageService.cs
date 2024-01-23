@@ -5,7 +5,7 @@ namespace FIHS.Interfaces
 {
     public interface IImageService
     {
-        public string SetImage(string ImgUrl, IFormFile? imgFile);
+        public string SetImage(IFormFile imgFile, string? ImgUrl = null);
         public void DeleteImage(string? ImgUrl);
     }
 }

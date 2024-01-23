@@ -53,7 +53,7 @@ namespace FIHS.Services.PlantservicesImp
         }
         private async Task SetPlantImg(Plant plant, PlantInDto plantInDto)
         {
-            plant.ImageUrl = _imageService.SetImage(plantInDto.ImageUrl, plantInDto.ImgFile);
+            plant.ImageUrl = _imageService.SetImage(plantInDto.ImgFile, plantInDto.ImageUrl);
         }
     }
 }

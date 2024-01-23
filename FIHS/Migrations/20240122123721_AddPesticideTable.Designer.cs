@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIHS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240122123721_AddPesticideTable")]
+    partial class AddPesticideTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,7 +135,7 @@ namespace FIHS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("FIHS.Models.ArticleSection", b =>
@@ -160,7 +163,7 @@ namespace FIHS.Migrations
 
                     b.HasIndex("ArticleId");
 
-                    b.ToTable("ArticleSections", (string)null);
+                    b.ToTable("ArticleSections");
                 });
 
             modelBuilder.Entity("FIHS.Models.Chat", b =>
@@ -179,7 +182,7 @@ namespace FIHS.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("FIHS.Models.Message", b =>
@@ -210,7 +213,56 @@ namespace FIHS.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("FIHS.Models.Pesticide.Pesticide", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Manufactuer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Toxicity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsageInstructions")
+                        .IsRequired()
+                        .HasMaxLength(800)
+                        .HasColumnType("nvarchar(800)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Pesticides");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>
@@ -274,7 +326,7 @@ namespace FIHS.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Plants", (string)null);
+                    b.ToTable("Plants");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
@@ -289,7 +341,7 @@ namespace FIHS.Migrations
 
                     b.HasIndex("SoilId");
 
-                    b.ToTable("PlantSoilTypes", (string)null);
+                    b.ToTable("PlantSoilTypes");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.PlantType", b =>
@@ -325,7 +377,7 @@ namespace FIHS.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("PlantTypes", (string)null);
+                    b.ToTable("PlantTypes");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
@@ -340,7 +392,7 @@ namespace FIHS.Migrations
 
                     b.HasIndex("PlantTypeId");
 
-                    b.ToTable("PlantTypesOfPlant", (string)null);
+                    b.ToTable("PlantTypesOfPlant");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.Soil", b =>
@@ -397,7 +449,7 @@ namespace FIHS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Soils", (string)null);
+                    b.ToTable("Soils");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -535,7 +587,7 @@ namespace FIHS.Migrations
 
             modelBuilder.Entity("FIHS.Models.ApplicationUser", b =>
                 {
-                    b.OwnsMany("FIHS.Models.ApplicationUser.RefreshTokens#FIHS.Models.Auth_Models.RefreshToken", "RefreshTokens", b1 =>
+                    b.OwnsMany("FIHS.Models.Auth_Models.RefreshToken", "RefreshTokens", b1 =>
                         {
                             b1.Property<string>("ApplicationUserId")
                                 .HasColumnType("nvarchar(450)");

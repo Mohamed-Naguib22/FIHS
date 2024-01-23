@@ -8,6 +8,8 @@ namespace FIHS.Dtos
     {
         [JsonIgnore]
         public string? Message { get; set; }
+        [JsonIgnore]
+        public bool Succeeded { get; set; }
         [EmailAddress]
         public string? Email { get; set; }
         public string? FirstName { get; set; }
