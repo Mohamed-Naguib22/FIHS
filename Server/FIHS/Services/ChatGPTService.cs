@@ -32,7 +32,8 @@ namespace FIHS.Services
             }
             catch
             {
-                return new AnswerModel { StatusCode = 503, Message = "Chat GPT service is unavailable." };
+                return new AnswerModel { StatusCode = 503, Message = "غير متوفرة Chat GPT خدمة" };
+
             }
         }
     }

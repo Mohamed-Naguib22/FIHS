@@ -68,13 +68,13 @@ namespace FIHS.Services
             var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "User not found"};
+                return new UserDto { Succeeded = false, Message = "المستخدم غير موجود"};
 
             _imageService.DeleteImage(user.ProfilePicture);
             var result = await _userManager.DeleteAsync(user);
 
             if (!result.Succeeded)
-                return new UserDto { Succeeded = false, Message = "Something went wrong" };
+                return new UserDto { Succeeded = false, Message = "حدث خطأ ما" };
 
             return new UserDto { Succeeded = true};
         }
@@ -84,14 +84,14 @@ namespace FIHS.Services
             var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "User not found" };
+                return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
 
             user.ProfilePicture = _imageService.SetImage(imgFile, user.ProfilePicture);
 
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
-                return new UserDto { Succeeded = false, Message = "Something went wrong" };
+                return new UserDto { Succeeded = false, Message = "حدث خطأ ما" };
 
             return new UserDto { Succeeded = true };
         }
@@ -101,7 +101,7 @@ namespace FIHS.Services
             var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "User not found" };
+                return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
 
             _imageService.DeleteImage(user.ProfilePicture);
 
@@ -109,7 +109,7 @@ namespace FIHS.Services
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
-                return new UserDto { Succeeded = false, Message = "Something went wrong" };
+                return new UserDto { Succeeded = false, Message = "حدث خطأ ما" };
 
             return new UserDto { Succeeded = true };
         }

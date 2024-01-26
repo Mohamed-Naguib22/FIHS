@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FIHS.Dtos;
+using FIHS.Dtos.Article;
 using FIHS.Interfaces;
 using FIHS.Models;
 using Microsoft.EntityFrameworkCore;

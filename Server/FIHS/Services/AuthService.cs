@@ -40,10 +40,10 @@ namespace FIHS.Services
         public async Task<AuthModel> RegisterAysnc(RegisterModel model)
         {
             if (await _userManager.FindByEmailAsync(model.Email) != null)
-                return new AuthModel { Succeeded = false, Message = "Email is already registered!" };
+                return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
 
             if (await _userManager.FindByEmailAsync(model.Username) != null)
-                return new AuthModel { Succeeded = false, Message = "Username is already registered!" };
+                return new AuthModel { Succeeded = false, Message = "اسم المستخدم مستخدم بالفعل" };
 
             var user = _mapper.Map<ApplicationUser>(model);
 
@@ -72,13 +72,13 @@ namespace FIHS.Services
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
-                return new AuthModel { Succeeded = false, Message = "Email is not found" };
+                return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني غير صحيح" };
 
             if (!_memoryCache.TryGetValue($"{user.Id}_VerificationCode", out string cachedCode))
-                return new AuthModel { Succeeded = false, Message = "Verification code not found or expired" };
+                return new AuthModel { Succeeded = false, Message = "رمز التحقق غير موجود أو انتهت صلاحيته" };
 
             if (model.VerificationCode != cachedCode)
-                return new AuthModel { Succeeded = false, Message = "Verification code not found or expired" };
+                return new AuthModel { Succeeded = false, Message = "رمز التحقق غير موجود أو انتهت صلاحيته" };
 
             user.EmailConfirmed = true;
 
@@ -97,7 +97,7 @@ namespace FIHS.Services
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
-                return new AuthModel { Succeeded = false, Message = "Email is not found" };
+                return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني غير صحيح" };
 
             if (_memoryCache.TryGetValue($"{user.Id}_VerificationCode", out string cachedCode))
             {
@@ -119,7 +119,7 @@ namespace FIHS.Services
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
-                return new ResetTokenModel { Succeeded = false, Message = "Email is incorrect" };
+                return new ResetTokenModel { Succeeded = false, Message = "البريد الإلكتروني غير صحيح" };
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -134,7 +134,7 @@ namespace FIHS.Services
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
-                return new AuthModel { Succeeded = false, Message = "Email is incorrect" };
+                return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني غير صحيح" };
 
             var tokenIsValid = await _userManager
                 .VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider,"ResetPassword", model.Token);
@@ -147,7 +147,7 @@ namespace FIHS.Services
             await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
-                return new AuthModel { Succeeded = false, Message = "Something went wrong" };
+                return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
             return new AuthModel { Succeeded = true };
         }
@@ -157,7 +157,7 @@ namespace FIHS.Services
 			var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.EmailConfirmed)
-                return new AuthModel { Succeeded = false, Message = "Email or Password is incorrect" };
+                return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني أو كلمة المرور غير صحيحة" };
 
             var jwtSecurityToken = await CreateJwtToken(user);
 			var roles = await _userManager.GetRolesAsync(user);
@@ -187,7 +187,7 @@ namespace FIHS.Services
 
             var result = await _userManager.AddToRoleAsync(user, model.Role);
 
-            return result.Succeeded ? string.Empty : "Something went wrong";
+            return result.Succeeded ? string.Empty : "حدث خطأ ما";
         }
         public async Task<AuthModel> ChangePasswordAsync(string userId, ChangePasswordModel model)
         {
@@ -197,7 +197,7 @@ namespace FIHS.Services
                 return new AuthModel { Succeeded = false, Message = "Invalid token." };
 
             if (!await _userManager.CheckPasswordAsync(user, model.CurrentPassword))
-                return new AuthModel { Succeeded = false, Message = "Password is incorrect." };
+                return new AuthModel { Succeeded = false, Message = "كلمة المرور غير صحيحة" };
 
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
