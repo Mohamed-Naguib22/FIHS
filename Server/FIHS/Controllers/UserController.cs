@@ -68,7 +68,7 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("Deleted successfully");
+            return Ok("تم حذف الحساب بنجاح");
         }
 
         [HttpPost("set-image")]
@@ -83,17 +83,17 @@ namespace FIHS.Controllers
                 return BadRequest("Image file is required.");
 
             if (!_allowedExtensions.Contains(Path.GetExtension(imgFile.FileName).ToLower()))
-                return BadRequest("This image extension is not allowed");
+                return BadRequest("نوع الملف هذا غير مسموح به");
 
             if (imgFile.Length > _maxAllowedImageSize)
-                return BadRequest("Max allowed image size is 1MB");
+                return BadRequest("الحجم الأقصى المسموح به للصورة هو 1 ميغابايت");
 
             var result = await _userService.SetImageAsync(refreshToken, imgFile);
 
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("Image set successfully");
+            return Ok("تم تعيين الصورة بنجاح");
         }
 
         [HttpDelete("delete-image")]
@@ -109,7 +109,7 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("Image deleted successfully");
+            return Ok("تم حذف الصورة بنجاح");
         }
     }
 }

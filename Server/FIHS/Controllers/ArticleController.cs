@@ -3,6 +3,7 @@ using FIHS.Interfaces;
 using FIHS.Dtos;
 using CarShopAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using FIHS.Dtos.Article;
 
 namespace FIHS.Controllers
 {
@@ -94,7 +95,7 @@ namespace FIHS.Controllers
             var section = await _articleService.UpdateSectionAsync(sectionId, sectionDto);
 
             if (section == null)
-                return BadRequest("Section not found");
+                BadRequest("Â–« «·ﬁ”„ €Ì— „ÊÃÊœ");
 
             return Ok(section);
         }
@@ -106,9 +107,9 @@ namespace FIHS.Controllers
             var result = await _articleService.DeleteArticleAsync(articleId);
 
             if (!result)
-                BadRequest("Article not found");
+                BadRequest("Â–« «·„ﬁ«· €Ì— „ÊÃÊœ");
 
-            return Ok("Article deleted successfully");
+            return Ok(" „ Õ–› «·„ﬁ«· »‰Ã«Õ");
         }
 
         [Authorize(Roles = "Admin")]
@@ -118,9 +119,9 @@ namespace FIHS.Controllers
             var result = await _articleService.DeleteSectionAsync(sectionId);
 
             if (!result)
-                BadRequest("Section not found");
+                BadRequest("Â–« «·ﬁ”„ €Ì— „ÊÃÊœ");
 
-            return Ok("Section deleted successfully");
+            return Ok(" „ Õ–› «·ﬁ”„ »‰Ã«Õ");
         }
     }
 }

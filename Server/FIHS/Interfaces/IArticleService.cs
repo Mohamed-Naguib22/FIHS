@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FHIS.Services;
 using FIHS.Dtos;
+using FIHS.Dtos.Article;
 using FIHS.Models;
 
 namespace FIHS.Interfaces

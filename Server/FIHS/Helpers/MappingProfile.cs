@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FIHS.Dtos;
+using FIHS.Dtos.Article;
 using FIHS.Dtos.FertilizerDto;
 using FIHS.Dtos.PesticideDto;
 using FIHS.Models;

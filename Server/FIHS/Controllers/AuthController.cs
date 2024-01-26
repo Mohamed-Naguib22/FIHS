@@ -27,7 +27,7 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("Please check your email to verify you account");
+            return Ok("يرجى التحقق من بريدك الإلكتروني للتحقق من حسابك");
         }
 
         [HttpPost("verifyAccout")]
@@ -71,7 +71,7 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("Password reset successfully");
+            return Ok("تمت إعادة تعيين كلمة المرور بنجاح");
         }
 
         [HttpPost("login")]

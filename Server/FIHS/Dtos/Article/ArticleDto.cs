@@ -1,7 +1,7 @@
 ﻿using FIHS.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace FIHS.Dtos
+namespace FIHS.Dtos.Article
 {
     public class ArticleDto
     {
