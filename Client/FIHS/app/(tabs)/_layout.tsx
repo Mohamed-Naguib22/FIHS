@@ -1,20 +1,16 @@
 import React from 'react';
-import { StyleSheet, ViewBase } from 'react-native';
-
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-import { View } from '@/components/Themed';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -6 }} {...props} />;
+  return <FontAwesome size={28} {...props} />;
 }
 
 export default function TabLayout() {
@@ -26,7 +22,19 @@ export default function TabLayout() {
     <Tabs 
   
       screenOptions={{
-        tabBarStyle:{backgroundColor:'#fff',paddingTop:10,paddingBottom:4 ,borderColor:'#fff' ,height:70},
+        tabBarStyle:{
+          backgroundColor:'#fff',
+          paddingTop:10,
+          paddingBottom:4,
+          borderColor:'#fff',
+          height:70,
+            shadowColor: '#171717',
+      shadowOffset: {width: -2, height: 4},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+          position:'relative',
+          display:'flex'
+        },
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
@@ -58,6 +66,9 @@ export default function TabLayout() {
         name="two"
         options={{
           title: '',
+          tabBarItemStyle:{
+            marginRight:25
+          },
           tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
         }}
         />
@@ -67,13 +78,33 @@ export default function TabLayout() {
         
         options={{
           title: '',
-          tabBarIcon: ({ color }) => <TabBarIcon name="barcode" color={color} />,
+          tabBarItemStyle:{
+            position:'absolute',
+            left:'50%',
+            top:'-50%',
+            transform:'translateX(-30px) translateY(-15px)',
+            zIndex:50,
+            width:60,
+            height:60,
+            backgroundColor:Colors.light.tint,
+            borderRadius:45,
+            display:'flex',
+            justifyContent:'center',
+            alignItems:'center'
+          },
+          tabBarIconStyle:{
+          marginTop:15
+          },
+          tabBarIcon: ({ color }) => <TabBarIcon name="barcode" color={"white"} />,
         }}
         />
       <Tabs.Screen
         name="three"
         options={{
           title: '',
+          tabBarItemStyle:{
+            marginLeft:25
+          },
           tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
         }}
         />
@@ -84,15 +115,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
         />
-
     </Tabs>
-       
   );
 }
-const styles = StyleSheet.create({
-  con: {
-    flex: 1,
-    flexDirection: 'row',
-    
-    // justifyContent: 'center',
-  }})
