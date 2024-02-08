@@ -5,10 +5,14 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from '@/components/useColorScheme';
-import { StatusBar } from 'react-native';
-import { GluestackUIProvider } from '@gluestack-ui/themed';
+import {  StatusBar,StyleSheet  } from 'react-native';
+import { GluestackUIProvider, Button } from '@gluestack-ui/themed';
 import { config } from '@/config/gluestack-ui.config';
-
+import Header from '@/components/layout/Header' 
+import { Image } from 'expo-image';
+import { View } from '@/components/Themed';
+import  Logo  from '@/assets/images/Logofinal.png';
+import  LogoBG  from '../assets/images/logoBG.jpg';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,11 +58,68 @@ function RootLayoutNav() {
   return (
     <GluestackUIProvider config={config}>      
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+  
+
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="(tabs)" options={
+            
+            { 
+              headerTitle: ({children, tintColor}) => <Header/>,
+              headerLeft: () => (
+                <View>
+
+               
+                 
+                <Image
+        style={styles.image}
+        source={Logo}
+        placeholder={"blurhash"}
+        contentFit="cover"
+        transition={1000}
+        />
+       
+        </View>
+              ),
+              headerBackground:()=>(    
+                <View    style={styles.BG1} >
+                  <Image
+                  style={styles.BG}
+                    source={LogoBG}
+                    placeholder={"blurhash"}
+                    contentFit="cover"
+                    transition={1000}
+                  />
+                </View>
+              ),
+              
+              
+            }} />
+          {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
         </Stack>
       </ThemeProvider>
     </GluestackUIProvider>
+    
   );
 }
+
+const styles = StyleSheet.create({
+  image: {
+width:150,
+height:70,
+backgroundColor:"",
+  },
+  BG: {
+width:500,
+height:"100%",
+},
+BG1: {
+  width:"100%",
+  height:"100%",
+  // transform:"translateY(-20px)",
+
+  },
+Hide: {
+
+  },
+  
+});

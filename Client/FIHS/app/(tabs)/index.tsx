@@ -1,15 +1,17 @@
 import { StyleSheet } from 'react-native';
-import { View } from '@/components/Themed';
+import { Text, View } from '@/components/Themed';
 import Fontisto from '@expo/vector-icons/Fontisto'
 import { Fab } from '@gluestack-ui/themed';
 export default function TabOneScreen() {
-  return (
+  return <>
     <View style={styles.container}>
       <Fab>
         <Fontisto name='reddit'  size={32} color={'#fff'}/>
       </Fab>
     </View>
-  );
+
+    </>
+  ;
 }
 
 const styles = StyleSheet.create({
