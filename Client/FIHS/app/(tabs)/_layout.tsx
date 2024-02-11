@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
@@ -7,6 +7,10 @@ import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import TabsHeader from '@/components/layout/TabsHeader';
 import { Feather } from '@expo/vector-icons';
 import { useTabHeaderHeight } from '@/components/layout/useTabHeaderHeight';
+import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ActionsheetDragIndicatorWrapper, ActionsheetItem, ActionsheetItemText, Button, ButtonText, HStack, VStack } from '@gluestack-ui/themed';
+import { Image } from 'expo-image';
+import { RNCamera } from 'react-native-camera';
+import Scan from '@/components/home/Scan';
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -77,12 +81,13 @@ export default function TabLayout() {
             borderRadius:20,
             display:'flex',
             justifyContent:'center',
-            alignItems:'center'
+            alignItems:'center',
           },
           tabBarIconStyle:{
-          marginTop:15
+          width:"100%",
+          height:"100%"
           },
-          tabBarIcon: ({ color }) => <Feather name="camera" color={"white"} size={28} />,
+          tabBarIcon: ({ color }) =><Scan/>,
         }}
       />     
       <Tabs.Screen
