@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using FIHS.Dtos;
-using FIHS.Dtos.Article;
+using FIHS.Dtos.ArticleDtos;
+using FIHS.Dtos.AuthModels;
 using FIHS.Dtos.FertilizerDto;
 using FIHS.Dtos.PesticideDto;
-using FIHS.Models;
+using FIHS.Dtos.UserDtos;
+using FIHS.Models.ArticleModels;
+using FIHS.Models.AuthModels;
 using FIHS.Models.Fertilizer;
 using FIHS.Models.Pesticide;
 using FIHS.Models.Plant;
@@ -19,8 +22,16 @@ namespace FIHS.Helpers
             CreateMap<ApplicationUser, UserDto>()
                 .ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src => _baseUrl + src.ProfilePicture));
             CreateMap<RegisterModel, ApplicationUser>().ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src => "\\images\\Default_User_Image.png"));
-            CreateMap<ArticleDto, Article>().ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
-            CreateMap<ArticleSectionDto, ArticleSection>();
+
+            //Article
+            CreateMap<AddArticleDto, Article>().ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
+            CreateMap<Article, ReturnArticleDto>()
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => _baseUrl + src.ImgUrl))
+                .ForMember(dest => dest.NumOfLikes, opt => opt.MapFrom(src => src.ArticleLikes.Where(al => al.ArticleId == src.Id).Count()));
+
+            CreateMap<SectionDto, ArticleSection>();
+            CreateMap<TagDto, ArticleTag>();
+
             CreateMap<Plant, PlantDto>();
             CreateMap<PlantsTypesOfPlant, PlantTypeDto>().IncludeMembers(src=>src.PlantType);
             CreateMap<PlantType, PlantTypeDto>();
