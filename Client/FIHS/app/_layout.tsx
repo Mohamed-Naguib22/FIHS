@@ -8,12 +8,9 @@ import { useColorScheme } from '@/components/useColorScheme';
 import {  StatusBar,StyleSheet  } from 'react-native';
 import { GluestackUIProvider, Button } from '@gluestack-ui/themed';
 import { config } from '@/config/gluestack-ui.config';
-import Header from '@/components/layout/Header' 
 import { Image } from 'expo-image';
 import { View } from '@/components/Themed';
-import  Logo  from '@/assets/images/Logofinal.png';
-import  LogoBG  from '../assets/images/logoBG.jpg';
-
+import { I18nManager } from 'react-native'
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -54,46 +51,44 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-
   return (
     <GluestackUIProvider config={config}>      
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-  
-
         <Stack>
           <Stack.Screen name="(tabs)" options={
-            
-            { 
-              headerTitle: ({children, tintColor}) => <Header/>,
-              headerLeft: () => (
-                <View>
+            {
+              headerShown:false 
+        //       headerTitle: ({children, tintColor}) => <Header/>,
+        //       headerLeft: () => (
+        //         <View>
 
-               
-                 
-                <Image
-        style={styles.image}
-        source={Logo}
-        placeholder={"blurhash"}
-        contentFit="cover"
-        transition={1000}
-        />
-       
-        </View>
-              ),
-              headerBackground:()=>(    
-                <View    style={styles.BG1} >
-                  <Image
-                  style={styles.BG}
-                    source={LogoBG}
-                    placeholder={"blurhash"}
-                    contentFit="cover"
-                    transition={1000}
-                  />
-                </View>
-              ),
+                    
+                      
+        //               <Image
+        //       style={styles.image}
+        //       source={Logo}
+        //       placeholder={"blurhash"}
+        //       contentFit="cover"
+        //       transition={1000}
+        //       />
+            
+        // </View>
+            //   ),
+            //   headerBackground:()=>(    
+            //     <View    style={styles.BG1} >
+            //       <Image
+            //       style={styles.BG}
+            //         source={LogoBG}
+            //         placeholder={"blurhash"}
+            //         contentFit="cover"
+            //         transition={1000}
+            //       />
+            //     </View>
+            //   ),
               
               
-            }} />
+            // 
+          }} />
           {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
         </Stack>
       </ThemeProvider>
