@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using FIHS.Interfaces;
-using FIHS.Dtos;
 using CarShopAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
-using FIHS.Dtos.Article;
+using FIHS.Dtos.ArticleDtos;
+using FIHS.Interfaces.IArticle;
 
 namespace FIHS.Controllers
 {
@@ -12,9 +11,12 @@ namespace FIHS.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleService _articleService;
-        public ArticleController(IArticleService articleService)
+        private readonly IArticleInteractionService _articleInteractionService;
+
+        public ArticleController(IArticleService articleService, IArticleInteractionService articleInteractionService)
         {
             _articleService = articleService;
+            _articleInteractionService = articleInteractionService;
         }
 
         [HttpGet("get-all")]
@@ -28,12 +30,12 @@ namespace FIHS.Controllers
         [HttpGet("get/{articleId}")]
         public async Task<IActionResult> GetArticleAsync(int articleId)
         {
-            var article = await _articleService.GetArticleAsync(articleId);
+            var result = await _articleService.GetArticleAsync(articleId);
 
-            if (article == null)
-                return BadRequest("Â–« «·„ﬁ«· €Ì— „ÊÃÊœ");
+            if (!result.Succeeded)
+                return BadRequest(result.Message);
 
-            return Ok(article);
+            return Ok(result);
         }
 
         [HttpGet("search")]
@@ -46,9 +48,9 @@ namespace FIHS.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("add")]
-        public async Task<IActionResult> AddArticleAsync([FromForm] ArticleDto articleDto)
+        public async Task<IActionResult> AddArticleAsync([FromForm] AddArticleDto articleDto)
         {
-            var modelValidation = ValidationHelper<ArticleDto>.Validate(articleDto);
+            var modelValidation = ValidationHelper<AddArticleDto>.Validate(articleDto);
             if (!string.IsNullOrEmpty(modelValidation))
                 return BadRequest(modelValidation);
 
@@ -58,10 +60,23 @@ namespace FIHS.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("add-section")]
-        public async Task<IActionResult> AddSectionAsync([FromBody] ArticleSectionDto sectionDto)
+        [HttpPost("add-tag")]
+        public async Task<IActionResult> AddTagAsync([FromBody] TagDto tagDto)
         {
-            var modelValidation = ValidationHelper<ArticleSectionDto>.Validate(sectionDto);
+            var modelValidation = ValidationHelper<TagDto>.Validate(tagDto);
+            if (!string.IsNullOrEmpty(modelValidation))
+                return BadRequest(modelValidation);
+
+            var tag = await _articleService.AddTagAsync(tagDto);
+
+            return Ok(tag);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("add-section")]
+        public async Task<IActionResult> AddSectionAsync([FromBody] SectionDto sectionDto)
+        {
+            var modelValidation = ValidationHelper<SectionDto>.Validate(sectionDto);
             if (!string.IsNullOrEmpty(modelValidation))
                 return BadRequest(modelValidation);
 
@@ -70,9 +85,9 @@ namespace FIHS.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("update/{articleId}")]
-        public async Task<IActionResult> UpdateArticleAsync(int articleId, [FromForm] ArticleDto articleDto)
+        public async Task<IActionResult> UpdateArticleAsync(int articleId, [FromForm] UpdateArticleDto articleDto)
         {
-            var modelValidation = ValidationHelper<ArticleDto>.Validate(articleDto);
+            var modelValidation = ValidationHelper<UpdateArticleDto>.Validate(articleDto);
             if (!string.IsNullOrEmpty(modelValidation))
                 return BadRequest(modelValidation);
 
@@ -86,9 +101,9 @@ namespace FIHS.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("update-section/{sectionId}")]
-        public async Task<IActionResult> UpdateSectionAsync(int sectionId, [FromBody] ArticleSectionDto sectionDto)
+        public async Task<IActionResult> UpdateSectionAsync(int sectionId, [FromBody] SectionDto sectionDto)
         {
-            var modelValidation = ValidationHelper<ArticleSectionDto>.Validate(sectionDto);
+            var modelValidation = ValidationHelper<SectionDto>.Validate(sectionDto);
             if (!string.IsNullOrEmpty(modelValidation))
                 return BadRequest(modelValidation);
 
@@ -113,6 +128,18 @@ namespace FIHS.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpDelete("delete-tag/{tagId}")]
+        public async Task<IActionResult> DeleteTagAsync(int tagId)
+        {
+            var result = await _articleService.DeleteTagAsync(tagId);
+
+            if (!result)
+                BadRequest("€Ì— „ÊÃÊœ");
+
+            return Ok(" „ «·Õ–› »‰Ã«Õ");
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("delete-section/{sectionId}")]
         public async Task<IActionResult> DeleteSectionAsync(int sectionId)
         {
@@ -122,6 +149,38 @@ namespace FIHS.Controllers
                 BadRequest("Â–« «·ﬁ”„ €Ì— „ÊÃÊœ");
 
             return Ok(" „ Õ–› «·ﬁ”„ »‰Ã«Õ");
+        }
+
+        [HttpGet("like/{articleId}")]
+        public async Task<IActionResult> LikeAsync(int articleId)
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _articleInteractionService.LikeAsync(articleId, refreshToken);
+
+            if (!result)
+                return BadRequest("·ﬁœ ﬁ„  »«·«⁄Ã«»  »Â–« «·„ﬁ«· »«·›⁄·");
+
+            return Ok(" „ «÷«›… «·«⁄Ã«» »‰Ã«Õ");
+        }
+
+        [HttpDelete("remove-like/{articleId}")]
+        public async Task<IActionResult> RemoveLikeAsync(int articleId)
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _articleInteractionService.RemoveLikeAsync(articleId, refreshToken);
+
+            if (!result)
+                return BadRequest("«‰  ·„  ﬁ„ »«·«⁄Ã«» »Â–« «·„ﬁ«·");
+
+            return Ok(" „ «“«·… «·«⁄Ã«» »‰Ã«Õ");
         }
     }
 }

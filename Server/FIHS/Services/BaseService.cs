@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using FIHS.Interfaces;
-using FIHS.Models;
+using FIHS.Models.AuthModels;
+using Google.Cloud.Translation.V2;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Services
 {
@@ -21,6 +23,16 @@ namespace FIHS.Services
             _context = context;
             _userManager = userManager;
             _imageService = imageService;
+        }
+        protected async Task<ApplicationUser?> GetUserByRefreshToken(string refreshToken)
+        {
+            return await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+        }
+        protected string TranslateText(string text, string targetLanguage)
+        {
+            TranslationClient client = TranslationClient.Create();
+            TranslationResult result = client.TranslateText(text, targetLanguage);
+            return result.TranslatedText;
         }
     }
 }
