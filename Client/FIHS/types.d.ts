@@ -4,7 +4,6 @@ interface DBItem {
 
 interface HasImage extends DBItem {
     imgUrl: string,
-    imageURL: string,
 }
 
 interface WithTitle extends DBItem {
