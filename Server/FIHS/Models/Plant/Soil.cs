@@ -10,6 +10,8 @@ namespace FIHS.Models.Plant
     {
         public int Id { get; set; }
         [Required,MaxLength(124),MinLength(2)]
+        public string Name { get; set; }
+        [Required, MaxLength(124), MinLength(2)]
         public string Texture { get; set; }
         [Required, MaxLength(124), MinLength(2)]
         public string Structure { get; set; }

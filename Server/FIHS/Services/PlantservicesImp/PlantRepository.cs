@@ -1,4 +1,5 @@
-﻿using FIHS.Dtos;
+﻿using AutoMapper;
+using FIHS.Dtos;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IPlant;
 using FIHS.Models.Plant;
@@ -10,10 +11,13 @@ namespace FIHS.Services.PlantservicesImp
     {
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
-        public PlantRepository(ApplicationDbContext context, IImageService imageService)
+        private readonly IMapper _mapper;
+        public PlantRepository(ApplicationDbContext context, IImageService imageService,IMapper mapper)
         { 
             _context = context;
             _imageService = imageService;
+            _mapper = mapper;
+
         }
 
         public async Task AddPlant(Plant plant, PlantInDto plantInDto)
@@ -42,18 +46,37 @@ namespace FIHS.Services.PlantservicesImp
             var plant = await _context.Plants.Include(pt => pt.PlantTypes).ThenInclude(p => p.PlantType).Include(p => p.Soils).ThenInclude(ps => ps.Soil).FirstOrDefaultAsync(p=>p.Name == name);
             return plant;
         }
-        private async Task SetPlantSoils(Plant plant, PlantInDto plantInDto)
+        public async Task<PlantDto> DeletePlantAsync(int plantId)
+        {
+           var plantToDelete = await _context.Plants.FirstOrDefaultAsync(plant => plant.Id == plantId);
+           PlantDto plantDto = _mapper.Map<PlantDto>(plantToDelete);
+           if (plantToDelete is null)
+            {
+                plantDto.Message = "No Plant found with this id";
+                return plantDto;
+            }
+            _context.Plants.Remove(plantToDelete);
+            _context.SaveChanges();
+            return plantDto;
+        }
+
+
+        #region private methods
+        private void SetPlantSoils(Plant plant, PlantInDto plantInDto)
         {
             plant.Soils = plantInDto.SoilsId.Select(soilIds => new PlantSoilTypes { SoilId = soilIds }).ToList();
 
         }
-        private async Task SetPlantTypes(Plant plant, PlantInDto plantInDto)
+        private void SetPlantTypes(Plant plant, PlantInDto plantInDto)
         {
             plant.PlantTypes = plantInDto.PlantTypesId.Select(PTId => new PlantsTypesOfPlant { PlantTypeId = PTId }).ToList();
         }
-        private async Task SetPlantImg(Plant plant, PlantInDto plantInDto)
+        private void SetPlantImg(Plant plant, PlantInDto plantInDto)
         {
             plant.ImageUrl = _imageService.SetImage(plantInDto.ImgFile, plantInDto.ImageUrl);
-        }
+        } 
+        #endregion
+
+
     }
 }
