@@ -8,7 +8,7 @@ namespace FIHS.Interfaces.IArticle
     public interface IArticleService
     {
         Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync();
-        Task<ReturnArticleDto> GetArticleAsync(int articleId);
+        Task<ReturnArticleDto> GetArticleAsync(int articleId, string? refreshToken);
         Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query);
         Task<Article> AddArticleAsync(AddArticleDto articleDto);
         Task<ArticleTag> AddTagAsync(TagDto tagDto);

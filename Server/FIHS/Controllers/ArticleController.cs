@@ -30,7 +30,9 @@ namespace FIHS.Controllers
         [HttpGet("get/{articleId}")]
         public async Task<IActionResult> GetArticleAsync(int articleId)
         {
-            var result = await _articleService.GetArticleAsync(articleId);
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            var result = await _articleService.GetArticleAsync(articleId, refreshToken);
 
             if (!result.Succeeded)
                 return BadRequest(result.Message);
