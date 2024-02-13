@@ -15,7 +15,8 @@ namespace FIHS.Helpers
 {
     public class MappingProfile : Profile
     {
-        private readonly string _baseUrl = "https://localhost:7184";
+        //private readonly string _baseUrl = "https://localhost:7184";
+        private readonly string _baseUrl = "https://192.168.1.11:7184";
 
         public MappingProfile() 
         {

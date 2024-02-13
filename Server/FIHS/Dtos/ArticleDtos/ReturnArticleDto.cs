@@ -10,7 +10,8 @@ namespace FIHS.Dtos.ArticleDtos
         public string Overview { get; set; }
         public string Author { get; set; }
         public string ImgUrl { get; set; }
-        public DateTime PublicationDate { get; set; }
+        public DateTime? PublicationDate { get; set; }
+        public bool Liked { get; set; }
         public int NumOfLikes { get; set; }
         [JsonIgnore]
         public string? Message { get; set; }
