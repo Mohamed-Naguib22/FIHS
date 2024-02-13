@@ -10,7 +10,7 @@ import { GluestackUIProvider, Button } from '@gluestack-ui/themed';
 import { config } from '@/config/gluestack-ui.config';
 import { Image } from 'expo-image';
 import { View } from '@/components/Themed';
-import { I18nManager } from 'react-native'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -51,7 +51,9 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const queryClient = new QueryClient()
   return (
+    <QueryClientProvider client={queryClient}>
     <GluestackUIProvider config={config}>      
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
@@ -93,7 +95,7 @@ function RootLayoutNav() {
         </Stack>
       </ThemeProvider>
     </GluestackUIProvider>
-    
+    </QueryClientProvider>
   );
 }
 
