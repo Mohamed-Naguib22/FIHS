@@ -9,5 +9,6 @@ namespace FIHS.Interfaces.IPlant
         public Task<Plant> GetPlantByIdAsync(int id);
         public Task<Plant> GetPlantByNameAsync(string name);
         public Task AddPlant(Plant plant,PlantInDto plantInDto);
+        public Task<PlantDto> DeletePlantAsync(int plantId);
     }
 }

@@ -13,7 +13,7 @@ namespace FIHS.Models.Plant
         public int? Id { get; set; }
         [Required,MaxLength(50),MinLength(2)]
         public string Name { get; set; }
-        [Required, MaxLength(50), MinLength(5)]
+        [Required, MaxLength(516), MinLength(5)]
         public string Description { get; set; }
         [ MaxLength(128), MinLength(2)]
         public string? CommonUses { get; set; }

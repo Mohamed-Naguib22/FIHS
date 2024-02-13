@@ -35,13 +35,14 @@ namespace FIHS.Controllers
             var plantsDto = _mapper.Map<List<PlantDto>>(await _plantRepository.GetAllPlantsAsync());
             return Ok(plantsDto);
         }
-        [HttpGet("GetPlantById{id}")]
+        [HttpGet("GetPlantById/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPlantById(int id)
         {
             var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByIdAsync(id));
-            return plantDto == null ? Ok(plantDto) : NotFound(); ;
+            return plantDto == null ?   NotFound() : Ok(plantDto);
         }
-        [HttpGet("GetPlantByName{name}")]
+        [HttpGet("GetPlantByName/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPlantByName(string name)
@@ -49,11 +50,7 @@ namespace FIHS.Controllers
             var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByNameAsync(name));
             return  Ok(plantDto);
         }
-        /// <summary>
-        /// Add New Plant
-        /// </summary>
-        /// <param name="plantInDto"></param>
-        /// <returns></returns>
+
         [HttpPost("AddPlant")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,10 +59,18 @@ namespace FIHS.Controllers
            if (ModelState.IsValid)
             {
                 var plant = _mapper.Map<Plant>(plantInDto);
-                _plantRepository.AddPlant(plant, plantInDto);
+                await _plantRepository.AddPlant(plant, plantInDto);
                 return Ok("Plant Added Succefully");
             }
            return BadRequest();
+        }
+        [HttpDelete("DeletePlant/{plantId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeletePlant(int plantId)
+        {
+            var plant =  await _plantRepository.DeletePlantAsync(plantId);
+            return plant.Message is "" ? Ok(plant) : NotFound(plant.Message);
         }
     }
 }
