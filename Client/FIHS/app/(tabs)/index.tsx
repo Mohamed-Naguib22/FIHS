@@ -3,58 +3,46 @@ import { Text, View } from '@/components/Themed';
 import Fontisto from '@expo/vector-icons/Fontisto'
 import { Fab } from '@gluestack-ui/themed';
 import { Image } from 'expo-image';
-import article from "../../assets/images/image.jpg";
-
+import TabsPageContainer from '@/components/layout/TabsPageContainer';
 export default function TabOneScreen() {
-  return <>
-    <View style={styles.container}>
-      <Fab>
-        <Fontisto name='reddit'  size={32} color={'#fff'}/>
-      </Fab>
-      <View style={styles.WeatherContainer}>
-        <View style={styles.WeatherContentLeft}>
-          <Text style={styles.WeatherNum}>19</Text>
-          <Text style={styles.center}>القاهره</Text>
+  return <TabsPageContainer>
+        <View style={styles.WeatherContainer}>
+          <View style={styles.WeatherContentLeft}>
+            <Text style={styles.WeatherNum}>19</Text>
+            <Text style={styles.center}>القاهره</Text>
+          </View>
+          <View style={styles.WeatherContentRight}>
+            <Fontisto style={styles.WeatherIcon} name='cloudy'  size={80} color={'#FCE504'}/>
+            <Text style={styles.center}>غائم</Text>
+          </View>
         </View>
-        <View style={styles.WeatherContentRight}>
-        
-          <Fontisto style={styles.WeatherIcon} name='cloudy'  size={80} color={'#FCE504'}/>
-
-          <Text style={styles.center}>غائم</Text>
+        <View style={styles.articlesViewName}>
+          <Text style={styles.articlesName}> المقالات</Text>
+          <Text style={styles.articlesMore}> المزيد</Text>
         </View>
-      </View>
-   
-<View style={styles.articlesViewName}>
-
-        <Text style={styles.articlesName}> المقالات</Text>
-        <Text style={styles.articlesMore}> المزيد</Text>
-</View>
         <ScrollView  style={styles.articlesScrollView} horizontal  contentContainerStyle={{paddingHorizontal:5}}showsHorizontalScrollIndicator={false}>
           <View style={styles.articles}>
-            <Image style={styles.articlesImage} source={article} />
+            <Image style={styles.articlesImage} source={require("@/assets/images/image.jpg")} />
             <Text style={styles.articlesHeader}>  النبات </Text>
             <Text style={styles.articlesContent} numberOfLines={1}>عرف الفول منذ أيام الفراعنة ويعدّ مصدراً .....</Text>
           </View>
           <View style={styles.articles}>
-            <Image style={styles.articlesImage} source={article} />
+            <Image style={styles.articlesImage} source={require("@/assets/images/image.jpg")} />
             <Text style={styles.articlesHeader}>  النبات </Text>
             <Text style={styles.articlesContent} numberOfLines={1}>عرف الفول منذ أيام الفراعنة ويعدّ مصدراً .....</Text>
           </View>
           <View style={styles.articles}>
-            <Image style={styles.articlesImage} source={article} />
+            <Image style={styles.articlesImage} source={require("@/assets/images/image.jpg")} />
             <Text style={styles.articlesHeader}>  النبات </Text>
             <Text style={styles.articlesContent} numberOfLines={1}>عرف الفول منذ أيام الفراعنة ويعدّ مصدراً .....</Text>
           </View>
           <View style={styles.articles}>
-            <Image style={styles.articlesImage} source={article} />
+            <Image style={styles.articlesImage} source={require("@/assets/images/image.jpg")} />
             <Text style={styles.articlesHeader}>  النبات </Text>
             <Text style={styles.articlesContent} numberOfLines={1}>عرف الفول منذ أيام الفراعنة ويعدّ مصدراً .....</Text>
           </View>
         </ScrollView>
-     
-   
-    </View>
-    </>
+    </TabsPageContainer>
   ;
 }
 

@@ -21,7 +21,120 @@ namespace FIHS.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FIHS.Models.ApplicationUser", b =>
+            modelBuilder.Entity("FIHS.Models.ArticleModels.Article", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Overview")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("FIHS.Models.ArticleModels.ArticleLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timespan")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ArticleId");
+
+                    b.ToTable("ArticleLikes");
+                });
+
+            modelBuilder.Entity("FIHS.Models.ArticleModels.ArticleSection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.ToTable("ArticleSections");
+                });
+
+            modelBuilder.Entity("FIHS.Models.ArticleModels.ArticleTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.ToTable("ArticleTags");
+                });
+
+            modelBuilder.Entity("FIHS.Models.AuthModels.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -98,69 +211,6 @@ namespace FIHS.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", "security");
-                });
-
-            modelBuilder.Entity("FIHS.Models.Article", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ImgUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Overview")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Articles");
-                });
-
-            modelBuilder.Entity("FIHS.Models.ArticleSection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ArticleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArticleId");
-
-                    b.ToTable("ArticleSections");
                 });
 
             modelBuilder.Entity("FIHS.Models.Fertilizer.Fertilizer", b =>
@@ -264,8 +314,8 @@ namespace FIHS.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(516)
+                        .HasColumnType("nvarchar(516)");
 
                     b.Property<string>("HarvistingSeason")
                         .IsRequired()
@@ -395,6 +445,11 @@ namespace FIHS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MoistureRetention")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("nvarchar(124)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(124)
                         .HasColumnType("nvarchar(124)");
@@ -562,9 +617,50 @@ namespace FIHS.Migrations
                     b.ToTable("UserTokens", "security");
                 });
 
-            modelBuilder.Entity("FIHS.Models.ApplicationUser", b =>
+            modelBuilder.Entity("FIHS.Models.ArticleModels.ArticleLike", b =>
                 {
-                    b.OwnsMany("FIHS.Models.Auth_Models.RefreshToken", "RefreshTokens", b1 =>
+                    b.HasOne("FIHS.Models.AuthModels.ApplicationUser", "ApplicationUser")
+                        .WithMany("ArticleLikes")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FIHS.Models.ArticleModels.Article", "Article")
+                        .WithMany("ArticleLikes")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("FIHS.Models.ArticleModels.ArticleSection", b =>
+                {
+                    b.HasOne("FIHS.Models.ArticleModels.Article", "Article")
+                        .WithMany("ArticleSections")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("FIHS.Models.ArticleModels.ArticleTag", b =>
+                {
+                    b.HasOne("FIHS.Models.ArticleModels.Article", "Article")
+                        .WithMany("ArticleTags")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("FIHS.Models.AuthModels.ApplicationUser", b =>
+                {
+                    b.OwnsMany("FIHS.Models.AuthModels.RefreshToken", "RefreshTokens", b1 =>
                         {
                             b1.Property<string>("ApplicationUserId")
                                 .HasColumnType("nvarchar(450)");
@@ -597,17 +693,6 @@ namespace FIHS.Migrations
                         });
 
                     b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("FIHS.Models.ArticleSection", b =>
-                {
-                    b.HasOne("FIHS.Models.Article", "Article")
-                        .WithMany("ArticleSections")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Article");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
@@ -659,7 +744,7 @@ namespace FIHS.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("FIHS.Models.ApplicationUser", null)
+                    b.HasOne("FIHS.Models.AuthModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -668,7 +753,7 @@ namespace FIHS.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("FIHS.Models.ApplicationUser", null)
+                    b.HasOne("FIHS.Models.AuthModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -683,7 +768,7 @@ namespace FIHS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FIHS.Models.ApplicationUser", null)
+                    b.HasOne("FIHS.Models.AuthModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -692,16 +777,25 @@ namespace FIHS.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("FIHS.Models.ApplicationUser", null)
+                    b.HasOne("FIHS.Models.AuthModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FIHS.Models.Article", b =>
+            modelBuilder.Entity("FIHS.Models.ArticleModels.Article", b =>
                 {
+                    b.Navigation("ArticleLikes");
+
                     b.Navigation("ArticleSections");
+
+                    b.Navigation("ArticleTags");
+                });
+
+            modelBuilder.Entity("FIHS.Models.AuthModels.ApplicationUser", b =>
+                {
+                    b.Navigation("ArticleLikes");
                 });
 
             modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>

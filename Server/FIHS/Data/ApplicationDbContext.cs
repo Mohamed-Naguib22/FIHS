@@ -1,4 +1,5 @@
-﻿using FIHS.Models;
+﻿using FIHS.Models.ArticleModels;
+using FIHS.Models.AuthModels;
 using FIHS.Models.Fertilizer;
 using FIHS.Models.Pesticide;
 using FIHS.Models.Plant;
@@ -32,6 +33,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Article> Articles { get; set; }
     public DbSet<ArticleSection> ArticleSections { get; set; }
+    public DbSet<ArticleTag> ArticleTags { get; set; }
+    public DbSet<ArticleLike> ArticleLikes { get; set; }
     public DbSet<Plant> Plants { get; set; }
     public DbSet<PlantType> PlantTypes { get; set; }
     public DbSet<PlantsTypesOfPlant> PlantTypesOfPlant { get; set;}

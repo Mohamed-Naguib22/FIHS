@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using FIHS.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using FIHS.Models.ChatGPT;
 using CarShopAPI.Helpers;
 using FIHS.Dtos;
+using FIHS.Interfaces.IChat;
 
 namespace FIHS.Controllers
 {

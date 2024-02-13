@@ -1,6 +1,6 @@
 ﻿using CarShopAPI.Helpers;
-using FIHS.Dtos;
-using FIHS.Interfaces;
+using FIHS.Dtos.UserDtos;
+using FIHS.Interfaces.IUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

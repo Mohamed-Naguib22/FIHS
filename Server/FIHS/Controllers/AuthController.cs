@@ -1,7 +1,6 @@
-﻿using FIHS.Dtos;
-using FIHS.Interfaces;
-using FIHS.Models;
-using FIHS.Models.Auth_Models;
+﻿using FIHS.Dtos.AuthModels;
+using FIHS.Dtos.UserDtos;
+using FIHS.Interfaces.IUser;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FIHS.Controllers
