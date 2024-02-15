@@ -3,7 +3,9 @@ using FIHS.Helpers;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IArticle;
 using FIHS.Interfaces.IChat;
+using FIHS.Interfaces.IDisease;
 using FIHS.Interfaces.IFertilizer;
+using FIHS.Interfaces.IPest;
 using FIHS.Interfaces.IPesticide;
 using FIHS.Interfaces.IPlant;
 using FIHS.Interfaces.IPlantId;
@@ -14,8 +16,10 @@ using FIHS.Services;
 using FIHS.Services.ArticleService;
 using FIHS.Services.ArticleServices;
 using FIHS.Services.ChatServices;
+using FIHS.Services.DiseaseService;
 using FIHS.Services.FertilizerService;
 using FIHS.Services.PesticideService;
+using FIHS.Services.PestService;
 using FIHS.Services.PlantIdServices;
 using FIHS.Services.PlantservicesImp;
 using FIHS.Services.UserServices;
@@ -62,6 +66,9 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IPesticide, PesticideService>();
 builder.Services.AddScoped<IFertilizer, FertilizerService>();
+builder.Services.AddScoped<IPestService, PestService>();
+builder.Services.AddScoped<IDiseaseService, DiseaseService>();
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -115,10 +122,10 @@ builder.Services.Configure<KestrelServerOptions>(options =>
         listenOptions.UseHttps();
     });
 
-    options.Listen(IPAddress.Parse("192.168.1.11"), 7184, listenOptions =>
+   /* options.Listen(IPAddress.Parse("192.168.1.11"), 7184, listenOptions =>
     {
         listenOptions.UseHttps();
-    });
+    });*/
 });
 
 builder.Services.AddControllers();
