@@ -1,6 +1,8 @@
 ﻿using FIHS.Models.ArticleModels;
 using FIHS.Models.AuthModels;
+using FIHS.Models.Disease;
 using FIHS.Models.Fertilizer;
+using FIHS.Models.Pest;
 using FIHS.Models.Pesticide;
 using FIHS.Models.Plant;
 using Microsoft.AspNetCore.Identity;
@@ -41,4 +43,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Soil> Soils { get; set; }
     public DbSet<Pesticide> Pesticides { get; set; }
     public DbSet<Fertilizer> Fertilizers { get; set; }
+    public DbSet<Pest> Pests { get; set; }
+    public DbSet<Disease> Diseases { get; set; }
 }
