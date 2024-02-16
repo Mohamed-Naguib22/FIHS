@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import TabsHeader from '@/components/layout/TabsHeader';
-import { Feather } from '@expo/vector-icons';
-import { useTabHeaderHeight } from '@/components/layout/useTabHeaderHeight';
-import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ActionsheetDragIndicatorWrapper, ActionsheetItem, ActionsheetItemText, Button, ButtonText, HStack, VStack } from '@gluestack-ui/themed';
-import { Image } from 'expo-image';
 import { RNCamera } from 'react-native-camera';
 import Scan from '@/components/home/Scan';
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -60,7 +56,7 @@ export default function TabLayout() {
           tabBarItemStyle:{
             marginRight:25
           },
-          tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
         }}
         />
       <Tabs.Screen
@@ -91,17 +87,17 @@ export default function TabLayout() {
         }}
       />     
       <Tabs.Screen
-        name="two"
+        name="favourites"
         options={{
           title: '',
           tabBarItemStyle:{
             marginLeft:40
           },
-          tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
         }}
         />
       <Tabs.Screen
-        name="four"
+        name="profile"
         options={{
           title: '',
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,

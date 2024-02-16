@@ -1,20 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Animated, { useDerivedValue, withSpring, withTiming } from 'react-native-reanimated'
 import { useSharedValue } from 'react-native-reanimated';
-import { Button, ButtonText, Fab, HStack, InputField, VStack } from '@gluestack-ui/themed';
+import { Button, ButtonText, Fab, HStack, InputField, VStack, Text } from '@gluestack-ui/themed';
 import { Input } from '@gluestack-ui/themed';
 import { InputSlot } from '@gluestack-ui/themed';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
-import { useTabHeaderHeight } from './useTabHeaderHeight';
+import { useTabHeaderHeight } from '../../hooks/state/useTabHeaderHeight';
 import { useNavigation } from 'expo-router';
 import { Animated as An } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useAnimationState, MotiView } from 'moti'
 import Fontisto from '@expo/vector-icons/Fontisto'
+import useTabsHeaderName from '@/hooks/state/useTabsHeaderName';
 const TabsHeader = () => {
   
   const animationState = useAnimationState({
@@ -29,11 +30,15 @@ const TabsHeader = () => {
   useEffect(()=>{  
     !isTop?animationState.transitionTo('scrolled'):animationState.transitionTo('top')
   },[isTop])
+  const {name} = useTabsHeaderName()
   return (
     <MotiView transition={{type:"spring", damping:50, delay:isTop?150:200}} state={animationState}  style={{ maxHeight:175, paddingTop:0, marginTop:-8}}>
       <StatusBar style={'light'}/>
       <VStack pt={"$2"} h={'$0.5'}>
-        <HStack ml={"auto"} px={"$6"} pt={"$10"}>
+        <HStack justifyContent='space-between' px={"$6"} pt={"$10"}>
+          <Text color='$primary400' zIndex={5} size='xl' position='absolute' top={"$10"} right={"$6"}>
+            {name}
+          </Text>
         <Image
         style={styles.logo}
         source={require('@/assets/images/Logofinal.png')}
