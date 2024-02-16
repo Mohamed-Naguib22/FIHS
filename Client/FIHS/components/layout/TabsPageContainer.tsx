@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Fab, ScrollView, View } from '@gluestack-ui/themed'
-import { useTabHeaderHeight } from './useTabHeaderHeight'
+import { useTabHeaderHeight } from '../../hooks/state/useTabHeaderHeight'
 import Fontisto from '@expo/vector-icons/Fontisto'
 
 type Props = {
