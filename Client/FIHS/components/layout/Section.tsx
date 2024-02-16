@@ -14,7 +14,7 @@ const Section = ({name, children, link}: Props) => {
         <HStack justifyContent='space-between' alignItems='center' my={"$5"}>
         <Text fontWeight='$bold' size='md'> {name}</Text>
         <Link $active={{opacity:0.75}} href={link} >
-            <LinkText fontWeight='$bold' size='md' textTransform='none' textDecorationLine='none' color='$blue700'>المزيد</LinkText>
+            <LinkText backgroundColor='rgba(41, 133, 120,0.6)' padding={5} borderRadius={'$lg'} fontWeight='$bold' size='md' textTransform='none' textDecorationLine='none' color='$white '>المزيد</LinkText>
         </Link>
         </HStack>
         <ScrollView horizontal  contentContainerStyle={{paddingHorizontal:5}} showsHorizontalScrollIndicator={false}>
