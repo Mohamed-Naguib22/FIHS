@@ -72,5 +72,21 @@ namespace FIHS.Controllers
             var plant =  await _plantRepository.DeletePlantAsync(plantId);
             return plant.Message is "" ? Ok(plant) : NotFound(plant.Message);
         }
+
+        [HttpGet("AllPlantTypes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllPlanttypes()
+        {
+            return Ok(await _plantRepository.GetAllPlantsTypeAsync());
+        }
+
+        [HttpGet("AllSoils")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllSoils()
+        {
+            return Ok(await _plantRepository.GetAllSoils());
+        }
     }
 }

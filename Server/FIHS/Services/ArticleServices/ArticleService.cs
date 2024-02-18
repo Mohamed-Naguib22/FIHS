@@ -6,33 +6,44 @@ using Microsoft.EntityFrameworkCore;
 using FIHS.Interfaces.IArticle;
 using Microsoft.AspNetCore.Identity;
 using FIHS.Models.AuthModels;
+using System.Linq;
 
 namespace FIHS.Services.ArticleService
 {
     public class ArticleService : BaseService, IArticleService
     {
         private readonly string _baseUrl;
+        private readonly IConfiguration _configuration;
         public ArticleService(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             IImageService imageService,
-            IMapper mapper) : base(context, userManager, mapper, imageService)
+            IMapper mapper, IConfiguration configuration) : base(context, userManager, mapper, imageService)
         {
+            _configuration = configuration;
+            _baseUrl = _configuration["BaseUrl"];
         }
 
         public async Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync()
         {
-            var articles = await _context.Articles
-                .Include(a => a.ArticleLikes)
-                .Include(a => a.ArticleTags)
-                .Include(a => a.ArticleSections)
-                .ToListAsync();
+            var likes = await _context.ArticleLikes.ToListAsync();
 
-           var articlesDto = _mapper.Map<IEnumerable<ReturnArticleDto>>(articles);
-            return articlesDto;
+            var articles = await _context.Articles
+                .Select(a => new ReturnArticleDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Author = a.Author,
+                    ImgUrl = _baseUrl + a.ImgUrl,
+                    NumOfLikes = a.ArticleLikes.Count()
+                }).OrderByDescending(a => a.NumOfLikes).ToListAsync();
+
+            return articles;
         }
 
-        public async Task<ReturnArticleDto> GetArticleAsync(int articleId)
+        public async Task<ReturnArticleDto> GetArticleAsync(int articleId, string refreshToken)
         {
+            var user = await GetUserByRefreshToken(refreshToken);
+
             var articles = await _context.Articles
                 .Include(a => a.ArticleLikes)
                 .Include(a => a.ArticleTags)
@@ -47,24 +58,36 @@ namespace FIHS.Services.ArticleService
             var articleDto = _mapper.Map<ReturnArticleDto>(article);
 
             var tags = _context.ArticleTags.Where(at => at.ArticleId == article.Id).Select(at => at.Tag);
+            var liked = await _context.ArticleLikes.AnyAsync(al => al.ArticleId == article.Id && al.ApplicationUserId == user.Id);
 
             var similarArticles = articles.Where(a => a.ArticleTags.Any(at => tags.Contains(at.Tag)))
                 .Where(a => a.Id != article.Id).Take(5);
 
             articleDto.SimilarArticles = similarArticles;
+            articleDto.Liked = liked;
+
             return articleDto;
         }
 
         public async Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query)
         {
-            var articles = await _context.Articles
+            var articles = _context.Articles
                 .Include(a => a.ArticleTags)
                 .Include(a => a.ArticleLikes)
                 .Include(a => a.ArticleSections)
-                .Where(a => a.ArticleTags.Any(at => at.Tag.Contains(query)))
-                .ToListAsync();
+                .Where(a => a.ArticleTags.Any(at => at.Tag.Contains(query)));
 
-            var articlesDto = _mapper.Map<IEnumerable<ReturnArticleDto>>(articles);
+            var likes = await _context.ArticleLikes.ToListAsync();
+
+            var articlesDto = await articles
+                .Select(a => new ReturnArticleDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Author = a.Author,
+                    ImgUrl = _baseUrl + a.ImgUrl,
+                    NumOfLikes = a.ArticleLikes.Count()
+                }).OrderByDescending(a => a.NumOfLikes).ToListAsync();
 
             return articlesDto;
         }

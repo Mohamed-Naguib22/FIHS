@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Fab, ScrollView, View } from '@gluestack-ui/themed'
-import { useTabHeaderHeight } from './useTabHeaderHeight'
+import { useTabHeaderHeight } from '../../hooks/state/useTabHeaderHeight'
 import Fontisto from '@expo/vector-icons/Fontisto'
 
 type Props = {
@@ -14,16 +14,20 @@ const TabsPageContainer = ({children}: Props) => {
     },[])
     return (
         <>
-            <ScrollView
+            <ScrollView 
             onScrollEndDrag={(e)=>{
             e.nativeEvent.contentOffset.y/e.nativeEvent.contentSize.height>0.1?heightWithoutSearch():heightWithSearch()
             }}
             >
-            <View p={"$5"}>
+            <ScrollView 
+            p={"$4"}
+            flex={1}
+            alignContent='center'
+            >
                 {
                     children
                 }
-            </View>
+            </ScrollView>
 
             </ScrollView>
             <Fab position='absolute' right={"unset" as any} left={"$4"} bottom={"$5"} >

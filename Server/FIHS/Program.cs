@@ -3,7 +3,9 @@ using FIHS.Helpers;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IArticle;
 using FIHS.Interfaces.IChat;
+using FIHS.Interfaces.IDisease;
 using FIHS.Interfaces.IFertilizer;
+using FIHS.Interfaces.IPest;
 using FIHS.Interfaces.IPesticide;
 using FIHS.Interfaces.IPlant;
 using FIHS.Interfaces.IPlantId;
@@ -14,17 +16,23 @@ using FIHS.Services;
 using FIHS.Services.ArticleService;
 using FIHS.Services.ArticleServices;
 using FIHS.Services.ChatServices;
+using FIHS.Services.DiseaseService;
 using FIHS.Services.FertilizerService;
 using FIHS.Services.PesticideService;
+using FIHS.Services.PestService;
 using FIHS.Services.PlantIdServices;
 using FIHS.Services.PlantservicesImp;
 using FIHS.Services.UserServices;
 using FIHS.Services.WeatherServices;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -35,6 +43,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.Configure<Sender>(builder.Configuration.GetSection("Sender"));
+//builder.WebHost.UseUrls("https://192.168.1.11:7184");
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>
     (options => {
@@ -57,6 +66,9 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IPesticide, PesticideService>();
 builder.Services.AddScoped<IFertilizer, FertilizerService>();
+builder.Services.AddScoped<IPestService, PestService>();
+builder.Services.AddScoped<IDiseaseService, DiseaseService>();
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -102,7 +114,21 @@ builder.Services.AddControllers()
         {
             options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
-//builder.Services.AddControllers();
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Listen(IPAddress.Loopback, 7184, listenOptions =>
+    {
+        listenOptions.UseHttps();
+    });
+
+   /* options.Listen(IPAddress.Parse("192.168.1.11"), 7184, listenOptions =>
+    {
+        listenOptions.UseHttps();
+    });*/
+});
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(typeof(Program));

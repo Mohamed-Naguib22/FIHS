@@ -1,66 +1,37 @@
-import { ScrollView, StyleSheet } from 'react-native';
-import { Text, View } from '@/components/Themed';
-import Fontisto from '@expo/vector-icons/Fontisto'
-import { Fab } from '@gluestack-ui/themed';
-// import { useNavigation } from 'expo-router';
-import { useTabHeaderHeight } from '@/components/layout/useTabHeaderHeight';
-import { useDerivedValue } from 'react-native-reanimated';
+import { Text } from '@gluestack-ui/themed';
 import TabsPageContainer from '@/components/layout/TabsPageContainer';
+import Section from '@/components/layout/Section';
+import ArticleCard from '@/components/home/ArticleCard';
+import useArticles from '@/hooks/useArticles';
+import Weather from '@/components/home/Weather';
+import PlantsTypes from '@/components/home/PlantsTypes';
+import { useEffect } from 'react';
+import useTabsHeaderName from '@/hooks/state/useTabsHeaderName';
 export default function TabOneScreen() {
-  const {heightWithoutSearch, heightWithSearch} = useTabHeaderHeight()  
-  return <TabsPageContainer>
-      <Text style={styles.title}>shhhs</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
-      <Text style={styles.title}>hi</Text>
+  const {data:arts, isLoading} = useArticles()  
+  const {setName} = useTabsHeaderName()
+  useEffect(()=>{
+    setName("الرئيسية")
+},[])
+  if(isLoading){
+    return <TabsPageContainer>
+      <Text>جاري التحميل....</Text>
     </TabsPageContainer>
+  }
+  return <TabsPageContainer>
+        <Weather/>
+        <Section name='المقالات' link='/'>
+          {
+            arts?.slice(0, 6).map((art)=>{
+              return <ArticleCard {...art}/>
+            })
+          }
+        </Section>     
+        <Section name='أنواع النباتات' link='/'>
+         <PlantsTypes/>
+        </Section>     
+
+    </TabsPageContainer>
+    
   ;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
