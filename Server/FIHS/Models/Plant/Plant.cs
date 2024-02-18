@@ -15,9 +15,9 @@ namespace FIHS.Models.Plant
         public string Name { get; set; }
         [Required, MaxLength(516), MinLength(5)]
         public string Description { get; set; }
-        [ MaxLength(128), MinLength(2)]
+        [ MaxLength(512), MinLength(2)]
         public string? CommonUses { get; set; }
-        [ MaxLength(128), MinLength(2)]
+        [ MaxLength(512), MinLength(2)]
         public string? NutritionalValue { get; set; }
         [Range(0,double.MaxValue)]
         public double AverageYield { get; set; }
@@ -29,7 +29,7 @@ namespace FIHS.Models.Plant
         public string PlantingSeason { get; set; }
         [Required, MaxLength(128), MinLength(2)]
         public string HarvistingSeason { get; set; }
-        [Required, MaxLength(128), MinLength(2)]
+        [Required, MaxLength(512), MinLength(2)]
         public string CulivationTips{ get; set; }
         [ValidateNever]
         public string ImageUrl { get; set; }
