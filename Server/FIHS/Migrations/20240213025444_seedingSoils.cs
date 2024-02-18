@@ -16,6 +16,8 @@ namespace FIHS.Migrations
                 "CationExchangeCapacity","ImgUrl"},
                 values: new object[] { "التربة الطينية","طينية","متماسكة","قلوية الي متعادلة","متوسط الي عالي","مرتفع","مرتفع","ضعيف","مرتفعة","No_Image.PNG" }
                 );
+
+
         }
 
         /// <inheritdoc />

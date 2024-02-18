@@ -59,7 +59,11 @@ namespace FIHS.Services.PlantservicesImp
             _context.SaveChanges();
             return plantDto;
         }
+        public async Task<IEnumerable<PlantTypeDto>> GetAllPlantsTypeAsync() =>
+             _mapper.Map<IEnumerable<PlantTypeDto>>(await _context.PlantTypes.ToListAsync());
 
+        public async Task<IEnumerable<SoilDto>> GetAllSoils()=>
+            _mapper.Map<IEnumerable<SoilDto>>(await _context.Soils.ToListAsync());
 
         #region private methods
         private void SetPlantSoils(Plant plant, PlantInDto plantInDto)
@@ -74,7 +78,9 @@ namespace FIHS.Services.PlantservicesImp
         private void SetPlantImg(Plant plant, PlantInDto plantInDto)
         {
             plant.ImageUrl = _imageService.SetImage(plantInDto.ImgFile, plantInDto.ImageUrl);
-        } 
+        }
+
+
         #endregion
 
 
