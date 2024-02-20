@@ -43,14 +43,14 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}>
         <Tabs.Screen
-        name="index"
+        name="home/index"
         options={{
           title: '',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
         />
       <Tabs.Screen
-        name="three"
+        name="diseases/index"
         options={{
           title: '',
           tabBarItemStyle:{
@@ -87,7 +87,7 @@ export default function TabLayout() {
         }}
       />     
       <Tabs.Screen
-        name="favourites"
+        name="favourites/index"
         options={{
           title: '',
           tabBarItemStyle:{
@@ -97,7 +97,7 @@ export default function TabLayout() {
         }}
         />
       <Tabs.Screen
-        name="profile"
+        name="profile/index"
         options={{
           title: '',
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
