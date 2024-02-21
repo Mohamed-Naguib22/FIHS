@@ -12,6 +12,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/(tabs)/two.tsx", "metro.config.js"  ]
+    "expo-env.d.ts",
+    "metro.config.js"
+  ]
 }

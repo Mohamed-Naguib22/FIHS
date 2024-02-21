@@ -58,40 +58,10 @@ function RootLayoutNav() {
       <GluestackUIProvider config={config}>      
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
-            <Stack.Screen name="(tabs)" options={
-              {
-                headerShown:false 
-          //       headerTitle: ({children, tintColor}) => <Header/>,
-          //       headerLeft: () => (
-          //         <View>
-
-                      
-                        
-          //               <Image
-          //       style={styles.image}
-          //       source={Logo}
-          //       placeholder={"blurhash"}
-          //       contentFit="cover"
-          //       transition={1000}
-          //       />
-              
-          // </View>
-              //   ),
-              //   headerBackground:()=>(    
-              //     <View    style={styles.BG1} >
-              //       <Image
-              //       style={styles.BG}
-              //         source={LogoBG}
-              //         placeholder={"blurhash"}
-              //         contentFit="cover"
-              //         transition={1000}
-              //       />
-              //     </View>
-              //   ),
-                
-                
-              // 
-            }} />
+            <Stack.Screen name='(tabs)' options={{headerShown:false}} />
+            <Stack.Screen name='(auth)' options={{headerShown:false}} />
+            <Stack.Screen name='articles' options={{headerShown:false}} />
+            <Stack.Screen name='diseases' options={{headerShown:false}} />
             {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
           </Stack>
         </ThemeProvider>
