@@ -8,6 +8,7 @@ import PlantsTypes from '@/components/home/PlantsTypes';
 import { useEffect } from 'react';
 import useTabsHeaderName from '@/hooks/state/useTabsHeaderName';
 import { useRouter } from 'expo-router';
+
 export default function TabOneScreen() {
   const {data:arts, isLoading} = useArticles()  
   const {setName} = useTabsHeaderName()
@@ -25,14 +26,14 @@ export default function TabOneScreen() {
         <Button onPress={()=>router.push('/(auth)/login')}>
           <ButtonText>تسجيل الدخول</ButtonText>
         </Button>
-        <Section name='المقالات' link='/'>
+        <Section name='المقالات' link='/articles/'>
           {
             arts?.slice(0, 6).map((art)=>{
               return <ArticleCard {...art}/>
             })
           }
         </Section>     
-        <Section name='أنواع النباتات' link='/'>
+        <Section name='أنواع النباتات' link=''>
          <PlantsTypes/>
         </Section>     
 
