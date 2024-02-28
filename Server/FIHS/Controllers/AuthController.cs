@@ -90,6 +90,14 @@ namespace FIHS.Controllers
             return Ok(result);
         }
 
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("refreshToken");
+
+            return Ok("Logged out successfully");
+        }
+
         [HttpPut("changePassword")]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
         {

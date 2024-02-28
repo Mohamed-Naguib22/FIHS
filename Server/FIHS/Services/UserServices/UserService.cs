@@ -19,7 +19,7 @@ namespace FIHS.Services.UserServices
         private UserDto MapUserToDto(ApplicationUser user)
         {
             var userDto = _mapper.Map<UserDto>(user);
-            userDto.ProfilePicture = _baseUrl + user.ProfilePicture;
+            userDto.ProfilePicture = _baseUrl + user.ImgUrl;
             userDto.Succeeded = true;
             return userDto;
         }
@@ -65,7 +65,7 @@ namespace FIHS.Services.UserServices
             if (user == null)
                 return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
 
-            _imageService.DeleteImage(user.ProfilePicture);
+            _imageService.DeleteImage(user.ImgUrl);
             var result = await _userManager.DeleteAsync(user);
 
             if (!result.Succeeded)
@@ -81,7 +81,7 @@ namespace FIHS.Services.UserServices
             if (user == null)
                 return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
 
-            user.ProfilePicture = _imageService.SetImage(imgFile, user.ProfilePicture);
+            user.ImgUrl = _imageService.SetImage(imgFile, user.ImgUrl);
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -98,9 +98,9 @@ namespace FIHS.Services.UserServices
             if (user == null)
                 return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
             
-            _imageService.DeleteImage(user.ProfilePicture);
+            _imageService.DeleteImage(user.ImgUrl);
 
-            user.ProfilePicture = "\\images\\Default_User_Image.png";
+            user.ImgUrl = "\\images\\Default_User_Image.png";
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)

@@ -39,11 +39,9 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//var MohamedAlaaConnection = builder.Configuration.GetConnectionString("mohamedalaaConnection");
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 builder.Services.Configure<Sender>(builder.Configuration.GetSection("Sender"));
-//builder.WebHost.UseUrls("https://192.168.1.11:7184");
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>
     (options => {
@@ -52,7 +50,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -68,7 +65,6 @@ builder.Services.AddScoped<IPesticide, PesticideService>();
 builder.Services.AddScoped<IFertilizer, FertilizerService>();
 builder.Services.AddScoped<IPestService, PestService>();
 builder.Services.AddScoped<IDiseaseService, DiseaseService>();
-
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -117,15 +113,8 @@ builder.Services.AddControllers()
 
 builder.Services.Configure<KestrelServerOptions>(options =>
 {
-    options.Listen(IPAddress.Loopback, 7184, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    });
-
-   /* options.Listen(IPAddress.Parse("192.168.1.11"), 7184, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    });*/
+    options.Listen(IPAddress.Loopback, 7184);
+    options.Listen(IPAddress.Parse("192.168.1.11"), 7184);
 });
 
 builder.Services.AddControllers();
@@ -142,7 +131,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseStaticFiles();
 app.UseRouting();

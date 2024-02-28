@@ -13,7 +13,7 @@ namespace FIHS.Dtos.AuthModels
         public AuthModel(ApplicationUser user, JwtSecurityToken jwtSecurityToken, RefreshToken refreshToken, List<string> roles)
         {
             Email = user.Email;
-            Username = user.UserName;
+            ImgUrl = user.ImgUrl;
             EmailConfirmed = user.EmailConfirmed;
             IsAuthenticated = true;
             Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -29,13 +29,10 @@ namespace FIHS.Dtos.AuthModels
         public bool Succeeded { get; set; }
         public bool IsAuthenticated { get; set; }
         public bool EmailConfirmed { get; set; }
-        public string? Username { get; set; }
+        public string? ImgUrl { get; set; }
         public string? Email { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FirstName { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? LastName { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? PhoneNumber { get; set; }
         public List<string>? Roles { get; set; }
         public string? Token { get; set; }
