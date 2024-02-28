@@ -48,7 +48,7 @@ namespace FIHS.Controllers
             return Ok(articles);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost("add")]
         public async Task<IActionResult> AddArticleAsync([FromForm] AddArticleDto articleDto)
         {
@@ -61,7 +61,7 @@ namespace FIHS.Controllers
             return Ok(article);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost("add-tag")]
         public async Task<IActionResult> AddTagAsync([FromBody] TagDto tagDto)
         {
@@ -76,9 +76,9 @@ namespace FIHS.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("add-section")]
-        public async Task<IActionResult> AddSectionAsync([FromBody] SectionDto sectionDto)
+        public async Task<IActionResult> AddSectionAsync([FromBody] AddSectionDto sectionDto)
         {
-            var modelValidation = ValidationHelper<SectionDto>.Validate(sectionDto);
+            var modelValidation = ValidationHelper<AddSectionDto>.Validate(sectionDto);
             if (!string.IsNullOrEmpty(modelValidation))
                 return BadRequest(modelValidation);
 
@@ -103,9 +103,9 @@ namespace FIHS.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("update-section/{sectionId}")]
-        public async Task<IActionResult> UpdateSectionAsync(int sectionId, [FromBody] SectionDto sectionDto)
+        public async Task<IActionResult> UpdateSectionAsync(int sectionId, [FromBody] UpdateSectionDto sectionDto)
         {
-            var modelValidation = ValidationHelper<SectionDto>.Validate(sectionDto);
+            var modelValidation = ValidationHelper<UpdateSectionDto>.Validate(sectionDto);
             if (!string.IsNullOrEmpty(modelValidation))
                 return BadRequest(modelValidation);
 

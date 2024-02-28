@@ -12,9 +12,9 @@ namespace FIHS.Interfaces.IArticle
         Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query);
         Task<Article> AddArticleAsync(AddArticleDto articleDto);
         Task<ArticleTag> AddTagAsync(TagDto tagDto);
-        Task<ArticleSection> AddSectionAsync(SectionDto sectionDto);
+        Task<ArticleSection> AddSectionAsync(AddSectionDto sectionDto);
         Task<Article> UpdateArticleAsync(int articleId, UpdateArticleDto articleDto);
-        Task<ArticleSection> UpdateSectionAsync(int sectionId, SectionDto sectionDto);
+        Task<ArticleSection> UpdateSectionAsync(int sectionId, UpdateSectionDto sectionDto);
         Task<bool> DeleteArticleAsync(int articleId);
         Task<bool> DeleteTagAsync(int tagId);
         Task<bool> DeleteSectionAsync(int sectionId);

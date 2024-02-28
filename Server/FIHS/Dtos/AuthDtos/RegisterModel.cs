@@ -8,8 +8,6 @@ namespace FIHS.Dtos.AuthModels
         public string FirstName { get; set; }
         [StringLength(100)]
         public string LastName { get; set; }
-        [StringLength(128)]
-        public string Username { get; set; }
         [EmailAddress, StringLength(128)]
         public string Email { get; set; }
         [StringLength(128)]

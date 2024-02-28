@@ -1,6 +1,7 @@
 ﻿using FIHS.Models.ArticleModels;
 using FIHS.Models.AuthModels;
 using FIHS.Models.Disease;
+using FIHS.Models.FavouriteModels;
 using FIHS.Models.Fertilizer;
 using FIHS.Models.Pest;
 using FIHS.Models.Pesticide;
@@ -45,4 +46,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Fertilizer> Fertilizers { get; set; }
     public DbSet<Pest> Pests { get; set; }
     public DbSet<Disease> Diseases { get; set; }
+    public DbSet<Favourite> Favourites { get; set; }
 }

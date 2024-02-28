@@ -4,6 +4,7 @@ using FIHS.Dtos.UserDtos;
 using FIHS.Helpers;
 using FIHS.Interfaces.IUser;
 using FIHS.Models.AuthModels;
+using FIHS.Models.FavouriteModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -24,28 +25,29 @@ namespace FIHS.Services.UserServices
         private readonly IEmailSender _emailSender;
         private readonly IMemoryCache _memoryCache;
         private readonly TimeSpan _CodeExpiration = TimeSpan.FromMinutes(15);
+        private readonly IConfiguration _configuration;
+        private readonly string _baseUrl;
 
         public AuthService(UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWT> jwt,
             IEmailSender emailSender,
             IMemoryCache memoryCache,
-            IMapper mapper) : base(context: null, userManager, mapper)
+            IMapper mapper, IConfiguration configuration) : base(context: null, userManager, mapper)
         {
             _roleManager = roleManager;
             _jwt = jwt.Value;
             _emailSender = emailSender;
             _memoryCache = memoryCache;
+            _baseUrl = configuration["BaseUrl"];
         }
         public async Task<AuthModel> RegisterAysnc(RegisterModel model)
         {
             if (await _userManager.FindByEmailAsync(model.Email) != null)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
 
-            if (await _userManager.FindByEmailAsync(model.Username) != null)
-                return new AuthModel { Succeeded = false, Message = "اسم المستخدم مستخدم بالفعل" };
-
             var user = _mapper.Map<ApplicationUser>(model);
+            user.ImgUrl = _baseUrl + user.ImgUrl;
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -86,7 +88,7 @@ namespace FIHS.Services.UserServices
 
             var refreshToken = GenerateRefreshToken();
             user.RefreshTokens?.Add(refreshToken);
-
+            user.Favourite = new Favourite { ApplicationUserId = user.Id, CreatedAt = DateTime.Now };
             await _userManager.UpdateAsync(user);
 
             return new AuthModel(user, jwtSecurityToken, refreshToken, new List<string> { "User" });
@@ -158,6 +160,8 @@ namespace FIHS.Services.UserServices
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.EmailConfirmed)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني أو كلمة المرور غير صحيحة" };
+            
+            user.ImgUrl = _baseUrl + user.ImgUrl;
 
             var jwtSecurityToken = await CreateJwtToken(user);
             var roles = await _userManager.GetRolesAsync(user);

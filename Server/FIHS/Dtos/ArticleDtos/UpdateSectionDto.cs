@@ -2,7 +2,7 @@
 
 namespace FIHS.Dtos.ArticleDtos
 {
-    public class SectionDto
+    public class UpdateSectionDto
     {
         [StringLength(128)]
         public string? Title { get; set; }

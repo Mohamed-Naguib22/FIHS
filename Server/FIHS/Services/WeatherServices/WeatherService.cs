@@ -1,11 +1,9 @@
 ﻿using FIHS.Dtos.WeatherDtos;
 using FIHS.Models.Weather;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using RestSharp;
 using FIHS.Interfaces.IWeather;
-using System.Globalization;
 
 namespace FIHS.Services.WeatherServices
 {
@@ -35,11 +33,10 @@ namespace FIHS.Services.WeatherServices
             if (content == null)
                 return new WeatherDto { Succeeded = false, Message = "حدث خطأ ما" };
 
-            var arabicCulture = new CultureInfo("ar-SA");
-
             var forecast = new WeatherDto
             {
                 City = content.Name,
+                Icon = "http://openweathermap.org/img/wn/" + content.Weather[0].Icon + ".png",
                 Description = content.Weather[0].Description,
                 Temperature = ConvertToArabicNumerals(content.Main.Temp.ToString("N0")),
                 Humidity = ConvertToArabicNumerals(content.Main.Humidity.ToString()),

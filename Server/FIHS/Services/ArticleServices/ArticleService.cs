@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using FIHS.Interfaces.IArticle;
 using Microsoft.AspNetCore.Identity;
 using FIHS.Models.AuthModels;
-using System.Linq;
 
 namespace FIHS.Services.ArticleService
 {
@@ -63,6 +62,7 @@ namespace FIHS.Services.ArticleService
             var similarArticles = articles.Where(a => a.ArticleTags.Any(at => tags.Contains(at.Tag)))
                 .Where(a => a.Id != article.Id).Take(5);
 
+            articleDto.ImgUrl = _baseUrl + article.ImgUrl;
             articleDto.SimilarArticles = similarArticles;
             articleDto.Liked = liked;
 
@@ -113,7 +113,7 @@ namespace FIHS.Services.ArticleService
             return tag;
         }
 
-        public async Task<ArticleSection> AddSectionAsync(SectionDto sectionDto)
+        public async Task<ArticleSection> AddSectionAsync(AddSectionDto sectionDto)
         {
             var section = _mapper.Map<ArticleSection>(sectionDto);
 
@@ -121,16 +121,6 @@ namespace FIHS.Services.ArticleService
             await _context.SaveChangesAsync();
 
             return section;
-        }
-
-        public async Task<bool> AddTagAsync(string content, int articleId)
-        {
-            var tag = new ArticleTag { Tag = content, ArticleId = articleId};
-
-            await _context.ArticleTags.AddAsync(tag);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<Article> UpdateArticleAsync(int articleId, UpdateArticleDto articleDto)
@@ -154,7 +144,7 @@ namespace FIHS.Services.ArticleService
             return article;
         }
 
-        public async Task<ArticleSection> UpdateSectionAsync(int sectionId, SectionDto sectionDto)
+        public async Task<ArticleSection> UpdateSectionAsync(int sectionId, UpdateSectionDto sectionDto)
         {
             var section = await _context.ArticleSections.FirstOrDefaultAsync(s => s.Id == sectionId);
 

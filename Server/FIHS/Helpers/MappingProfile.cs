@@ -19,22 +19,21 @@ namespace FIHS.Helpers
 {
     public class MappingProfile : Profile
     {
-        //private readonly string _baseUrl = "https://localhost:7184";
-        private readonly string _baseUrl = "https://192.168.1.11:7184";
-
         public MappingProfile() 
         {
             CreateMap<ApplicationUser, UserDto>()
-                .ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src => _baseUrl + src.ProfilePicture));
-            CreateMap<RegisterModel, ApplicationUser>().ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src => "\\images\\Default_User_Image.png"));
+                .ForMember(dest => dest.ProfilePicture, opt => opt.Ignore());
+            CreateMap<RegisterModel, ApplicationUser>()
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => "\\images\\Default_User_Image.png"))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
 
             //Article
             CreateMap<AddArticleDto, Article>().ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
             CreateMap<Article, ReturnArticleDto>()
-                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => _baseUrl + src.ImgUrl))
+                .ForMember(dest => dest.ImgUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.NumOfLikes, opt => opt.MapFrom(src => src.ArticleLikes.Where(al => al.ArticleId == src.Id).Count()));
 
-            CreateMap<SectionDto, ArticleSection>();
+            CreateMap<AddSectionDto, ArticleSection>();
             CreateMap<TagDto, ArticleTag>();
 
             CreateMap<Plant, PlantDto>();
