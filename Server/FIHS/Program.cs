@@ -100,24 +100,15 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
 });
-builder.Services.AddControllers(opt =>
-{
-    opt.AllowEmptyInputInBodyModelBinding = true;
-});
-builder.Services.AddControllers()
-        .AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        });
 
 builder.Services.Configure<KestrelServerOptions>(options =>
 {
     options.Listen(IPAddress.Loopback, 7184);
-    options.Listen(IPAddress.Parse("192.168.1.11"), 7184);
+    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
 });
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(typeof(Program));
