@@ -10,11 +10,13 @@ import Logo from '@/components/layout/Logo'
 import useLogin from '@/hooks/useLogin'
 import { Form, Formik } from 'formik'
 import { Login, LoginSchema } from './../../../models/Login';
+import useSession from '@/hooks/state/useSession'
 type Props = {}
 const LoginPage = (props: Props) => {
   const [isPasswordShown,setIsPasswordShown]=useState(false);
   const router = useRouter()
   const login = useLogin()
+  const {setLoading} = useSession()
   return (
     <ImageBackground
     style={{
