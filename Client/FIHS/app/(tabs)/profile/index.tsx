@@ -10,10 +10,11 @@ import { useState } from 'react';
 import { Actionsheet } from '@gluestack-ui/themed';
 import { ActionsheetBackdrop } from '@gluestack-ui/themed';
 import { ActionsheetDragIndicatorWrapper } from '@gluestack-ui/themed';
+import useSession from '@/hooks/state/useSession';
 
 export default function ProfileScreen() {
   const [showActionsheet, setShowActionsheet] = useState(false)
-
+  const {imgUrl} = useSession()
   return (
     <>
     <TabsPageContainer>
@@ -23,7 +24,7 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={()=>setShowActionsheet(true)}>
           <Avatar size='xl' alignSelf='center'>
             <AvatarFallbackText>يوسف محمد</AvatarFallbackText>
-            <AvatarImage alt='يوسف محمد' source={require('@/assets/images/avatar.png')}/>
+            <AvatarImage alt='يوسف محمد' source={imgUrl||require('@/assets/images/avatar.png')}/>
           </Avatar>
           </TouchableOpacity>        
           <HStack gap={"$1"}>

@@ -6,15 +6,17 @@ import CustomInput from '@/components/profile/CustomInput';
 import { Heading } from '@gluestack-ui/themed';
 import { ButtonText } from '@gluestack-ui/themed';
 import { PersonalInfo } from '@/models/PersonalInfo';
+import useSession from '@/hooks/state/useSession';
 type Props = {}
 
 const PersonalInfoForm = (props: Props) => {
+    const {email} = useSession()
     return (
         <Formik<PersonalInfo>
         initialValues={{
         firstName:'يوسف',
         lastName:'محمد',
-        email:'yousef.helly@gmail.com',
+        email:email,
         phoneNumber:'01020273407',
         username:'يوسف الحلي'
         }}
