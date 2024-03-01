@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Fab, ScrollView, View } from '@gluestack-ui/themed'
+import { Fab, ScrollView, View, RefreshControl } from '@gluestack-ui/themed'
 import { useTabHeaderHeight } from '../../hooks/state/useTabHeaderHeight'
 import Fontisto from '@expo/vector-icons/Fontisto'
 
@@ -13,7 +13,8 @@ const TabsPageContainer = ({children}: Props) => {
         heightWithSearch()
     },[])
     return (
-        <>
+        <RefreshControl colors={['#298578']} onRefresh={()=>console.log('refresh!')} flex={1}>
+            
             <ScrollView 
             onScrollEndDrag={(e)=>{
             e.nativeEvent.contentOffset.y/e.nativeEvent.contentSize.height>0.1?heightWithoutSearch():heightWithSearch()
@@ -33,7 +34,7 @@ const TabsPageContainer = ({children}: Props) => {
             <Fab position='absolute' right={"unset" as any} left={"$4"} bottom={"$5"} >
                 <Fontisto name='reddit' size={32} color={"white"}/>
             </Fab>
-        </>
+        </RefreshControl>
     )
 }
 
