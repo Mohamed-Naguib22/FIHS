@@ -8,10 +8,12 @@ import { Image } from 'expo-image'
 import useSession from '@/hooks/state/useSession'
 import { StatusBar } from 'expo-status-bar'
 import Logo from '@/components/layout/Logo'
+import useLogin from '@/hooks/useLogin'
 type Props = {}
 const LoginPage = (props: Props) => {
   const [isPasswordShown,setIsPasswordShown]=useState(false);
   const router = useRouter()
+  const login = useLogin()
   const {setLoading} = useSession()
   return (
     <ImageBackground
