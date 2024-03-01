@@ -55,8 +55,8 @@ const LoginPage = (props: Props) => {
     <View style={{
       flex:1,
       marginHorizontal:15,
-    }} >
-   
+    }}
+    >
       <Text textAlign='center' color='$white' fontSize={25} fontWeight='800' pt={30} pb={10}>تسجيل الدخول</Text>
       <View>
         <Text fontSize={18} fontWeight='400' color='$white' marginVertical={5} marginRight={15} >البريد الالكتروني </Text>

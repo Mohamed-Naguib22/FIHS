@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import useSession from '@/hooks/state/useSession';
 import Loading from '@/components/layout/Loading';
+import Toast from 'react-native-toast-message';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -77,7 +78,8 @@ function RootLayoutNav() {
 
             {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
           </Stack>
-        </ThemeProvider>
+      </ThemeProvider>
+      <Toast />
       </GluestackUIProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
