@@ -19,7 +19,7 @@ namespace FIHS.Services.UserServices
         private UserDto MapUserToDto(ApplicationUser user)
         {
             var userDto = _mapper.Map<UserDto>(user);
-            userDto.ProfilePicture = _baseUrl + user.ImgUrl;
+            userDto.ImgUrl = _baseUrl + user.ImgUrl;
             userDto.Succeeded = true;
             return userDto;
         }
@@ -41,7 +41,6 @@ namespace FIHS.Services.UserServices
             if (user == null)
                 return new UserDto { Succeeded = false, Message = "Invalid token." };
 
-            user.UserName = model.Username ?? user.UserName;
             user.FirstName = model.FirstName ?? user.FirstName;
             user.LastName = model.LastName ?? user.LastName;
             user.PhoneNumber = model.PhoneNumber ?? user.PhoneNumber;

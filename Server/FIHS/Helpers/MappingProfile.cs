@@ -22,10 +22,12 @@ namespace FIHS.Helpers
         public MappingProfile() 
         {
             CreateMap<ApplicationUser, UserDto>()
-                .ForMember(dest => dest.ProfilePicture, opt => opt.Ignore());
+                .ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
             CreateMap<RegisterModel, ApplicationUser>()
                 .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => "\\images\\Default_User_Image.png"))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
+            CreateMap<ApplicationUser, AuthModel>()
+                .ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
 
             //Article
             CreateMap<AddArticleDto, Article>().ForMember(dest => dest.ImgUrl, opt => opt.Ignore());

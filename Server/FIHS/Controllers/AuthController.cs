@@ -26,10 +26,10 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("يرجى التحقق من بريدك الإلكتروني للتحقق من حسابك");
+            return Ok("يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك");
         }
 
-        [HttpPost("verifyAccout")]
+        [HttpPost("verify-accout")]
         public async Task<IActionResult> VerifyAccountAsync([FromBody] VerifyAccountModel model)
         {
             if (!ModelState.IsValid)
@@ -45,7 +45,7 @@ namespace FIHS.Controllers
             return Ok(result);
         }
 
-        [HttpPost("forgetPassword")]
+        [HttpPost("forget-password")]
         public async Task<IActionResult> ForgetPasswordAsync([FromBody] ForgetPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -59,7 +59,7 @@ namespace FIHS.Controllers
             return Ok(result);
         }
 
-        [HttpPost("resetPassword")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -98,7 +98,7 @@ namespace FIHS.Controllers
             return Ok("Logged out successfully");
         }
 
-        [HttpPut("changePassword")]
+        [HttpPut("change-password")]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
@@ -115,7 +115,7 @@ namespace FIHS.Controllers
             return Ok(result);
         }
 
-        [HttpPost("addRole")]
+        [HttpPost("add-role")]
         public async Task<IActionResult> AddRoleAsync([FromBody] AddRoleModel model)
         {
             if (!ModelState.IsValid)
@@ -129,7 +129,7 @@ namespace FIHS.Controllers
             return Ok(model);
         }
 
-        [HttpGet("refreshToken")]
+        [HttpGet("refresh-token")]
         public async Task<IActionResult> RefreshTokenAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -144,7 +144,7 @@ namespace FIHS.Controllers
             return Ok(result);
         }
 
-        [HttpPost("revokeToken")]
+        [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeTokenAsync([FromBody] RevokeToken model)
         {
             var refreshToken = model.Token ?? Request.Cookies["refreshToken"];
