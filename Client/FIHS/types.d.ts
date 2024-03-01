@@ -56,3 +56,13 @@ type WeatherStatus = {
     humidity: string,
     windSpeed: string
 }
+type Session = {
+    isAuthenticated: boolean,
+    emailConfirmed: boolean,
+    imgUrl: string | null,
+    email: string,
+    roles: string[],
+    token: string,
+    expiresOn: string,
+    refreshTokenExpiration: string
+}

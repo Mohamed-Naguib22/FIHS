@@ -1,24 +1,37 @@
 import { create } from "zustand";
 
 
-interface Session {
+interface SessionState extends Session {
     isLoading: boolean,
-    token: string | null,
     setLoading: (status: boolean)=>void,
-    setToken: (newToken: string)=>void
+    setSession: (session: Session)=>void,
 }
 
-const useSession = create<Session>((set)=>({
+const useSession = create<SessionState>((set)=>({
     isLoading:false,
-    token:null,
+    token:'',
+    email:'',
+    emailConfirmed:false,
+    expiresOn:'',
+    imgUrl:null,
+    isAuthenticated:false,
+    refreshTokenExpiration:'',
+    roles:[],
     setLoading:(status: boolean)=>set((state)=>{
         return {
             isLoading:status
         }
     }),
-    setToken:(newToken)=>set((state)=>{
+    setSession:(session: Partial<Session>)=>set((state)=>{
         return {
-            token:newToken
+            token:session?.token || state.token,
+            email:session?.email || state.email,
+            emailConfirmed:session?.emailConfirmed || state.emailConfirmed,
+            expiresOn:session?.expiresOn || state.expiresOn,
+            imgUrl:session?.imgUrl || state.imgUrl,
+            isAuthenticated:session?.isAuthenticated || state.isAuthenticated,
+            refreshTokenExpiration:session?.refreshTokenExpiration || state.refreshTokenExpiration,
+            roles:session?.roles || state.roles,
         }
     }),
 }))
