@@ -5,19 +5,42 @@ import { TextInput } from 'react-native-gesture-handler'
 import { SafeAreaView, TouchableOpacity} from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
+import useSession from '@/hooks/state/useSession'
+import { StatusBar } from 'expo-status-bar'
+import Logo from '@/components/layout/Logo'
 type Props = {}
 const LoginPage = (props: Props) => {
-const [isPasswordShown,setIsPasswordShown]=useState(false);
-    const router = useRouter()
+  const [isPasswordShown,setIsPasswordShown]=useState(false);
+  const router = useRouter()
+  const {setLoading} = useSession()
   return (
-    
     <ImageBackground
     style={{
       backgroundColor:"",
       height:"100%",
       width:"100%",
     }}
-     source={require("@/assets/images/LoginBG.png")}>
+    source={require("@/assets/images/LoginBG.png")
+    }>
+    <StatusBar style='light'/>
+    <View position='absolute' top={45} left={'$1/2'} transform={'translateX(35px)'}>
+      <Logo/>
+    </View>
+    <View 
+    position='absolute' 
+    top={125} 
+    left={'$1/2'} 
+    transform={'translateX(125px)'} 
+    bg='rgba(41, 133, 120,0.6)'
+    maxWidth={'$64'}
+    p={'$5'}
+    rounded={'$md'}
+    >
+      <Text textAlign='center' color='$textDark100' pb={'$2.5'}>اهلا بك في FIHS !</Text>
+      <Text textAlign='center' color='$textDark300' size='sm'>
+        سجل دخولك الان في FIHS لتتمتع بكامل المزايا المتوفرة في التطبيق!
+      </Text>
+    </View>
     <SafeAreaView  style={{
       backgroundColor:"rgba(41, 133, 120,0.9)",
       bottom:0,
@@ -27,23 +50,14 @@ const [isPasswordShown,setIsPasswordShown]=useState(false);
       height:560,
       borderTopEndRadius:50,
       borderTopStartRadius:50,
-      
-      }}>
+      }}
+    >
     <View style={{
       flex:1,
       marginHorizontal:15,
-    }} >
-      {/* <View
-      h={'$1'}
-      w={'$24'}
-      borderBottomEndRadius={9}
-      borderBottomStartRadius={9}
-      marginHorizontal="34%"
-      bgColor='#fff'
-      ></View> */}
-      {/* <Image style={{width:150,height:52, backgroundColor:"#fff", left:85,top:10 }} source={require('@/assets/images/Logofinal.png')}/> */}
+    }}
+    >
       <Text textAlign='center' color='$white' fontSize={25} fontWeight='800' pt={30} pb={10}>تسجيل الدخول</Text>
-      
       <View>
         <Text fontSize={18} fontWeight='400' color='$white' marginVertical={5} marginRight={15} >البريد الالكتروني </Text>
         <View style={{
@@ -57,23 +71,16 @@ const [isPasswordShown,setIsPasswordShown]=useState(false);
         borderBottomStartRadius:10,
         alignItems:"center",
         justifyContent:"center",
-        paddingLeft:22,
         backgroundColor:"#fff"
-
         }}>
         <TextInput
         style={{
           width:"100%",
           textAlign:"right",
           padding:8,
-
         }}
         placeholder='ادخل البريد الالكتروني '
-      
-        
-        
         />
-
         </View>
       </View>
       <View marginTop={20}>
@@ -133,16 +140,16 @@ const [isPasswordShown,setIsPasswordShown]=useState(false);
           mb={20}
         borderBottomStartRadius={10}
         borderTopEndRadius={10}
-        onPress={()=>router.push('/(tabs)/home')}>
+        onPress={()=>setLoading(true)}>
         <ButtonText color='#000' >تسجيل الدخول </ButtonText>
 
       </Button>
       </HStack>
-        <View style={{
-          flexDirection:"row",
-          alignItems:"center",
-          marginVertical:"2"
-        }}>
+        <View
+        flexDirection='row'
+        alignItems='center'
+        my={2}
+        >
           <View
           style={{
             flex:1,
@@ -163,22 +170,18 @@ const [isPasswordShown,setIsPasswordShown]=useState(false);
         </View>
         <HStack justifyContent='center' gap={20}  pt={25} >
           <View bgColor='#fff' borderRadius={15} w={55} h={55} style={{justifyContent:"center",alignItems:"center"}} >
-          {/* <Ionicons name='logo-google' color="rgb(41,133,120)"  size={40} /> */}
-          <Image style={{width:30,height:30,}} source={require("@/assets/images/google-icon.png")}/>
+            <Image style={{width:30,height:30,}} source={require("@/assets/images/google-icon.png")}/>
           </View>
           <View bgColor='#fff' borderRadius={15} w={55} h={55} style={{justifyContent:"center",alignItems:"center"}} >
-          <Ionicons name='logo-facebook' color="#0866FF"  size={40} />
+            <Ionicons name='logo-facebook' color="#0866FF"  size={40} />
           </View>
-          
         </HStack>
-        <Text textAlign='center' color='#e5e5e5' fontSize={14} fontWeight='800' pt={20}>  إذا لم يكن لديك حساب قم بالتسجيل يمكنك   
-      <Text color='$white' fontSize={14} underline fontWeight='800' onPress={()=>router.push('/(auth)/register')}>
-     التسجيل هنا!</Text>
-      </Text>
-        
+        <Text textAlign='center' color='#e5e5e5' fontSize={14} fontWeight='800' pt={20}> 
+          <Text color='$textLight50' fontSize={14} underline fontWeight='800' onPress={()=>router.push('/(auth)/register')}>
+          لا تمتلك حساباً؟
+          </Text>
+        </Text>
       </View>
-
-     
     </SafeAreaView>
     </ImageBackground>
   )
