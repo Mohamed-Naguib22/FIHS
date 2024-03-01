@@ -10,8 +10,6 @@ namespace FIHS.Dtos.UserDtos
         public string? FirstName { get; set; }
         [StringLength(50)]
         public string? LastName { get; set; }
-        [StringLength(128)]
-        public string? Username { get; set; }
         [Phone(ErrorMessage = "Invalid phone number"), StringLength(11, MinimumLength = 11)]
         public string? PhoneNumber { get; set; }
     }

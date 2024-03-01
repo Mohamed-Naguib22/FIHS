@@ -25,7 +25,6 @@ namespace FIHS.Services.UserServices
         private readonly IEmailSender _emailSender;
         private readonly IMemoryCache _memoryCache;
         private readonly TimeSpan _CodeExpiration = TimeSpan.FromMinutes(15);
-        private readonly IConfiguration _configuration;
         private readonly string _baseUrl;
 
         public AuthService(UserManager<ApplicationUser> userManager,
@@ -47,7 +46,6 @@ namespace FIHS.Services.UserServices
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
 
             var user = _mapper.Map<ApplicationUser>(model);
-            user.ImgUrl = _baseUrl + user.ImgUrl;
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -82,6 +80,9 @@ namespace FIHS.Services.UserServices
             if (model.VerificationCode != cachedCode)
                 return new AuthModel { Succeeded = false, Message = "رمز التحقق غير موجود أو انتهت صلاحيته" };
 
+            if(user.EmailConfirmed)
+                return new AuthModel { Succeeded = false, Message = "هذا الحساب مفعل بالفعل" };
+
             user.EmailConfirmed = true;
 
             var jwtSecurityToken = await CreateJwtToken(user);
@@ -91,7 +92,7 @@ namespace FIHS.Services.UserServices
             user.Favourite = new Favourite { ApplicationUserId = user.Id, CreatedAt = DateTime.Now };
             await _userManager.UpdateAsync(user);
 
-            return new AuthModel(user, jwtSecurityToken, refreshToken, new List<string> { "User" });
+            return MapToAuthModel(user, jwtSecurityToken, refreshToken, new List<string> { "User" });
         }
 
         public async Task<AuthModel> ResendVerificationCodeAsync(string email)
@@ -161,22 +162,20 @@ namespace FIHS.Services.UserServices
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.EmailConfirmed)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني أو كلمة المرور غير صحيحة" };
             
-            user.ImgUrl = _baseUrl + user.ImgUrl;
-
             var jwtSecurityToken = await CreateJwtToken(user);
             var roles = await _userManager.GetRolesAsync(user);
 
             if (user.RefreshTokens.Any(t => t.IsActive))
             {
                 var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
-                return new AuthModel(user, jwtSecurityToken, activeRefreshToken, roles.ToList());
+                return MapToAuthModel(user, jwtSecurityToken, activeRefreshToken, roles.ToList());
             }
             else
             {
                 var refreshToken = GenerateRefreshToken();
                 user.RefreshTokens.Add(refreshToken);
                 await _userManager.UpdateAsync(user);
-                return new AuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
+                return MapToAuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
             }
         }
         public async Task<string> AddRoleAysnc(AddRoleModel model)
@@ -218,14 +217,14 @@ namespace FIHS.Services.UserServices
             if (user.RefreshTokens.Any(t => t.IsActive))
             {
                 var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
-                return new AuthModel(user, jwtSecurityToken, activeRefreshToken, roles.ToList());
+                return MapToAuthModel(user, jwtSecurityToken, activeRefreshToken, roles.ToList());
             }
             else
             {
                 var refreshToken = GenerateRefreshToken();
                 user.RefreshTokens.Add(refreshToken);
                 await _userManager.UpdateAsync(user);
-                return new AuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
+                return MapToAuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
             }
         }
         public async Task<AuthModel> RefreshTokenAsync(string token)
@@ -249,7 +248,7 @@ namespace FIHS.Services.UserServices
             var jwtSecurityToken = await CreateJwtToken(user);
             var roles = await _userManager.GetRolesAsync(user);
 
-            return new AuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
+            return MapToAuthModel(user, jwtSecurityToken, refreshToken, roles.ToList());
         }
         public async Task<bool> RevokeTokenAsync(string token)
         {
@@ -321,8 +320,21 @@ namespace FIHS.Services.UserServices
         private static string GenerateRandomCode()
         {
             var random = new Random();
-            string code = random.Next(100000, 999999).ToString();
-            return code;
+            return random.Next(100000, 999999).ToString();
+        }
+
+        private AuthModel MapToAuthModel(ApplicationUser user, JwtSecurityToken jwtSecurityToken, RefreshToken refreshToken, List<string> roles)
+        {
+            var authModel = _mapper.Map<AuthModel>(user);
+            authModel.IsAuthenticated = true;
+            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            authModel.ExpiresOn = jwtSecurityToken.ValidTo;
+            authModel.RefreshToken = refreshToken.Token;
+            authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
+            authModel.Roles = roles;
+            authModel.ImgUrl = _baseUrl + user.ImgUrl;
+            authModel.Succeeded = true;
+            return authModel;
         }
     }
 }
