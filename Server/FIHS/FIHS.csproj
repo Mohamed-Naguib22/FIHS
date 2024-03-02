@@ -10,6 +10,7 @@
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="ChatGPT.Net" Version="2.0.0" />
+    <PackageReference Include="DevAccelerateSmsTextlocal" Version="7.0.1-preview6.5" />
     <PackageReference Include="Google.Apis.Auth" Version="1.66.0" />
     <PackageReference Include="Google.Apis.Oauth2.v2" Version="1.66.0.1869" />
     <PackageReference Include="Google.Cloud.Translation.V2" Version="3.2.0" />
