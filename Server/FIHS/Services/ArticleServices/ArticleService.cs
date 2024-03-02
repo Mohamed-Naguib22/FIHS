@@ -63,7 +63,15 @@ namespace FIHS.Services.ArticleService
                 .Where(a => a.Id != article.Id).Take(5);
 
             articleDto.ImgUrl = _baseUrl + article.ImgUrl;
-            articleDto.SimilarArticles = similarArticles;
+            articleDto.SimilarArticles = similarArticles.Select(a => new ReturnArticleDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Author = a.Author,
+                ImgUrl = _baseUrl + a.ImgUrl,
+                NumOfLikes = a.ArticleLikes.Count()
+            }).OrderByDescending(a => a.NumOfLikes).ToList();
+
             articleDto.Liked = liked;
 
             return articleDto;

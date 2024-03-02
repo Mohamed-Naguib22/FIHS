@@ -19,7 +19,7 @@ namespace FIHS.Dtos.ArticleDtos
         public bool Succeeded { get; set; }
         public IEnumerable<ArticleSection> ArticleSections { get; set; }
         public IEnumerable<ArticleTag> ArticleTags { get; set; }
-        public IEnumerable<Article> SimilarArticles { get; set; }
+        public IEnumerable<ReturnArticleDto> SimilarArticles { get; set; }
         public ReturnArticleDto()
         {
             Succeeded = true;
