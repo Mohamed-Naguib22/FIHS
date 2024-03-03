@@ -59,8 +59,11 @@ type WeatherStatus = {
 type Session = {
     isAuthenticated: boolean,
     emailConfirmed: boolean,
+    firstName: string,
+    lastName: string,
     imgUrl: string | null,
     email: string,
+    phoneNumber: string,
     roles: string[],
     token: string,
     expiresOn: string,
