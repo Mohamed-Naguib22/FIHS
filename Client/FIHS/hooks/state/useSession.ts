@@ -9,6 +9,9 @@ interface SessionState extends Session {
 
 const useSession = create<SessionState>((set)=>({
     isLoading:false,
+    firstName:'',
+    lastName:'',
+    phoneNumber:'',
     token:'',
     email:'',
     emailConfirmed:false,
@@ -26,6 +29,9 @@ const useSession = create<SessionState>((set)=>({
         return {
             token:session?.token || state.token,
             email:session?.email || state.email,
+            firstName:session?.firstName || state.firstName,
+            lastName:session?.lastName || state.lastName,
+            phoneNumber:session?.phoneNumber || state.phoneNumber,
             emailConfirmed:session?.emailConfirmed || state.emailConfirmed,
             expiresOn:session?.expiresOn || state.expiresOn,
             imgUrl:session?.imgUrl || state.imgUrl,
@@ -36,3 +42,19 @@ const useSession = create<SessionState>((set)=>({
     }),
 }))
 export default useSession
+
+
+export const DEFAULT_SESSION = {
+    isLoading:false,
+    firstName:'',
+    lastName:'',
+    phoneNumber:'',
+    token:'',
+    email:'',
+    emailConfirmed:false,
+    expiresOn:'',
+    imgUrl:null,
+    isAuthenticated:false,
+    refreshTokenExpiration:'',
+    roles:[],
+}
