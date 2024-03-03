@@ -12,22 +12,23 @@ type Props = {
 
 const CustomInput = ({name, onChangeText, onBlur, value, type, isDisabled}: Props) => {
   return (
-        <Input
-                    variant="outline"
-                    size="md"
-                    isDisabled={isDisabled??false}
-                    isInvalid={false}
-                    isReadOnly={false}
-        >
-            <InputField
-            type={type?type:'text'}
-            textAlign='right'
-            direction='rtl' 
-            onChangeText={onChangeText!(name)} 
-            onBlur={onBlur(name)} 
-            value={value}
-            />
-        </Input>
+      <Input
+          variant="outline"
+          size="md"
+          id={name}
+          isDisabled={isDisabled??false}
+          isInvalid={false}
+          isReadOnly={false}
+      >
+          <InputField
+          type={type?type:'text'}
+          textAlign={(type==='password' || name ==='email' || name ==='phoneNumber')?'left':'right'}
+          direction='rtl' 
+          onChangeText={(e)=>onChangeText!(e)} 
+          onBlur={onBlur(name)} 
+          value={value}
+          />
+      </Input>
   )
 }
 
