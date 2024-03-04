@@ -1,27 +1,22 @@
 ﻿using AutoMapper;
+using FIHS.Dtos.AuthModels;
 using FIHS.Dtos.UserDtos;
+using FIHS.Helpers;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IUser;
 using FIHS.Models.AuthModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace FIHS.Services.UserServices
 {
     public class UserService : BaseService, IUserService
     {
-        private readonly string _baseUrl;
-        public UserService(UserManager<ApplicationUser> userManager,
-            IImageService imageService, IMapper mapper, IConfiguration configuration) : base(context: null, userManager, mapper, imageService)
+        private readonly IImageService _imageService; 
+        public UserService(UserManager<ApplicationUser> userManager, IMapper mapper, 
+            IConfiguration configuration, IImageService imageService, IOptions<JWT> jwt) : base (userManager, mapper, configuration, jwt)
         {
-            _baseUrl = configuration["BaseUrl"];
-        }
-
-        private UserDto MapUserToDto(ApplicationUser user)
-        {
-            var userDto = _mapper.Map<UserDto>(user);
-            userDto.ImgUrl = _baseUrl + user.ImgUrl;
-            userDto.Succeeded = true;
-            return userDto;
+            _imageService = imageService;
         }
 
         public async Task<UserDto> GetProfileAsync(string refreshToken)
@@ -34,12 +29,12 @@ namespace FIHS.Services.UserServices
             return MapUserToDto(user);
         }
 
-        public async Task<UserDto> UpdateProfileAsync(string refreshToken, UpdateProfileModel model)
+        public async Task<AuthModel> UpdateProfileAsync(string refreshToken, UpdateProfileModel model)
         {
             var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "Invalid token." };
+                return new AuthModel { Succeeded = false, Message = "Invalid token." };
 
             user.FirstName = model.FirstName ?? user.FirstName;
             user.LastName = model.LastName ?? user.LastName;
@@ -51,10 +46,31 @@ namespace FIHS.Services.UserServices
             {
                 var errors = result.Errors.Select(r => r.Description).ToList();
                 string errorMessage = string.Join(", ", errors);
-                return new UserDto { Succeeded = false, Message = errorMessage };
+                return new AuthModel { Succeeded = false, Message = errorMessage };
             }
 
-            return MapUserToDto(user);
+            return await MapToAuthModel(user);
+        }
+
+        public async Task<AuthModel> ChangePasswordAsync(string refreshToken, ChangePasswordModel model)
+        {
+            var user = await GetUserByRefreshToken(refreshToken);
+
+            if (user == null)
+                return new AuthModel { Succeeded = false, Message = "Invalid token." };
+
+            if (!await _userManager.CheckPasswordAsync(user, model.CurrentPassword))
+                return new AuthModel { Succeeded = false, Message = "كلمة المرور غير صحيحة" };
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(r => r.Description).ToList();
+                string errorMessage = string.Join(", ", errors);
+                return new AuthModel { Succeeded = false, Message = errorMessage };
+            }
+            return await MapToAuthModel(user);
         }
 
         public async Task<UserDto> DeleteAccountAsync(string refreshToken)
@@ -73,21 +89,21 @@ namespace FIHS.Services.UserServices
             return new UserDto { Succeeded = true };
         }
 
-        public async Task<UserDto> SetImageAsync(string refreshToken, IFormFile imgFile)
+        public async Task<AuthModel> SetImageAsync(string refreshToken, IFormFile imgFile)
         {
             var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
+                return new AuthModel { Succeeded = false, Message = "المستخدم غير موجود" };
 
             user.ImgUrl = _imageService.SetImage(imgFile, user.ImgUrl);
 
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
-                return new UserDto { Succeeded = false, Message = "حدث خطأ ما" };
+                return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
-            return new UserDto { Succeeded = true };
+            return await MapToAuthModel(user);
         }
 
         public async Task<UserDto> DeleteImageAsync(string refreshToken)

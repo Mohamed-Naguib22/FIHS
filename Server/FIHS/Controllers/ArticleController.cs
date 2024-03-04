@@ -48,7 +48,7 @@ namespace FIHS.Controllers
             return Ok(articles);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("add")]
         public async Task<IActionResult> AddArticleAsync([FromForm] AddArticleDto articleDto)
         {
@@ -61,7 +61,7 @@ namespace FIHS.Controllers
             return Ok(article);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("add-tag")]
         public async Task<IActionResult> AddTagAsync([FromBody] TagDto tagDto)
         {
@@ -153,6 +153,7 @@ namespace FIHS.Controllers
             return Ok(" „ Õ–› «·ﬁ”„ »‰Ã«Õ");
         }
 
+        [Authorize]
         [HttpGet("like/{articleId}")]
         public async Task<IActionResult> LikeAsync(int articleId)
         {
@@ -169,6 +170,7 @@ namespace FIHS.Controllers
             return Ok(" „ «÷«›… «·«⁄Ã«» »‰Ã«Õ");
         }
 
+        [Authorize]
         [HttpDelete("remove-like/{articleId}")]
         public async Task<IActionResult> RemoveLikeAsync(int articleId)
         {

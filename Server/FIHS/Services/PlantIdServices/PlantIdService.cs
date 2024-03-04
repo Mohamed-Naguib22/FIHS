@@ -9,7 +9,7 @@ using Google.Apis.Translate.v2.Data;
 
 namespace FIHS.Services.PlantIdServices
 {
-    public class PlantIdService : BaseService, IPlantIdService
+    public class PlantIdService : IPlantIdService
     {
         const string API_URL = "https://plant.id/api/v2/";
         const string LANGUAGE = "ar";

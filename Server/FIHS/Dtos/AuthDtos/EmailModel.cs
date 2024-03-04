@@ -2,7 +2,7 @@
 
 namespace FIHS.Dtos.AuthModels
 {
-    public class ForgetPasswordModel
+    public class EmailModel
     {
         [EmailAddress, StringLength(128)]
         public string Email { get; set; }

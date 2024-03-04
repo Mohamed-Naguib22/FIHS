@@ -7,7 +7,7 @@ namespace FHIS.Services
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private const string IMAGE_FOLDER_PATH = "\\images\\";
-        private const string DEFAULT_USER_IMAGE = IMAGE_FOLDER_PATH + "Default_User_Image.png";
+        private const string DEFAULT_USER_IMAGE =  "Default_User_Image.png";
         public ImageService(IWebHostEnvironment webHostEnvironment)
         {
             _webHostEnvironment = webHostEnvironment;
@@ -28,7 +28,7 @@ namespace FHIS.Services
         }
         public void DeleteImage(string? imgUrl)
         {
-            if (!string.IsNullOrEmpty(imgUrl) || imgUrl != DEFAULT_USER_IMAGE) 
+            if (!string.IsNullOrEmpty(imgUrl) && !imgUrl.Contains(DEFAULT_USER_IMAGE)) 
             {
                 var imgOldPath = _webHostEnvironment.WebRootPath + imgUrl;
 

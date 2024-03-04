@@ -9,6 +9,6 @@ namespace FIHS.Dtos.AuthModels
         [JsonIgnore]
         public string? Message { get; set; }
         [JsonIgnore]
-        public bool Succeeded { get; set; }
+        public bool Succeeded { get; set; } = true;
     }
 }
