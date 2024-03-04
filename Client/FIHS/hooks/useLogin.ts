@@ -4,11 +4,10 @@ import useSession from './state/useSession';
 import { useRouter } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { AxiosResponse } from 'axios';
-import { useState } from 'react';
+import storage from '@/utils/storage';
 
 const useLogin = ()=>{    
     const { setSession, setLoading } = useSession()
-    const [errorMessage, setErrorMessage] = useState("حدث خطأ ما")
     const router = useRouter()
     return useMutation({
         mutationFn: async({email, password}:{email: string, password: string}): Promise<any>=> {
@@ -18,6 +17,11 @@ const useLogin = ()=>{
                     'Content-Type':'application/json'
                 }
             }).then((res)=>{
+                let rt = res.headers['set-cookie']?.[0]
+                storage.save({
+                    key:'refreshToken',
+                    data:rt
+                })
                 setSession(res.data)
                 setLoading(false)
                 router.replace('/(tabs)/home')

@@ -4,7 +4,7 @@ import { ResetPassword } from '@/models/ResetPassword'
 import useSession, { DEFAULT_SESSION } from './state/useSession'
 import Toast from 'react-native-toast-message'
 import { PersonalInfo } from '@/models/PersonalInfo'
-
+import storage from '../utils/storage'
 export const useProfile = () => useQuery<Session>({
     queryKey:['profile'],
     queryFn:()=>api.get<Session>(`User/profile`).then((res)=>res.data)
@@ -16,10 +16,18 @@ export default useProfile
 
 export const UpdateProfile = ()=>{
     const {token, setSession} = useSession()
+    let localRt = storage.load<string>({
+        key:'refreshToken'
+    })
     return useMutation({
     mutationFn: async(vals: PersonalInfo)=>
-    await userApi(token).put<Session>(`‘User/update-profile`, {firstName: vals.firstName, lastName: vals.lastName, phoneNumber:vals.phoneNumber}).then((res)=>{
+    await userApi(token, await localRt).put<Session>(`User/update-profile`, {firstName: vals.firstName, lastName: vals.lastName, phoneNumber:vals.phoneNumber}).then((res)=>{
         setSession(res.data)
+        let rt = res.headers['set-cookie']?.[0]
+        storage.save({
+            key:'refreshToken',
+            data:rt
+        })
         Toast.show({
             type:'success',
             text1:'تمت العملية بنجاح',
@@ -39,10 +47,18 @@ export const UpdateProfile = ()=>{
 
 export const UpdatePassword = ()=>{
     const {token, setSession} = useSession()
+    let localRt = storage.load<string>({
+        key:'refreshToken'
+    })
     return useMutation({
     mutationFn: async(vals: ResetPassword)=>{
-        await userApi(token).put<Session>(`Auth/change-password`, vals).then((res)=>{
+        await userApi(token, await localRt).put<Session>(`Auth/change-password`, vals).then((res)=>{
             setSession(res.data)
+            let rt = res.headers['set-cookie']?.[0]
+            storage.save({
+                key:'refreshToken',
+                data:rt
+            })
             Toast.show({
                 type:'success',
                 text1:'تمت العملية بنجاح',
@@ -63,10 +79,18 @@ export const UpdatePassword = ()=>{
 
 export const PostProfileImg = ()=>{
     const {token, setSession} = useSession()
+    let localRt = storage.load<string>({
+        key:'refreshToken'
+    })
     return useMutation({
     mutationFn: async({img}: {img:File})=>{
-        await userApi(token).post<Session>(`User/set-image`).then((res)=>{
+        await userApi(token, await localRt).post<Session>(`User/set-image`, {imgFile:img}).then((res)=>{
             setSession(res.data)
+            let rt = res.headers['set-cookie']?.[0]
+            storage.save({
+                key:'refreshToken',
+                data:rt
+            })
             Toast.show({
                 type:'success',
                 text1:'تمت العملية بنجاح',
@@ -86,10 +110,18 @@ export const PostProfileImg = ()=>{
 
 export const DeleteProfileImg = ()=>{
     const {token, setSession} = useSession()
+    let localRt = storage.load<string>({
+        key:'refreshToken'
+    })
     return useMutation({
     mutationFn: async()=>{
-        await userApi(token).delete<Session>(`User/delete-image`).then((res)=>{
+        await userApi(token, await localRt).delete<Session>(`User/delete-image`).then((res)=>{
             setSession(res.data)
+            let rt = res.headers['set-cookie']?.[0]
+            storage.save({
+                key:'refreshToken',
+                data:rt
+            })
             Toast.show({
                 type:'success',
                 text1:'تمت العملية بنجاح',
@@ -108,10 +140,19 @@ export const DeleteProfileImg = ()=>{
 
 export const DeleteAccount = ()=>{
     const {token, setSession} = useSession()
+    let localRt = storage.load<string>({
+        key:'refreshToken'
+    })
     return useMutation({
     mutationFn: async()=>{
-        await userApi(token).delete<Session>(`User/delete-account`).then((res)=>{
+        await userApi(token, await localRt).delete<Session>(`User/delete-account`).then((res)=>{
             setSession(DEFAULT_SESSION)
+            storage.remove({
+                key:'refreshToken'
+            })
+            storage.remove({
+                key:'session'
+            })
             Toast.show({
                 type:'success',
                 text1:'تمت العملية بنجاح',
