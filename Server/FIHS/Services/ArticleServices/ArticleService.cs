@@ -11,15 +11,15 @@ namespace FIHS.Services.ArticleService
 {
     public class ArticleService : BaseService, IArticleService
     {
-        private readonly string _baseUrl;
-        private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
+        private readonly IImageService _imageService;
         public ArticleService(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             IImageService imageService,
-            IMapper mapper, IConfiguration configuration) : base(context, userManager, mapper, imageService)
+            IMapper mapper, IConfiguration configuration) : base (userManager, mapper, configuration)
         {
-            _configuration = configuration;
-            _baseUrl = _configuration["BaseUrl"];
+            _imageService = imageService;
+            _context = context;
         }
 
         public async Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync()

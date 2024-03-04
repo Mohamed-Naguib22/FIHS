@@ -1,6 +1,7 @@
 ﻿using FIHS.Dtos.AuthModels;
 using FIHS.Dtos.UserDtos;
 using FIHS.Interfaces.IUser;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FIHS.Controllers
@@ -29,7 +30,7 @@ namespace FIHS.Controllers
             return Ok("يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك");
         }
 
-        [HttpPost("verify-accout")]
+        [HttpPost("verify-account")]
         public async Task<IActionResult> VerifyAccountAsync([FromBody] VerifyAccountModel model)
         {
             if (!ModelState.IsValid)
@@ -45,8 +46,16 @@ namespace FIHS.Controllers
             return Ok(result);
         }
 
+        [HttpGet("resend-verification-code")]
+        public async Task<IActionResult> ResendVerificationCodeAsync([FromBody] EmailModel model)
+        {
+            var result = await _authService.ResendVerificationCodeAsync(model);
+         
+            return result.Succeeded ? Ok(result.Message) : BadRequest(result.Message);
+        }
+
         [HttpPost("forget-password")]
-        public async Task<IActionResult> ForgetPasswordAsync([FromBody] ForgetPasswordModel model)
+        public async Task<IActionResult> ForgetPasswordAsync([FromBody] EmailModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -70,7 +79,7 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("تمت إعادة تعيين كلمة المرور بنجاح");
+            return result.Succeeded ? Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpPost("login")]
@@ -95,24 +104,7 @@ namespace FIHS.Controllers
         {
             Response.Cookies.Delete("refreshToken");
 
-            return Ok("Logged out successfully");
-        }
-
-        [HttpPut("change-password")]
-        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
-        {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
-            if (userId == null)
-                return BadRequest("Invalid token");
-
-            var result = await _authService.ChangePasswordAsync(userId, model);
-
-            if (!result.IsAuthenticated)
-                return BadRequest(result.Message);
-
-            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
-
-            return Ok(result);
+            return Ok("تم تسجيل الخروج بنجاح");
         }
 
         [HttpPost("add-role")]
@@ -164,7 +156,7 @@ namespace FIHS.Controllers
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Expires = expires.ToLocalTime(),
                 Secure = true,
                 IsEssential = true,

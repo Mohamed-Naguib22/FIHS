@@ -9,7 +9,7 @@ using FIHS.Interfaces.IChat;
 
 namespace FIHS.Services.ChatServices
 {
-    public class ChatGPTService : BaseService, IChatGPTService
+    public class ChatGPTService : IChatGPTService
     {
         private readonly IConfiguration _configuration;
         public ChatGPTService(IConfiguration configuration)

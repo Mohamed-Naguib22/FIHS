@@ -1,4 +1,5 @@
-﻿using FIHS.Interfaces.IArticle;
+﻿using AutoMapper;
+using FIHS.Interfaces.IArticle;
 using FIHS.Models.ArticleModels;
 using FIHS.Models.AuthModels;
 using Microsoft.AspNetCore.Identity;
@@ -8,8 +9,11 @@ namespace FIHS.Services.ArticleServices
 {
     public class ArticleInteractionService : BaseService, IArticleInteractionService
     {
-        public ArticleInteractionService(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : base(context, userManager)
+        private readonly ApplicationDbContext _context;
+        public ArticleInteractionService(ApplicationDbContext context, IMapper mapper, IConfiguration configuration,
+            UserManager<ApplicationUser> userManager) : base(userManager, mapper, configuration)
         {
+            _context = context;
         }
 
         public async Task<bool> LikeAsync(int articleId, string refreshToken) 

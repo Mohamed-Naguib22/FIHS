@@ -52,6 +52,26 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
+            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+
+            return Ok(result);
+        }
+
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _userService.ChangePasswordAsync(refreshToken, model);
+
+            if (!result.IsAuthenticated)
+                return BadRequest(result.Message);
+
+            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+
             return Ok(result);
         }
 
@@ -92,8 +112,10 @@ namespace FIHS.Controllers
 
             if (!result.Succeeded)
                 return BadRequest(result.Message);
+            
+            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
-            return Ok("تم تعيين الصورة بنجاح");
+            return Ok(result);
         }
 
         [HttpDelete("delete-image")]
@@ -110,6 +132,20 @@ namespace FIHS.Controllers
                 return BadRequest(result.Message);
 
             return Ok("تم حذف الصورة بنجاح");
+        }
+
+        private void SetRefreshTokenInCookie(string refreshToken, DateTime expires)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = false,
+                Expires = expires.ToLocalTime(),
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.None
+            };
+
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
     }
 }
