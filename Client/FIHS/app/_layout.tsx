@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import useSession from '@/hooks/state/useSession';
 import Loading from '@/components/layout/Loading';
 import Toast from 'react-native-toast-message';
+import storage from '@/utils/storage';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -55,7 +56,10 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const queryClient = new QueryClient()
-  const {isLoading, token} = useSession()
+  const {isLoading, token, setSession} = useSession()
+  useEffect(()=>{
+    storage.load<Session>({key:'session'}).then((res)=>setSession(res))
+  },[])
   if(isLoading){
     return <Loading/>
   }
@@ -64,9 +68,9 @@ function RootLayoutNav() {
       <QueryClientProvider client={queryClient}>
       <GluestackUIProvider config={config}>      
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack screenOptions={{headerShown:false}}>
+          <Stack  initialRouteName={token===''?'(auth)':'(tabs)'} screenOptions={{headerShown:false}}>
             {//if there isn't user
-              !token?
+              token===''?
                 <Stack.Screen name='(auth)' options={{headerShown:false}} />
               :
               <>

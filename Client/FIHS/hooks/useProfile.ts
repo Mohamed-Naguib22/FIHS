@@ -146,6 +146,7 @@ export const DeleteAccount = ()=>{
     return useMutation({
     mutationFn: async()=>{
         await userApi(token, await localRt).delete<Session>(`User/delete-account`).then((res)=>{
+            //@ts-ignore
             setSession(DEFAULT_SESSION)
             storage.remove({
                 key:'refreshToken'

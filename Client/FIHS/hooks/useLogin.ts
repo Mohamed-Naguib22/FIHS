@@ -1,6 +1,6 @@
-import api from '@/utils/api';
+import api, { userApi } from '@/utils/api';
 import { useMutation } from '@tanstack/react-query';
-import useSession from './state/useSession';
+import useSession, { DEFAULT_SESSION } from './state/useSession';
 import { useRouter } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { AxiosResponse } from 'axios';
@@ -38,3 +38,29 @@ const useLogin = ()=>{
     })
 }
 export default useLogin
+
+export const Logout = ()=>{    
+    const { setSession, setLoading, token } = useSession()
+    const rf = storage.load({key:'refreshToken'})
+    const router = useRouter()
+    return useMutation({
+        mutationFn: async(): Promise<any>=> {
+            setLoading(true)    
+            await userApi(token, await rf).get<Session, AxiosResponse<Session, {msg: string}>>(`/Auth/logout`,).then((res)=>{
+                storage.remove({key:'refreshToken'})                
+                //@ts-ignore
+                setSession(DEFAULT_SESSION)
+                setLoading(false)
+                // router.replace('/(auth)/login')
+            }).catch((err)=>{
+                setLoading(false)
+                Toast.show({
+                    type:'error',
+                    text1:'خطأ',
+                    text2:err.response.data
+                })
+                console.log(err.response);
+            })
+        }
+    })
+}
