@@ -22,6 +22,7 @@ export default function TabLayout() {
   const {imgUrl} = useSession()
   return (
     <Tabs       
+    initialRouteName='home/index'
       screenOptions={{   
         tabBarStyle:{
           flexDirection:'row-reverse',
