@@ -18,7 +18,7 @@ const Articles = (props: Props) => {
       <Text  textAlign='right'  color='#000' fontWeight='900'fontSize={20} p={6}>المقالات </Text>
    <TouchableOpacity onPress={()=>router.push('/articles/[id]')} activeOpacity={1} > 
    <View bg='rgba(41, 133, 120,0.6)' borderRadius={"$xl"} borderColor='#000' mb={15} h={250} w={'$full'}  >
-      <Image style={styles.PlantsTypesImage} source={require('@/assets/images/PlantType.jpg')}/>
+      <Image style={styles.articlePhoto} source={require('@/assets/images/PlantType.jpg')}/>
       <Text  textAlign='right' color='#000' marginRight={5} fontWeight='700' pt={6}> مقاله عن النباتات الزهريه </Text>
       <HStack justifyContent='space-between' alignItems='center'>
         <HStack ml={5} mt={20}  alignItems='center'>
@@ -46,7 +46,7 @@ const Articles = (props: Props) => {
    </TouchableOpacity>
    <TouchableOpacity onPress={()=>router.push('/articles/[id]')} activeOpacity={1} > 
    <View bg='rgba(41, 133, 120,0.6)' borderRadius={"$xl"} borderColor='#000' mb={15} h={250} w={'$full'}  >
-      <Image style={styles.PlantsTypesImage} source={require('@/assets/images/PlantType.jpg')}/>
+      <Image style={styles.articlePhoto} source={require('@/assets/images/PlantType.jpg')}/>
       <Text  textAlign='right' color='#000' marginRight={5} fontWeight='700' pt={6}> مقاله عن النباتات الزهريه </Text>
       <HStack justifyContent='space-between' alignItems='center'>
         <HStack ml={5} mt={20}  alignItems='center'>
@@ -74,7 +74,7 @@ const Articles = (props: Props) => {
    </TouchableOpacity>
    <TouchableOpacity onPress={()=>router.push('/articles/[id]')} activeOpacity={1} > 
    <View bg='rgba(41, 133, 120,0.6)' borderRadius={"$xl"} borderColor='#000' mb={15} h={250} w={'$full'}  >
-      <Image style={styles.PlantsTypesImage} source={require('@/assets/images/PlantType.jpg')}/>
+      <Image style={styles.articlePhoto} source={require('@/assets/images/PlantType.jpg')}/>
       <Text  textAlign='right' color='#000' marginRight={5} fontWeight='700' pt={6}> مقاله عن النباتات الزهريه </Text>
       <HStack justifyContent='space-between' alignItems='center'>
         <HStack ml={5} mt={20}  alignItems='center'>
@@ -107,7 +107,7 @@ const Articles = (props: Props) => {
 
 export default Articles
 const styles = StyleSheet.create({
-  PlantsTypesImage:{  
+  articlePhoto:{  
       width:"100%",
       height:160,
       borderTopEndRadius:10,

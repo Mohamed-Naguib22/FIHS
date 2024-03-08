@@ -39,7 +39,7 @@ const Scan = (props: Props) => {
         </HStack>
         </ActionsheetContent>
     </Actionsheet>
-    <Button onPress={()=>setShowActionsheet(!showActionsheet)} h={65} w={65} px={"$0"} py={"$0"} transform={"translateY(8px)"} rounded={"$2xl"}>
+    <Button onPress={()=>setShowActionsheet(!showActionsheet)} h={65} w={65} px={"$0"} py={"$0"} transform={"translateY(5px)"} rounded={"$2xl"}>
         <Feather name='camera' color={"white"} size={28}/>
     </Button>
     </>

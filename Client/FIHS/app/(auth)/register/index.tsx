@@ -34,50 +34,10 @@ const Register = (props: Props) => {
       flex:1,
       marginHorizontal:15,
     }} >
-      {/* <View
-      h={'$1'}
-      w={'$24'}
-      borderBottomEndRadius={9}
-      borderBottomStartRadius={9}
-      marginHorizontal="34%"
-      bgColor='#fff'
-      ></View> */}
-      {/* <Image style={{width:150,height:52, backgroundColor:"#fff", left:85,top:10 }} source={require('@/assets/images/Logofinal.png')}/> */}
+     
       <Text textAlign='center' color='$white' fontSize={25} fontWeight='800' pt={30} pb={10}> انشاء  حساب </Text>
      
-{/* 
-      <View>
-        <Text fontSize={18} fontWeight='400' color='$white' marginVertical={5} marginRight={22} >الاسم الثاني </Text>
-        <View style={{
-        width:"90%",   
-        marginRight:12,
-        marginLeft:12,
-        height:48,
-        borderColor:"#fff",
-        borderWidth:1,
-        borderTopEndRadius:10,
-        borderBottomStartRadius:10,
-        alignItems:"center",
-        justifyContent:"center",
-        paddingLeft:22,
-        backgroundColor:"#fff"
 
-        }}>
-        <TextInput
-        style={{
-          width:"100%",
-          textAlign:"right",
-          padding:8,
-
-        }}
-        placeholder='الاسم الاول '
-      
-        
-        
-        />
-
-        </View>
-      </View> */}
       <View marginTop={12}>
         {/* <Text fontSize={18} fontWeight='400' color='$white' marginVertical={5} marginRight={22} >الاسم الاول</Text> */}
         <View style={{
@@ -232,7 +192,7 @@ const Register = (props: Props) => {
           mt={10}
         borderBottomStartRadius={10}
         borderTopEndRadius={10}
-        onPress={()=>router.push('/(tabs)/home')}>
+        onPress={()=>router.push('/(auth)/verificationCode/')}>
         <ButtonText color='#000' >انشاء الحساب   </ButtonText>
 
       </Button>

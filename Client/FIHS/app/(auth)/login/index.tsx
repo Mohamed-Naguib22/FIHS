@@ -33,15 +33,7 @@ const [isPasswordShown,setIsPasswordShown]=useState(false);
       flex:1,
       marginHorizontal:15,
     }} >
-      {/* <View
-      h={'$1'}
-      w={'$24'}
-      borderBottomEndRadius={9}
-      borderBottomStartRadius={9}
-      marginHorizontal="34%"
-      bgColor='#fff'
-      ></View> */}
-      {/* <Image style={{width:150,height:52, backgroundColor:"#fff", left:85,top:10 }} source={require('@/assets/images/Logofinal.png')}/> */}
+   
       <Text textAlign='center' color='$white' fontSize={25} fontWeight='800' pt={30} pb={10}>تسجيل الدخول</Text>
       
       <View>
@@ -119,7 +111,7 @@ const [isPasswordShown,setIsPasswordShown]=useState(false);
           }
         </TouchableOpacity>
         </View>
-        <Text marginHorizontal={8} color='#fff' fontSize={12} marginRight={15}>هل نسيت كلمه المرور؟</Text>
+        <Text marginHorizontal={8} color='#fff' fontSize={12} marginRight={15} onPress={()=>router.push('/(auth)/resetPassword')}>هل نسيت كلمه المرور؟</Text>
       </View>
       <HStack 
         justifyContent='center'
@@ -128,9 +120,9 @@ const [isPasswordShown,setIsPasswordShown]=useState(false);
         >
 
       <Button w={130}
-      h={"$12"}
+        h={"$12"}
         backgroundColor='$white'
-          mb={20}
+        mb={20}
         borderBottomStartRadius={10}
         borderTopEndRadius={10}
         onPress={()=>router.push('/(tabs)/home')}>
