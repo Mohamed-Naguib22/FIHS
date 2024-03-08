@@ -3,16 +3,16 @@ import { Stack } from 'expo-router';
 
 type Props = {}
 
-const Articleslayout = (props: Props) => {
+const DiseasesPestslayout = (props: Props) => {
     return (
         <Stack screenOptions={{
-            // headerShown:false,
+            headerShown:false,
             animation:'slide_from_right',
         }}>
-            <Stack.Screen name='index'/>
-             <Stack.Screen name='[id]/index'/>
+            <Stack.Screen name='pests'/>
+             <Stack.Screen name='diseases'/>
          </Stack>
     )
 }
 
-export default Articleslayout
+export default DiseasesPestslayout

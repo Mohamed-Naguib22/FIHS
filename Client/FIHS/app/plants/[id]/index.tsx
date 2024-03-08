@@ -3,18 +3,15 @@ import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { HStack, VStack,View, Text } from '@gluestack-ui/themed'
 import { Image } from 'expo-image'
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
 import { Fontisto, FontAwesome} from '@expo/vector-icons' 
 import TabsPageContainer from '@/components/layout/TabsPageContainer'
-import { useRouter } from 'expo-router'
 
 type Props = {}
 
-const Article = (props: Props) => {
+const Plant = (props: Props) => {
     const {id} = useLocalSearchParams()
-    const router = useRouter()
-
   return <TabsPageContainer>
 
       <Image style={styles.articlePhotoId} source={require('@/assets/images/PlantDiseases.jpg')}/>
@@ -134,18 +131,22 @@ const Article = (props: Props) => {
 
       <ScrollView horizontal style={{marginBottom:30}} >
 
-      <TouchableOpacity activeOpacity={1} style={{backgroundColor:"transparent",borderColor:"rgba(41, 133, 120,0.6)",borderWidth:1,borderRadius:5,height:150,width:150,marginRight:10}} bg='' borderRadius={"$lg"} borderColor='#000' h={150} w={150} marginRight={10} onPress={()=>router.push('/articles/[id]')}>
-          <Image style={styles.similar} source={require('@/assets/images/PlantType.jpg')}/>
+      <View bg='rgba(41, 133, 120,0.6)' borderRadius={"$lg"} borderColor='#000' h={150} w={150} marginRight={10}>
+          <Image style={styles.similarArticles} source={require('@/assets/images/PlantType.jpg')}/>
           <Text textAlign='center' color='#000' marginRight={5} fontWeight='700' pt={6}>نباتات زهريه</Text>
-      </TouchableOpacity>
-      <TouchableOpacity activeOpacity={1} style={{backgroundColor:"transparent",borderColor:"rgba(41, 133, 120,0.6)",borderWidth:1,borderRadius:5,height:150,width:150,marginRight:10}} bg='' borderRadius={"$lg"} borderColor='#000' h={150} w={150} marginRight={10} onPress={()=>router.push('/articles/[id]')}>
-          <Image style={styles.similar} source={require('@/assets/images/PlantType.jpg')}/>
+      </View>
+      <View bg='rgba(41, 133, 120,0.6)' borderRadius={"$lg"} borderColor='#000' h={150} w={150} marginRight={10}>
+          <Image style={styles.similarArticles} source={require('@/assets/images/PlantType.jpg')}/>
           <Text textAlign='center' color='#000' marginRight={5} fontWeight='700' pt={6}>نباتات زهريه</Text>
-      </TouchableOpacity>
-      <TouchableOpacity activeOpacity={1} style={{backgroundColor:"transparent",borderColor:"rgba(41, 133, 120,0.6)",borderWidth:1,borderRadius:5,height:150,width:150,marginRight:10}} bg='' borderRadius={"$lg"} borderColor='#000' h={150} w={150} marginRight={10} onPress={()=>router.push('/articles/[id]')}>
-          <Image style={styles.similar} source={require('@/assets/images/PlantType.jpg')}/>
+      </View>
+      <View bg='rgba(41, 133, 120,0.6)' borderRadius={"$lg"} borderColor='#000' h={150} w={150} marginRight={10}>
+          <Image style={styles.similarArticles} source={require('@/assets/images/PlantType.jpg')}/>
           <Text textAlign='center' color='#000' marginRight={5} fontWeight='700' pt={6}>نباتات زهريه</Text>
-      </TouchableOpacity>
+      </View>
+      <View bg='rgba(41, 133, 120,0.6)' borderRadius={"$lg"} borderColor='#000' h={150} w={150} marginRight={10}>
+          <Image style={styles.similarArticles} source={require('@/assets/images/PlantType.jpg')}/>
+          <Text textAlign='center' color='#000' marginRight={5} fontWeight='700' pt={6}>نباتات زهريه</Text>
+      </View>
       </ScrollView>
     </VStack>
   </TabsPageContainer>
@@ -159,11 +160,11 @@ const styles = StyleSheet.create({
       // borderTopStartRadius:10,
       borderRadius:10,
   },
-  similar:{  
+  similarArticles:{  
     width:"100%",
     height:110,
-    borderTopEndRadius:5,
-    borderTopStartRadius:5,
+    borderTopEndRadius:10,
+    borderTopStartRadius:10,
   }
 })
-export default Article
+export default Plant

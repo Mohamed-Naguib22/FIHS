@@ -33,7 +33,7 @@ export default function TabOneScreen() {
             })
           }
         </Section>     
-        <Section name='أنواع النباتات' link=''>
+        <Section name='أنواع النباتات' link='/plants/'>
          <PlantsTypes/>
         </Section>     
 

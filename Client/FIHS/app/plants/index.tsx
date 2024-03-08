@@ -3,12 +3,12 @@ import React from 'react'
 
 type Props = {}
 
-const Diseases = (props: Props) => {
+const Plants = (props: Props) => {
   return (
     <View>
-      <Text>Diseases</Text>
+      <Text>ddفقa</Text>
     </View>
   )
 }
 
-export default Diseases
+export default Plants
