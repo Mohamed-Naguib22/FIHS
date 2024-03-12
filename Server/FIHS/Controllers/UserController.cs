@@ -1,4 +1,5 @@
 ﻿using CarShopAPI.Helpers;
+using FIHS.Dtos;
 using FIHS.Dtos.UserDtos;
 using FIHS.Interfaces.IUser;
 using Microsoft.AspNetCore.Authorization;
@@ -92,8 +93,9 @@ namespace FIHS.Controllers
         }
 
         [HttpPost("set-image")]
-        public async Task<IActionResult> SetImageAsync([FromForm] IFormFile imgFile)
+        public async Task<IActionResult> SetImageAsync([FromForm] ImageDto imageDto)
         {
+            var imgFile = imageDto.ImgFile;
             var refreshToken = Request.Cookies["refreshToken"];
 
             if (string.IsNullOrEmpty(refreshToken))
