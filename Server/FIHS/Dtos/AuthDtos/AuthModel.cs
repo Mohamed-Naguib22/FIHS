@@ -10,6 +10,7 @@ namespace FIHS.Dtos.AuthModels
         public string? Message { get; set; }
         [JsonIgnore]
         public bool Succeeded { get; set; }
+        public bool IsVerified { get; set; } = true;
         public bool IsAuthenticated { get; set; }
         public bool EmailConfirmed { get; set; }
         public string? ImgUrl { get; set; }

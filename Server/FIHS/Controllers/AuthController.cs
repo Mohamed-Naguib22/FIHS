@@ -24,6 +24,9 @@ namespace FIHS.Controllers
 
             var result = await _authService.RegisterAysnc(model);
 
+            if (!result.IsVerified)
+                return Ok(new { IsVerified = false });
+
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
@@ -89,6 +92,9 @@ namespace FIHS.Controllers
                 return BadRequest(ModelState);
 
             var result = await _authService.LoginAsync(model);
+
+            if (!result.IsVerified)
+                return Ok(new { IsVerified = false });
 
             if (!result.IsAuthenticated)
                 return BadRequest(result.Message);
