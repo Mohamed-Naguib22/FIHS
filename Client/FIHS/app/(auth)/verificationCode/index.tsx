@@ -6,13 +6,16 @@ import { SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { OtpInput } from "react-native-otp-entry";
-import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
+import { useVerify } from '@/hooks/useLogin'
 
 
 export default function index() {
-  <OtpInput numberOfDigits={6}  onTextChange={(text) => console.log(text)} />
-
-  const router = useRouter()
+  <OtpInput 
+  numberOfDigits={6}  
+  onTextChange={(text) => {console.log(text);setCode(text)}} 
+  />
+  const [code, setCode] = useState('')
+  const verify = useVerify()
   return (
     <ImageBackground
     style={{
@@ -71,18 +74,16 @@ export default function index() {
       <VStack 
         justifyContent='center'
         alignItems='center'
-        marginVertical={10}
-        
+        marginVertical={10}  
         >
-
       <Button w={130}
-      h={"$12"}
+        h={"$12"}
         backgroundColor='$rgba(41, 133, 120,0.9)'
-          mb={10}
-          mt={10}
+        mb={10}
+        mt={10}
         borderBottomStartRadius={10}
         borderTopEndRadius={10}
-        onPress={()=>router.push('/(auth)/login/')}>
+        onPress={()=>verify.mutate({verificationCode:code})}>
         <ButtonText color='#fff' >تأكيد</ButtonText>
       </Button>
       <Text>اعادة ارسال رمز التحقق؟</Text>

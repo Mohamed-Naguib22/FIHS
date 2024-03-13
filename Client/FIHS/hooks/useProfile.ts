@@ -5,6 +5,7 @@ import useSession, { DEFAULT_SESSION } from './state/useSession'
 import Toast from 'react-native-toast-message'
 import { PersonalInfo } from '@/models/PersonalInfo'
 import storage from '../utils/storage'
+import { useRouter } from 'expo-router'
 export const useProfile = () => useQuery<Session>({
     queryKey:['profile'],
     queryFn:()=>api.get<Session>(`User/profile`).then((res)=>res.data)
@@ -84,7 +85,11 @@ export const PostProfileImg = ()=>{
     })
     return useMutation({
     mutationFn: async({img}: {img:File})=>{
-        await userApi(token, await localRt).post<Session>(`User/set-image`, {imgFile:img}).then((res)=>{
+        let fd = new FormData()
+        fd.append('imgFile', img)
+        await userApi(token, await localRt).post<Session>(`User/set-image`, fd, {headers:{'Content-Type':'multipart/form-data'}}).then((res)=>{
+            console.log(res);
+            
             setSession(res.data)
             let rt = res.headers['set-cookie']?.[0]
             storage.save({
@@ -102,6 +107,8 @@ export const PostProfileImg = ()=>{
                 text1:'خطأ',
                 text2:err.response.data
             })
+            console.log(err.response.data);
+            
         })
     }
 })}
@@ -138,8 +145,9 @@ export const DeleteProfileImg = ()=>{
 })}
 
 
-export const DeleteAccount = ()=>{
+export const useDeleteAccount = ()=>{
     const {token, setSession} = useSession()
+    const router = useRouter()
     let localRt = storage.load<string>({
         key:'refreshToken'
     })
@@ -151,14 +159,12 @@ export const DeleteAccount = ()=>{
             storage.remove({
                 key:'refreshToken'
             })
-            storage.remove({
-                key:'session'
-            })
             Toast.show({
                 type:'success',
                 text1:'تمت العملية بنجاح',
                 text2:'تم حذف حسابك بنجاح'
             })        
+            router.replace('/(auth)/login')
         }).catch((err)=>{
             Toast.show({
                 type:'error',

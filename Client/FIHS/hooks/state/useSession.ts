@@ -45,6 +45,8 @@ const useSession = create<SessionState>((set)=>(
                         roles:session?.roles || state.roles,
                     }
                 })
+        } else{
+            storage.remove({key:'session'})
         }
         return {
             token:session?.token || state.token,
