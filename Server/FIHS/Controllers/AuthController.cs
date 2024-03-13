@@ -49,7 +49,7 @@ namespace FIHS.Controllers
             return Ok(result);
         }
 
-        [HttpGet("resend-verification-code")]
+        [HttpPost("resend-verification-code")]
         public async Task<IActionResult> ResendVerificationCodeAsync([FromBody] EmailModel model)
         {
             var result = await _authService.ResendVerificationCodeAsync(model);
