@@ -31,12 +31,12 @@ namespace FIHS.Services.UserServices
         public async Task<AuthModel> RegisterAysnc(RegisterModel model)
         {
             var registeredUser = await _userManager.FindByEmailAsync(model.Email);
+            
+            if (registeredUser != null && !await _userManager.IsEmailConfirmedAsync(registeredUser))
+                return new AuthModel { IsVerified = false };
 
             if (registeredUser != null )
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
-  
-            if (registeredUser != null && !await _userManager.IsEmailConfirmedAsync(registeredUser))
-                return new AuthModel { IsVerified = false };
 
             var user = _mapper.Map<ApplicationUser>(model);
 
