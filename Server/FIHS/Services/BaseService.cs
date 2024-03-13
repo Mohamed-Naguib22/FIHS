@@ -65,6 +65,7 @@ namespace FIHS.Services
 
             var authModel = _mapper.Map<AuthModel>(user);
             authModel.IsAuthenticated = true;
+            authModel.IsVerified = true;
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             authModel.ExpiresOn = jwtSecurityToken.ValidTo;
             authModel.RefreshToken = refreshToken.Token;

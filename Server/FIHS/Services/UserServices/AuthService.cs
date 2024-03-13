@@ -30,8 +30,13 @@ namespace FIHS.Services.UserServices
 
         public async Task<AuthModel> RegisterAysnc(RegisterModel model)
         {
-            if (await _userManager.FindByEmailAsync(model.Email) != null)
+            var registeredUser = await _userManager.FindByEmailAsync(model.Email);
+
+            if (registeredUser != null )
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
+  
+            if (registeredUser != null && !await _userManager.IsEmailConfirmedAsync(registeredUser))
+                return new AuthModel { IsVerified = false };
 
             var user = _mapper.Map<ApplicationUser>(model);
 
@@ -144,9 +149,12 @@ namespace FIHS.Services.UserServices
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password) || !user.EmailConfirmed)
+            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني أو كلمة المرور غير صحيحة" };
             
+            if (!user.EmailConfirmed)
+                return new AuthModel{ IsVerified = false };
+
             return await MapToAuthModel(user);
         }
 
@@ -194,7 +202,7 @@ namespace FIHS.Services.UserServices
             if (!refreshToken.IsActive)
                 return false;
 
-            refreshToken.RevokedOn = DateTime.UtcNow;
+            refreshToken.RevokedOn = DateTime.Now;
 
             await _userManager.UpdateAsync(user);
 
