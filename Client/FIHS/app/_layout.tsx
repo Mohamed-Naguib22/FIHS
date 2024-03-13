@@ -59,9 +59,16 @@ export default function RootLayout() {
 }
 
 
-function RootLayoutNav({token}:{token: string}) {
+function RootLayoutNav(props:{token: string}) {
   const colorScheme = useColorScheme();
   const queryClient = new QueryClient()
+  const {isLoading, token, setSession} = useSession()
+  useEffect(()=>{
+    storage.load<Session>({key:'session'}).then((res)=>setSession(res))
+  },[])
+  if(isLoading){
+    return <Loading/>
+  }
   return (
     <GestureHandlerRootView  style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
