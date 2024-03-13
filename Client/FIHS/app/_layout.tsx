@@ -5,12 +5,16 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from '@/components/useColorScheme';
-import {  StatusBar,StyleSheet  } from 'react-native';
-import { GluestackUIProvider, Button } from '@gluestack-ui/themed';
+import {  ActivityIndicator, StatusBar,StyleSheet  } from 'react-native';
+import { GluestackUIProvider, Button, View, ImageBackground } from '@gluestack-ui/themed';
 import { config } from '@/config/gluestack-ui.config';
 import { Image } from 'expo-image';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import useSession from '@/hooks/state/useSession';
+import Loading from '@/components/layout/Loading';
+import Toast from 'react-native-toast-message';
+import storage from '@/utils/storage';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -29,67 +33,57 @@ export default function RootLayout() {
     ...FontAwesome.font,
     
   });
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+    const {isLoading, setLoading, token, setSession} = useSession()
+    useEffect(()=>{
+      setLoading(true)
+      storage.load<Session>({key:'session'}).then((res)=>{
+        setSession(res)
+        setLoading(false)
+      })
+    },[])
   useEffect(() => {
     if (error) throw error;
   }, [error]);
-
   useEffect(() => {
-    if (loaded) {
+    if (loaded && !isLoading) {      
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, isLoading]);
+  
 
   if (!loaded) {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <RootLayoutNav token={token}/>;
 }
 
 
-function RootLayoutNav() {
+function RootLayoutNav(props:{token: string}) {
   const colorScheme = useColorScheme();
   const queryClient = new QueryClient()
+  const {isLoading, token, setSession} = useSession()
+  useEffect(()=>{
+    storage.load<Session>({key:'session'}).then((res)=>setSession(res))
+  },[])
+  if(isLoading){
+    return <Loading/>
+  }
   return (
     <GestureHandlerRootView  style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
       <GluestackUIProvider config={config}>      
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name='(tabs)' options={{headerShown:false}} />
-            <Stack.Screen name='(auth)' options={{headerShown:false}} />
-            <Stack.Screen name='articles' options={{headerShown:false}} />
-            <Stack.Screen name='diseases' options={{headerShown:false}} />
-            <Stack.Screen name='plants' options={{headerShown:false}} />
-            {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
+          <Stack screenOptions={{headerShown:false}}>
+                <Stack.Screen name='(tabs)' options={{headerShown:false}} />
+                <Stack.Screen name='(auth)' options={{headerShown:false}} />
+                <Stack.Screen name='articles' options={{headerShown:false}} />
+                <Stack.Screen name='diseasesType' options={{headerShown:false}} />
           </Stack>
-        </ThemeProvider>
+          <Toast />
+      </ThemeProvider>
       </GluestackUIProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  image: {
-width:150,
-height:70,
-backgroundColor:"",
-  },
-  BG: {
-width:500,
-height:"100%",
-},
-BG1: {
-  width:"100%",
-  height:"100%",
-  // transform:"translateY(-20px)",
-
-  },
-Hide: {
-
-  },
-  
-});

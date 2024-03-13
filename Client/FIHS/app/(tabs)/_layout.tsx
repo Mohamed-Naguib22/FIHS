@@ -7,6 +7,8 @@ import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import TabsHeader from '@/components/layout/TabsHeader';
 import { RNCamera } from 'react-native-camera';
 import Scan from '@/components/home/Scan';
+import { Avatar, AvatarFallbackText, AvatarImage } from '@gluestack-ui/themed';
+import useSession from '@/hooks/state/useSession';
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -17,8 +19,10 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
+  const {imgUrl} = useSession()
   return (
     <Tabs       
+    initialRouteName='home/index'
       screenOptions={{   
         tabBarStyle:{
           flexDirection:'row-reverse',
@@ -100,7 +104,10 @@ export default function TabLayout() {
         name="profile/index"
         options={{
           title: '',
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          tabBarIcon: ({ color }) => imgUrl&& <Avatar borderColor={color} borderWidth={'$2'} size='sm' alignSelf='center'>
+          <AvatarFallbackText></AvatarFallbackText>
+          <AvatarImage alt='يوسف محمد' source={imgUrl}/>
+        </Avatar>,
         }}
       />
     </Tabs>

@@ -10,10 +10,31 @@ import { useState } from 'react';
 import { Actionsheet } from '@gluestack-ui/themed';
 import { ActionsheetBackdrop } from '@gluestack-ui/themed';
 import { ActionsheetDragIndicatorWrapper } from '@gluestack-ui/themed';
+import useSession from '@/hooks/state/useSession';
+import * as ImagePicker from 'expo-image-picker';
+import { PostProfileImg } from '@/hooks/useProfile';
 
 export default function ProfileScreen() {
   const [showActionsheet, setShowActionsheet] = useState(false)
+  const {imgUrl} = useSession()
+  const postProfileImg = PostProfileImg()
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
 
+    console.log(result);
+
+    if (!result.canceled) {
+      postProfileImg.mutate({img:result.assets[0] as unknown as File}, {
+        onSuccess(data, variables, context) {
+          setShowActionsheet(!showActionsheet)
+        },
+      })
+    }
+  };
   return (
     <>
     <TabsPageContainer>
@@ -23,7 +44,7 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={()=>setShowActionsheet(true)}>
           <Avatar size='xl' alignSelf='center'>
             <AvatarFallbackText>يوسف محمد</AvatarFallbackText>
-            <AvatarImage alt='يوسف محمد' source={require('@/assets/images/avatar.png')}/>
+            <AvatarImage alt='يوسف محمد' source={imgUrl||require('@/assets/images/avatar.png')}/>
           </Avatar>
           </TouchableOpacity>        
           <HStack gap={"$1"}>
@@ -48,7 +69,7 @@ export default function ProfileScreen() {
                 <ActionsheetDragIndicator />
             </ActionsheetDragIndicatorWrapper>
         <HStack gap={"$5"} h={"$full"} alignItems='center' justifyContent='center'>
-            <Button variant='outline' rounded={"$2xl"} w={175} h={175} onPress={()=>setShowActionsheet(!showActionsheet)}>
+            <Button variant='outline' rounded={"$2xl"} w={175} h={175} onPress={pickImage}>
                 <VStack gap={"$0.5"} alignItems='center'>
                     <ButtonText size='3xl'>
                       <FontAwesome size={40} name='edit'/>
