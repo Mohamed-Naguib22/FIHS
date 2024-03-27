@@ -162,7 +162,7 @@ namespace FIHS.Controllers
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = false,
+                HttpOnly = true,
                 Expires = expires.ToLocalTime(),
                 Secure = true,
                 IsEssential = true,
