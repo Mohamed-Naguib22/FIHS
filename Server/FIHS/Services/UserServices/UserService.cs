@@ -106,12 +106,12 @@ namespace FIHS.Services.UserServices
             return await MapToAuthModel(user);
         }
 
-        public async Task<UserDto> DeleteImageAsync(string refreshToken)
+        public async Task<AuthModel> DeleteImageAsync(string refreshToken)
         {
             var user = await GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
+                return new AuthModel { Succeeded = false, Message = "المستخدم غير موجود" };
             
             _imageService.DeleteImage(user.ImgUrl);
 
@@ -119,9 +119,9 @@ namespace FIHS.Services.UserServices
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
-                return new UserDto { Succeeded = false, Message = "حدث خطأ ما" };
+                return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
-            return new UserDto { Succeeded = true };
+            return await MapToAuthModel(user);
         }
     }
 }

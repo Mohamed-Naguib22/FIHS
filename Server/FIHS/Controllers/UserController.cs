@@ -133,7 +133,7 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("تم حذف الصورة بنجاح");
+            return Ok(result);
         }
 
         private void SetRefreshTokenInCookie(string refreshToken, DateTime expires)
