@@ -52,13 +52,13 @@ namespace FIHS.Services.UserServices
             await _userManager.AddToRoleAsync(user, "User");
             await _userManager.UpdateAsync(user);
 
-            string verificationCode = GenerateRandomCode();
+            var verificationCode = GenerateRandomCode();
 
             await _emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your verification code is {verificationCode}");
 
             _memoryCache.Set($"{user.Id}_VerificationCode", verificationCode, _CodeExpiration);
 
-            return new AuthModel { Succeeded = true };
+            return new AuthModel { Succeeded = true, Message = "يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك" };
         }
 
         public async Task<AuthModel> VerifyAccountAsync(VerifyAccountModel model)
@@ -142,7 +142,7 @@ namespace FIHS.Services.UserServices
             if (!result.Succeeded)
                 return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
-            return new AuthModel { Succeeded = true, Message = "تمت إعادة تعيين كلمة المرور بنجاح" };
+            return await MapToAuthModel(user);
         }
 
         public async Task<AuthModel> LoginAsync(TokenrRequestModel model)
