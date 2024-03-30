@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FIHS.Dtos;
 using FIHS.Interfaces.IArticle;
 using FIHS.Models.ArticleModels;
 using FIHS.Models.AuthModels;
@@ -16,40 +17,35 @@ namespace FIHS.Services.ArticleServices
             _context = context;
         }
 
-        public async Task<bool> LikeAsync(int articleId, string refreshToken) 
+        public async Task<BaseDto> LikeAsync(int articleId, string refreshToken) 
         {
+            var dto = new BaseDto();
+
             var user = await GetUserByRefreshToken(refreshToken);
 
-            var isLiked = await _context.ArticleLikes.AnyAsync(al => al.ArticleId == articleId && al.ApplicationUserId == user.Id);
-
-            if (isLiked)
-                return false;
-
-            var like = new ArticleLike
-            {
-                ArticleId = articleId,
-                ApplicationUserId = user.Id,
-            };
-
-            await _context.ArticleLikes.AddAsync(like);
-            await _context.SaveChangesAsync();
+            if (user == null)
+                return new BaseDto { Succeeded = false, Message = "Invalid Token." };
             
-            return true;
-        }
-
-        public async Task<bool> RemoveLikeAsync(int articleId, string refreshToken)
-        {
-            var user = await GetUserByRefreshToken(refreshToken);
+            if (!await _context.Articles.AnyAsync(a => a.Id == articleId))
+                return new BaseDto { Succeeded = false, Message = "هذا المقال غير موجود" };
 
             var like = await _context.ArticleLikes.FirstOrDefaultAsync(al => al.ArticleId == articleId && al.ApplicationUserId == user.Id);
 
             if (like == null)
-                return false;
+            {
+                await _context.ArticleLikes.AddAsync(new ArticleLike { ArticleId = articleId, ApplicationUserId = user.Id });
+                dto.Succeeded = true;
+                dto.Message = "تم اضافة الاعجاب بنجاح";
+            }
+            else
+            {
+                _context.ArticleLikes.Remove(like);
+                dto.Succeeded = true;
+                dto.Message = "تم ازالة الاعجاب بنجاح";
+            }
 
-            _context.ArticleLikes.Remove(like);
             await _context.SaveChangesAsync();
-
-            return true;
+            return dto;
         }
     }
 }

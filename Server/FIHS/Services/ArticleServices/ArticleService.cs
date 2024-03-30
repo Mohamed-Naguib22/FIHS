@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using FIHS.Interfaces.IArticle;
 using Microsoft.AspNetCore.Identity;
 using FIHS.Models.AuthModels;
+using FIHS.Extensions;
+using System.Collections.Generic;
 
 namespace FIHS.Services.ArticleService
 {
@@ -22,7 +24,7 @@ namespace FIHS.Services.ArticleService
             _context = context;
         }
 
-        public async Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync()
+        public async Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync(int offset, int limit)
         {
             var likes = await _context.ArticleLikes.ToListAsync();
 
@@ -36,7 +38,7 @@ namespace FIHS.Services.ArticleService
                     NumOfLikes = a.ArticleLikes.Count()
                 }).OrderByDescending(a => a.NumOfLikes).ToListAsync();
 
-            return articles;
+            return articles.Paginate(offset, limit);
         }
 
         public async Task<ReturnArticleDto> GetArticleAsync(int articleId, string refreshToken)
@@ -57,7 +59,8 @@ namespace FIHS.Services.ArticleService
             var articleDto = _mapper.Map<ReturnArticleDto>(article);
 
             var tags = _context.ArticleTags.Where(at => at.ArticleId == article.Id).Select(at => at.Tag);
-            var liked = await _context.ArticleLikes.AnyAsync(al => al.ArticleId == article.Id && al.ApplicationUserId == user.Id);
+
+            var liked = user?.Id != null && await _context.ArticleLikes.AnyAsync(al => al.ArticleId == article.Id && al.ApplicationUserId == user.Id);
 
             var similarArticles = articles.Where(a => a.ArticleTags.Any(at => tags.Contains(at.Tag)))
                 .Where(a => a.Id != article.Id).Take(5);
@@ -73,11 +76,10 @@ namespace FIHS.Services.ArticleService
             }).OrderByDescending(a => a.NumOfLikes).ToList();
 
             articleDto.Liked = liked;
-
             return articleDto;
         }
 
-        public async Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query)
+        public async Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query, int offset, int limit)
         {
             var articles = _context.Articles
                 .Include(a => a.ArticleTags)
@@ -97,7 +99,7 @@ namespace FIHS.Services.ArticleService
                     NumOfLikes = a.ArticleLikes.Count()
                 }).OrderByDescending(a => a.NumOfLikes).ToListAsync();
 
-            return articlesDto;
+            return articlesDto.Paginate(offset, limit);
         }
 
         public async Task<Article> AddArticleAsync(AddArticleDto articleDto)

@@ -2,14 +2,16 @@
 using FHIS.Services;
 using FIHS.Dtos.ArticleDtos;
 using FIHS.Models.ArticleModels;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace FIHS.Interfaces.IArticle
 {
     public interface IArticleService
     {
-        Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync();
+        Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync(int offest, int limit);
         Task<ReturnArticleDto> GetArticleAsync(int articleId, string? refreshToken);
-        Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query);
+        Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query, int offset, int limit);
         Task<Article> AddArticleAsync(AddArticleDto articleDto);
         Task<ArticleTag> AddTagAsync(TagDto tagDto);
         Task<ArticleSection> AddSectionAsync(AddSectionDto sectionDto);

@@ -20,9 +20,9 @@ namespace FIHS.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllArticlesAsync()
+        public async Task<IActionResult> GetAllArticlesAsync([FromQuery] int offset, [FromQuery] int limit)
         {
-            var articles = await _articleService.GetAllArticlesAsync();
+            var articles = await _articleService.GetAllArticlesAsync(offset, limit);
 
             return Ok(articles);
         }
@@ -34,16 +34,13 @@ namespace FIHS.Controllers
 
             var result = await _articleService.GetArticleAsync(articleId, refreshToken);
 
-            if (!result.Succeeded)
-                return BadRequest(result.Message);
-
-            return Ok(result);
+            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchAsync([FromQuery] string query)
+        public async Task<IActionResult> SearchAsync([FromQuery] string query, [FromQuery] int offset, [FromQuery] int limit)
         {
-            var articles = await _articleService.SearchAsync(query);
+            var articles = await _articleService.SearchAsync(query, offset, limit);
 
             return Ok(articles);
         }
@@ -164,27 +161,7 @@ namespace FIHS.Controllers
 
             var result = await _articleInteractionService.LikeAsync(articleId, refreshToken);
 
-            if (!result)
-                return BadRequest("·ﬁœ ﬁ„  »«·«⁄Ã«»  »Â–« «·„ﬁ«· »«·›⁄·");
-
-            return Ok(" „ «÷«›… «·«⁄Ã«» »‰Ã«Õ");
-        }
-
-        [Authorize]
-        [HttpDelete("remove-like/{articleId}")]
-        public async Task<IActionResult> RemoveLikeAsync(int articleId)
-        {
-            var refreshToken = Request.Cookies["refreshToken"];
-
-            if (string.IsNullOrEmpty(refreshToken))
-                return BadRequest("Token is required!");
-
-            var result = await _articleInteractionService.RemoveLikeAsync(articleId, refreshToken);
-
-            if (!result)
-                return BadRequest("«‰  ·„  ﬁ„ »«·«⁄Ã«» »Â–« «·„ﬁ«·");
-
-            return Ok(" „ «“«·… «·«⁄Ã«» »‰Ã«Õ");
+            return result.Succeeded ? Ok(result.Message) : BadRequest(result.Message);
         }
     }
 }

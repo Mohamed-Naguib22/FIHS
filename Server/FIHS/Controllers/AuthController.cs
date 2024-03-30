@@ -30,7 +30,7 @@ namespace FIHS.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Message);
 
-            return Ok("يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك");
+            return Ok(result.Message);
         }
 
         [HttpPost("verify-account")]
@@ -79,10 +79,7 @@ namespace FIHS.Controllers
 
             var result = await _authService.ResetPasswordAsync(model);
 
-            if (!result.Succeeded)
-                return BadRequest(result.Message);
-
-            return result.Succeeded ? Ok(result.Message) : BadRequest(result.Message);
+            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
         }
 
         [HttpPost("login")]
