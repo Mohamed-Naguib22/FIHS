@@ -13,7 +13,6 @@ interface WithTitle extends DBItem {
 
 interface ArticleItem extends HasImage, WithTitle {
     author: string,
-    publicationDate: string,
 }
 
 interface AgroCare extends HasImage {
@@ -29,16 +28,18 @@ type Article = ArticleItem & {
 }
 
 type ArticleByID = Article & {
-    articleSections: WithTitle &{ content: string, articleId: number }[],
-    articleTags: DBItem &{ tag: string, articleId: number }[],
+    publicationDate: string,
+    liked: boolean,
+    articleSections: (WithTitle & { content: string, articleId: number })[],
+    articleTags: (DBItem & { tag: string, articleId: number })[],
     similarArticles: Article[]
 }
 
-type Fertilizer =  AgroCare &{
+type Fertilizer = AgroCare & {
     nutrientContent: string
 }
 
-type Pesticide = AgroCare &{
+type Pesticide = AgroCare & {
     description: string,
     toxicity: string,
     type: string
@@ -54,7 +55,8 @@ type WeatherStatus = {
     temperature: string,
     pressure: string,
     humidity: string,
-    windSpeed: string
+    windSpeed: string,
+    icon: string,
 }
 type Session = {
     isAuthenticated: boolean,
@@ -69,3 +71,5 @@ type Session = {
     expiresOn: string,
     refreshTokenExpiration: string
 }
+
+type Paginate<T, N extends string> = Record<N, T[]> & { nextPage: number | null }
