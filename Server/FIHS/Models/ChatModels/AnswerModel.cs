@@ -9,5 +9,7 @@ namespace FIHS.Models.ChatGPT
         public string? Message { get; set; }
         [JsonIgnore]
         public int StatusCode { get; set; }
+        [JsonIgnore]
+        public bool Succeeded { get; set; }
     }
 }
