@@ -3,6 +3,9 @@ using CarShopAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using FIHS.Dtos.ArticleDtos;
 using FIHS.Interfaces.IArticle;
+using OpenAI_API.Moderation;
+using System.Text.Json;
+using FIHS.Models.ArticleModels;
 
 namespace FIHS.Controllers
 {
@@ -22,9 +25,8 @@ namespace FIHS.Controllers
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAllArticlesAsync([FromQuery] int offset, [FromQuery] int limit)
         {
-            var articles = await _articleService.GetAllArticlesAsync(offset, limit);
-
-            return Ok(articles);
+            var (articles, nextPage) = await _articleService.GetAllArticlesAsync(offset, limit);
+            return Ok(new { Articles = articles, NextPage = nextPage });
         }
 
         [HttpGet("get/{articleId}")]
@@ -40,9 +42,8 @@ namespace FIHS.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchAsync([FromQuery] string query, [FromQuery] int offset, [FromQuery] int limit)
         {
-            var articles = await _articleService.SearchAsync(query, offset, limit);
-
-            return Ok(articles);
+            var (articles, nextPage) = await _articleService.SearchAsync(query, offset, limit);
+            return Ok(new { Articles = articles, NextPage = nextPage });
         }
 
         [Authorize(Roles = "Admin")]

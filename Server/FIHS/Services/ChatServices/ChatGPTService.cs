@@ -23,16 +23,19 @@ namespace FIHS.Services.ChatServices
                 var apiKey = _configuration["ApiKeys:ChatGPT"];
 
                 if (apiKey == null)
-                    return new AnswerModel { StatusCode = 400, Message = "API key for ChatGPT is missing or invalid." };
+                    return new AnswerModel { StatusCode = 400, Message = "API key for ChatGPT is missing or invalid.", Succeeded = false };
 
                 var openAi = new ChatGpt(apiKey);
                 var answer = await openAi.Ask(model.Question);
 
-                return new AnswerModel { Answer = answer };
+                if (answer == null || string.IsNullOrEmpty(answer))
+                    return new AnswerModel { StatusCode = 503, Message = "غير متوفرة Chat GPT خدمة", Succeeded = false };
+
+                return new AnswerModel { Answer = answer, Succeeded = true };
             }
             catch
             {
-                return new AnswerModel { StatusCode = 503, Message = "غير متوفرة Chat GPT خدمة" };
+                return new AnswerModel { StatusCode = 503, Message = "غير متوفرة Chat GPT خدمة", Succeeded = false };
 
             }
         }

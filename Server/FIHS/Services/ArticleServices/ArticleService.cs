@@ -24,7 +24,7 @@ namespace FIHS.Services.ArticleService
             _context = context;
         }
 
-        public async Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync(int offset, int limit)
+        public async Task<(IEnumerable<ReturnArticleDto>, int? nextPage)> GetAllArticlesAsync(int offset, int limit)
         {
             var likes = await _context.ArticleLikes.ToListAsync();
 
@@ -79,7 +79,7 @@ namespace FIHS.Services.ArticleService
             return articleDto;
         }
 
-        public async Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query, int offset, int limit)
+        public async Task<(IEnumerable<ReturnArticleDto>, int? nextPage)> SearchAsync(string query, int offset, int limit)
         {
             var articles = _context.Articles
                 .Include(a => a.ArticleTags)

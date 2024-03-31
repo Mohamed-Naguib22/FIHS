@@ -9,9 +9,9 @@ namespace FIHS.Interfaces.IArticle
 {
     public interface IArticleService
     {
-        Task<IEnumerable<ReturnArticleDto>> GetAllArticlesAsync(int offest, int limit);
+        Task<(IEnumerable<ReturnArticleDto>, int? nextPage)> GetAllArticlesAsync(int offest, int limit);
         Task<ReturnArticleDto> GetArticleAsync(int articleId, string? refreshToken);
-        Task<IEnumerable<ReturnArticleDto>> SearchAsync(string query, int offset, int limit);
+        Task<(IEnumerable<ReturnArticleDto>, int? nextPage)> SearchAsync(string query, int offset, int limit);
         Task<Article> AddArticleAsync(AddArticleDto articleDto);
         Task<ArticleTag> AddTagAsync(TagDto tagDto);
         Task<ArticleSection> AddSectionAsync(AddSectionDto sectionDto);

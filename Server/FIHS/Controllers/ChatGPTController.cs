@@ -22,10 +22,7 @@ namespace FIHS.Controllers
         {
             var result = await _chatGPTService.AskQuestionAsync(questionModel);
 
-            if (!string.IsNullOrEmpty(result.Message))
-                return StatusCode(result.StatusCode, result.Message);
-
-            return Ok(result);
+            return result.Succeeded ? Ok(result) : StatusCode(result.StatusCode, result.Message);
         }
     }
 }
