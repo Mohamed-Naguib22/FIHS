@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="ChatGPT.Net" Version="2.0.0" />
     <PackageReference Include="DevAccelerateSmsTextlocal" Version="7.0.1-preview6.5" />
     <PackageReference Include="Google.Apis.Auth" Version="1.66.0" />
@@ -33,7 +33,7 @@
     <PackageReference Include="OpenAI" Version="1.7.2" />
     <PackageReference Include="RestSharp" Version="106.13.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
   </ItemGroup>
 
   <ItemGroup>
