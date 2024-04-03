@@ -44,8 +44,11 @@ namespace FIHS.Helpers
             CreateMap<PlantSoilTypes, SoilDto>().IncludeMembers(src => src.Soil);
             CreateMap<Soil, SoilDto>();
             CreateMap<Plant, PlantInDto>().ReverseMap();
+            //Pest & Disease
             CreateMap<PestDto, Pest>().ForMember(p => p.ImageUrl, opt => opt.Ignore());
             CreateMap<DiseaseDto, Disease>().ForMember(d => d.ImageUrl, opt => opt.Ignore());
+            CreateMap<Disease, ReturnDiseaseDto>().ForMember(d => d.ImageUrl, opt => opt.Ignore());
+            CreateMap<Pest,ReturnPestDto>().ForMember(p=>p.ImageUrl, opt => opt.Ignore());
             /*mapping pesticide & fertilizer*/
             CreateMap<Pesticide, PesticideDto>().ReverseMap().ForMember(i => i.ImageURL, opt => opt.Ignore());
             CreateMap<Fertilizer, FertilizerDto>().ReverseMap().ForMember(i => i.ImageURL, opt => opt.Ignore());
