@@ -52,7 +52,7 @@ namespace FIHS.Services.PlantservicesImp
            PlantDto plantDto = _mapper.Map<PlantDto>(plantToDelete);
            if (plantToDelete is null)
             {
-                plantDto.Message = "No Plant found with this id";
+                plantDto.Message = "لم يتم ايجاد نبات بهذا الرقم";
                 return plantDto;
             }
             _context.Plants.Remove(plantToDelete);

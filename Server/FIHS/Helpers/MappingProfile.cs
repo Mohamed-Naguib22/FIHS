@@ -14,11 +14,15 @@ using FIHS.Models.Fertilizer;
 using FIHS.Models.Pest;
 using FIHS.Models.Pesticide;
 using FIHS.Models.Plant;
+using Microsoft.Identity.Client;
+using System.Configuration;
 
 namespace FIHS.Helpers
 {
     public class MappingProfile : Profile
     {
+        IConfiguration configuration = new ConfigurationBuilder()
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
         public MappingProfile() 
         {
             CreateMap<ApplicationUser, UserDto>()
@@ -37,9 +41,11 @@ namespace FIHS.Helpers
 
             CreateMap<AddSectionDto, ArticleSection>();
             CreateMap<TagDto, ArticleTag>();
+            // Plants&Soils
+            CreateMap<Plant, PlantDto>()
+                .ForMember(des => des.ImageUrl, opt => opt.MapFrom(src => configuration.GetSection("BaseUrl").Value + src.ImageUrl));
 
-            CreateMap<Plant, PlantDto>();
-            CreateMap<PlantsTypesOfPlant, PlantTypeDto>().IncludeMembers(src=>src.PlantType);
+            CreateMap<PlantsTypesOfPlant, PlantTypeDto>().IncludeMembers(src=>src.PlantType).ReverseMap();
             CreateMap<PlantType, PlantTypeDto>();
             CreateMap<PlantSoilTypes, SoilDto>().IncludeMembers(src => src.Soil);
             CreateMap<Soil, SoilDto>();

@@ -15,6 +15,8 @@ namespace FIHS.Models.Plant
         public string Name { get; set; }
         [Required, MaxLength(516), MinLength(5)]
         public string Description { get; set; }
+        [Required, MaxLength(50),MinLength(2)]
+        public string Color { get; set; }
         [ MaxLength(512), MinLength(2)]
         public string? CommonUses { get; set; }
         [ MaxLength(512), MinLength(2)]

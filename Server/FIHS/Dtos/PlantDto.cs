@@ -14,6 +14,7 @@ namespace FIHS.Dtos
             public int Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
+            public string color { get; set; }
             public string? CommonUses { get; set; }
             public string? NutritionalValue { get; set; }
             public double AverageYield { get; set; }
