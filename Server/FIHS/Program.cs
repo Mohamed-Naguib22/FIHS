@@ -9,9 +9,11 @@ using FIHS.Interfaces.IPest;
 using FIHS.Interfaces.IPesticide;
 using FIHS.Interfaces.IPlant;
 using FIHS.Interfaces.IPlantId;
+using FIHS.Interfaces.IPlantType;
 using FIHS.Interfaces.IUser;
 using FIHS.Interfaces.IWeather;
 using FIHS.Models.AuthModels;
+using FIHS.Models.Plant;
 using FIHS.Services;
 using FIHS.Services.ArticleService;
 using FIHS.Services.ArticleServices;
@@ -22,6 +24,7 @@ using FIHS.Services.PesticideService;
 using FIHS.Services.PestService;
 using FIHS.Services.PlantIdServices;
 using FIHS.Services.PlantservicesImp;
+using FIHS.Services.PlantTypeServices;
 using FIHS.Services.UserServices;
 using FIHS.Services.WeatherServices;
 using Microsoft.AspNetCore;
@@ -67,6 +70,7 @@ builder.Services.AddScoped<IPesticide, PesticideService>();
 builder.Services.AddScoped<IFertilizer, FertilizerService>();
 builder.Services.AddScoped<IPestService, PestService>();
 builder.Services.AddScoped<IDiseaseService, DiseaseService>();
+builder.Services.AddScoped<IPlantType, PlantTypeServices>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -105,11 +109,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
-builder.Services.Configure<KestrelServerOptions>(options =>
-{
-    options.Listen(IPAddress.Loopback, 7184);
-    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
-});
+//builder.Services.Configure<KestrelServerOptions>(options =>
+//{
+//    options.Listen(IPAddress.Loopback, 7184);
+//    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
+//});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();

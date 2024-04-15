@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace FIHS.Dtos
 {
     public class PlantTypeDto

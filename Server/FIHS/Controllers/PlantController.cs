@@ -60,7 +60,7 @@ namespace FIHS.Controllers
             {
                 var plant = _mapper.Map<Plant>(plantInDto);
                 await _plantRepository.AddPlant(plant, plantInDto);
-                return Ok("Plant Added Succefully");
+                return Ok("تمت اضافة النبات بنجاح");
             }
            return BadRequest();
         }
