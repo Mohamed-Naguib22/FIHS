@@ -1,5 +1,6 @@
 ﻿using FIHS.Dtos.PestDto;
-using FIHS.Models.Pest;
+using FIHS.Models.PestModels;
+
 
 namespace FIHS.Interfaces.IPest
 {

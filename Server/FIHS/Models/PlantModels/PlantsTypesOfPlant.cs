@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FIHS.Models.Plant
+namespace FIHS.Models.PlantModels
 {
     public class PlantsTypesOfPlant
     {

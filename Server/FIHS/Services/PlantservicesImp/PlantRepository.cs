@@ -2,7 +2,7 @@
 using FIHS.Dtos;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IPlant;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Services.PlantservicesImp
@@ -31,7 +31,11 @@ namespace FIHS.Services.PlantservicesImp
 
         public async Task<IEnumerable<Plant>> GetAllPlantsAsync()
         {
-            var plant = await _context.Plants.Include(pt => pt.PlantTypes).ThenInclude(p => p.PlantType).Include(p => p.Soils).ThenInclude(ps => ps.Soil).ToListAsync();
+            var plant = await _context.Plants.Include(pt => pt.PlantTypes).ThenInclude(p => p.PlantType)
+                .Include(p => p.Soils).ThenInclude(ps => ps.Soil)
+                .Include(p => p.Diseases).ThenInclude(pd => pd.Disease)
+                .Include(p => p.Pests).ThenInclude(pp => pp.Pest)
+                .ToListAsync();
             return plant;
         }
 

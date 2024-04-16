@@ -1,4 +1,6 @@
-﻿using FIHS.Models.Plant;
+﻿using FIHS.Dtos.DiseaseDto;
+using FIHS.Dtos.PestDto;
+using FIHS.Models.PlantModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,6 +29,8 @@ namespace FIHS.Dtos
         public string Message { get; set; } = string.Empty;
             public ICollection<PlantTypeDto> PlantTypes { get; set; }
             public ICollection<SoilDto> Soils { get; set; }
+            public ICollection<ReturnDiseaseDto> Diseases { get; set; }
+            public ICollection<ReturnPestDto> Pests { get; set; }
 
     }
 }

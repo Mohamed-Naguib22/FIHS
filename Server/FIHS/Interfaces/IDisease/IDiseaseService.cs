@@ -1,5 +1,5 @@
 ﻿using FIHS.Dtos.DiseaseDto;
-using FIHS.Models.Disease;
+using FIHS.Models.DiseaseModels;
 
 
 namespace FIHS.Interfaces.IDisease

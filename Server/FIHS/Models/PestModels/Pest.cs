@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace FIHS.Models.Pest
+namespace FIHS.Models.PestModels
 {
     public class Pest
     {
@@ -27,6 +27,8 @@ namespace FIHS.Models.Pest
         public string  Reproduction { get; set; }
         [JsonIgnore,ValidateNever,NotMapped]
         public string Message { get; set; }
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public virtual IEnumerable<PlantsPests> Plants { get; set; }
 
     }
 }

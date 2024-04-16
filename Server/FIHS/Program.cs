@@ -13,7 +13,7 @@ using FIHS.Interfaces.IPlantType;
 using FIHS.Interfaces.IUser;
 using FIHS.Interfaces.IWeather;
 using FIHS.Models.AuthModels;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 using FIHS.Services;
 using FIHS.Services.ArticleService;
 using FIHS.Services.ArticleServices;
