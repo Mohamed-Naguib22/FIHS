@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 using AutoMapper;
 using FIHS.Dtos;
 using FIHS.Interfaces.IPlant;

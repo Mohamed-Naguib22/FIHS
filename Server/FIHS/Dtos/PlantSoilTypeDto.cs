@@ -1,4 +1,4 @@
-﻿using FIHS.Models.Plant;
+﻿using FIHS.Models.PlantModels;
 using System.Text.Json.Serialization;
 
 namespace FIHS.Dtos

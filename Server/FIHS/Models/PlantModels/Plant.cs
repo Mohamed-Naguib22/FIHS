@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using FIHS.Models.DiseaseModels;
+using FIHS.Models.PestModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace FIHS.Models.Plant
+namespace FIHS.Models.PlantModels
 {
         [Index(nameof(Name),IsUnique = true)]
     public class Plant
@@ -42,6 +44,10 @@ namespace FIHS.Models.Plant
         public virtual ICollection<PlantsTypesOfPlant> PlantTypes { get; set; }
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual IEnumerable<PlantSoilTypes> Soils { get; set; }
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public virtual IEnumerable<PlantsDiseases> Diseases { get; set; }
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public virtual IEnumerable<PlantsPests> Pests { get; set; }
 
 
 

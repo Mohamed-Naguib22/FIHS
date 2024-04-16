@@ -2,7 +2,7 @@
 using FIHS.Dtos.PestDto;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IPest;
-using FIHS.Models.Pest;
+using FIHS.Models.PestModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Services.PestService

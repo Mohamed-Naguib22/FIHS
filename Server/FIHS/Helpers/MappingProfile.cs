@@ -7,13 +7,15 @@ using FIHS.Dtos.FertilizerDto;
 using FIHS.Dtos.PestDto;
 using FIHS.Dtos.PesticideDto;
 using FIHS.Dtos.UserDtos;
+using FIHS.Models;
 using FIHS.Models.ArticleModels;
 using FIHS.Models.AuthModels;
-using FIHS.Models.Disease;
+using FIHS.Models.DiseaseModels;
 using FIHS.Models.Fertilizer;
-using FIHS.Models.Pest;
+using FIHS.Models.PestModels;
+
 using FIHS.Models.Pesticide;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 using Microsoft.Identity.Client;
 using System.Configuration;
 
@@ -44,16 +46,19 @@ namespace FIHS.Helpers
             // Plants&Soils
             CreateMap<Plant, PlantDto>()
                 .ForMember(des => des.ImageUrl, opt => opt.MapFrom(src => configuration.GetSection("BaseUrl").Value + src.ImageUrl));
-
             CreateMap<PlantsTypesOfPlant, PlantTypeDto>().IncludeMembers(src=>src.PlantType).ReverseMap();
             CreateMap<PlantType, PlantTypeDto>();
             CreateMap<PlantSoilTypes, SoilDto>().IncludeMembers(src => src.Soil);
             CreateMap<Soil, SoilDto>();
             CreateMap<Plant, PlantInDto>().ReverseMap();
+            CreateMap<PlantsDiseases, PlantDto>().IncludeMembers(src => src.Plant).ReverseMap();
+            CreateMap<PlantsPests, PlantDto>().IncludeMembers(src => src.Plant);
             //Pest & Disease
+            CreateMap<PlantsPests,ReturnPestDto>().IncludeMembers(src => src.Pest);
+            CreateMap<PlantsDiseases, ReturnDiseaseDto>().IncludeMembers(src => src.Disease).ReverseMap();
             CreateMap<PestDto, Pest>().ForMember(p => p.ImageUrl, opt => opt.Ignore());
             CreateMap<DiseaseDto, Disease>().ForMember(d => d.ImageUrl, opt => opt.Ignore());
-            CreateMap<Disease, ReturnDiseaseDto>().ForMember(d => d.ImageUrl, opt => opt.Ignore());
+            CreateMap<Disease, ReturnDiseaseDto>();
             CreateMap<Pest,ReturnPestDto>().ForMember(p=>p.ImageUrl, opt => opt.Ignore());
             /*mapping pesticide & fertilizer*/
             CreateMap<Pesticide, PesticideDto>().ReverseMap().ForMember(i => i.ImageURL, opt => opt.Ignore());

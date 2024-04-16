@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FIHS.Dtos;
 using FIHS.Interfaces.IPlantType;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Services.PlantTypeServices

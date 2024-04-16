@@ -2,7 +2,7 @@
 using FIHS.Dtos.DiseaseDto;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IDisease;
-using FIHS.Models.Disease;
+using FIHS.Models.DiseaseModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Services.DiseaseService
