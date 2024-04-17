@@ -9,6 +9,8 @@ namespace FIHS.Dtos.PestDto
         public string Species { get; set; }
         [Required,StringLength(50)]
         public string Name { get; set; }
+        [Required, StringLength(128)]
+        public string ScientificName { get; set; }
         [Required]
         public IFormFile Image { get; set; }
         [Required,StringLength(128)]

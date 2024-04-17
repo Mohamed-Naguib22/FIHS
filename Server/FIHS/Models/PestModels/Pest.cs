@@ -12,6 +12,8 @@ namespace FIHS.Models.PestModels
         public string Species { get; set; }
         [MinLength(2),MaxLength(50)]
         public string Name { get; set; }
+        [MinLength(2),MaxLength(128)]
+        public string ScientificName { get; set; }
         public string ImageUrl { get; set; }
         [MinLength(2), MaxLength(128)]
         public string DamageSymptoms { get; set; }

@@ -25,8 +25,10 @@ namespace FIHS.Helpers
     {
         IConfiguration configuration = new ConfigurationBuilder()
                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
+        private string _baseUrl;
         public MappingProfile() 
         {
+            _baseUrl = configuration.GetSection("BaseUrl").Value;
             CreateMap<ApplicationUser, UserDto>()
                 .ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
             CreateMap<RegisterModel, ApplicationUser>()
@@ -50,16 +52,18 @@ namespace FIHS.Helpers
             CreateMap<PlantType, PlantTypeDto>();
             CreateMap<PlantSoilTypes, SoilDto>().IncludeMembers(src => src.Soil);
             CreateMap<Soil, SoilDto>();
-            CreateMap<Plant, PlantInDto>().ReverseMap();
+            CreateMap<Plant, PlantInDto>().ForMember(des => des.ImageUrl, opt => opt.MapFrom(src => configuration.GetSection("BaseUrl").Value + src.ImageUrl)).ReverseMap();
             CreateMap<PlantsDiseases, PlantDto>().IncludeMembers(src => src.Plant).ReverseMap();
+            CreateMap<PlantsDiseases, PlantInDto>().IncludeMembers(src => src.Plant).ReverseMap();
             CreateMap<PlantsPests, PlantDto>().IncludeMembers(src => src.Plant);
+            CreateMap<PlantsPests, PlantInDto>().IncludeMembers(src => src.Plant);
             //Pest & Disease
             CreateMap<PlantsPests,ReturnPestDto>().IncludeMembers(src => src.Pest);
             CreateMap<PlantsDiseases, ReturnDiseaseDto>().IncludeMembers(src => src.Disease).ReverseMap();
-            CreateMap<PestDto, Pest>().ForMember(p => p.ImageUrl, opt => opt.Ignore());
+            CreateMap<PestDto, Pest>().ForMember(p => p.ImageUrl, opt=>opt.Ignore());
             CreateMap<DiseaseDto, Disease>().ForMember(d => d.ImageUrl, opt => opt.Ignore());
-            CreateMap<Disease, ReturnDiseaseDto>();
-            CreateMap<Pest,ReturnPestDto>().ForMember(p=>p.ImageUrl, opt => opt.Ignore());
+            CreateMap<Disease, ReturnDiseaseDto>().ForMember(d => d.ImageUrl, opt => opt.MapFrom(d => _baseUrl + d.ImageUrl));
+            CreateMap<Pest,ReturnPestDto>().ForMember(p => p.ImageUrl, opt => opt.MapFrom(p => _baseUrl + p.ImageUrl));
             /*mapping pesticide & fertilizer*/
             CreateMap<Pesticide, PesticideDto>().ReverseMap().ForMember(i => i.ImageURL, opt => opt.Ignore());
             CreateMap<Fertilizer, FertilizerDto>().ReverseMap().ForMember(i => i.ImageURL, opt => opt.Ignore());
