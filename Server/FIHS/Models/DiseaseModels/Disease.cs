@@ -9,7 +9,13 @@ namespace FIHS.Models.DiseaseModels
     {
         public int Id { get; set; }
         [MinLength(2), MaxLength(50)]
+        public string Species { get; set; }
+        [MinLength(2), MaxLength(50)]
         public string Name { get; set; }
+        [MinLength(2), MaxLength(128)]
+        public string ScientificName { get; set; }
+        [MinLength(2), MaxLength(128)]
+        public string Causes { get; set; }
         public string ImageUrl { get; set; }
         [MinLength(2), MaxLength(128)]
         public string Description { get; set; }

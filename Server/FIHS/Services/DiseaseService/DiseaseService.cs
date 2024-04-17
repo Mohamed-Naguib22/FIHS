@@ -12,14 +12,12 @@ namespace FIHS.Services.DiseaseService
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
-        private readonly string _baseUrl;
 
-        public DiseaseService(ApplicationDbContext context, IImageService imageService, IMapper mapper,IConfiguration configuration)
+        public DiseaseService(ApplicationDbContext context, IImageService imageService, IMapper mapper)
         {
             _context = context;
             _imageService = imageService;
             _mapper = mapper;
-            _baseUrl = configuration["BaseUrl"];
         }
 
         public async Task<ReturnDiseaseDto> AddDiseaseAsync(DiseaseDto diseaseDto)
@@ -31,75 +29,50 @@ namespace FIHS.Services.DiseaseService
             await _context.AddAsync(disease);
             await _context.SaveChangesAsync();
             var diseaseView=_mapper.Map<ReturnDiseaseDto>(disease);
-            diseaseView.ImageUrl = _baseUrl + disease.ImageUrl;
             return diseaseView;
         }
 
         public async Task<ReturnDiseaseDto> DeleteDiseaseAsync(int id)
         {
-            var disease=await _context.Diseases.SingleOrDefaultAsync(d=>d.Id==id);
+            var disease=await _context.Diseases.Include(d=>d.Plants).ThenInclude(p=>p.Plant).SingleOrDefaultAsync(d=>d.Id==id);
             if (disease == null)
                 return new ReturnDiseaseDto { Message = "No Disease is Found" };
             _imageService.DeleteImage(disease.ImageUrl);
             _context.Remove(disease);
             await _context.SaveChangesAsync();
-            var diseaseView = _mapper.Map<ReturnDiseaseDto>(disease);
-            diseaseView.ImageUrl = _baseUrl + disease.ImageUrl;
-            return diseaseView;
+            return _mapper.Map<ReturnDiseaseDto>(disease);
         }
         public async Task<ReturnDiseaseDto> GetDiseaseByIdAsync(int id)
         {
-            var disease = await _context.Diseases.SingleOrDefaultAsync(d => d.Id == id);
+            var disease = await _context.Diseases.Include(d => d.Plants).ThenInclude(p => p.Plant).SingleOrDefaultAsync(d => d.Id == id);
             if (disease == null)
                 return new ReturnDiseaseDto { Message = "No disease is found" };
             var diseaseView = _mapper.Map<ReturnDiseaseDto>(disease);
-            diseaseView.ImageUrl = _baseUrl + disease.ImageUrl;
             return diseaseView;
         }
 
         public async Task<ReturnDiseaseDto> GetDiseaseByNameAsync(string name)
         {
-            var disease =await _context.Diseases.SingleOrDefaultAsync(d => d.Name.ToLower().Trim() == name.ToLower().Trim());
+            var disease =await _context.Diseases.Include(d => d.Plants).ThenInclude(p => p.Plant).SingleOrDefaultAsync(d => d.Name.ToLower().Trim() == name.ToLower().Trim());
             if (disease == null)
                 return new ReturnDiseaseDto { Message = "No Disease is Found" };
             var diseaseView = _mapper.Map<ReturnDiseaseDto>(disease);
-            diseaseView.ImageUrl = _baseUrl + disease.ImageUrl;
             return diseaseView;
         }
 
         public async Task<IEnumerable<ReturnDiseaseDto>> GetDiseasesAsync()
         {
-            var diseases = await _context.Diseases.Select(d=>new ReturnDiseaseDto
-            {
-                Id=d.Id,
-                Description=d.Description,
-                Name=d.Name,
-                PreventionMethods=d.PreventionMethods,
-                Symptoms=d.Symptoms,
-                Treatments=d.Treatments,
-                ImageUrl=_baseUrl + d.ImageUrl,
-            }).ToListAsync();
-            return diseases;
+            return _mapper.Map<IEnumerable<ReturnDiseaseDto>>(await _context.Diseases.Include(d => d.Plants).ThenInclude(p => p.Plant).ToListAsync());
         }
 
         public async Task<IEnumerable<ReturnDiseaseDto>> SearchForDiseaseByNameAsync(string name)
         {
-            var diseases = await _context.Diseases.Where(d=>d.Name.ToLower().Trim().Contains(name.ToLower().Trim())).Select(d => new ReturnDiseaseDto
-            {
-                Id = d.Id,
-                Description = d.Description,
-                Name = d.Name,
-                PreventionMethods = d.PreventionMethods,
-                Symptoms = d.Symptoms,
-                Treatments = d.Treatments,
-                ImageUrl = _baseUrl + d.ImageUrl,
-            }).ToListAsync();
-            return diseases;
+           return _mapper.Map<IEnumerable<ReturnDiseaseDto>>(await _context.Diseases.Include(d => d.Plants).ThenInclude(p => p.Plant).Where(d=>d.Name.ToLower().Trim().Contains(name.ToLower().Trim())).ToListAsync());
         }
 
         public async Task<ReturnDiseaseDto> UpdateDiseaseAsync(UpdateDiseaseDto diseaseDto, int id)
         {
-            var disease = await _context.Diseases.SingleOrDefaultAsync(d => d.Id == id);
+            var disease = await _context.Diseases.Include(d => d.Plants).ThenInclude(p => p.Plant).SingleOrDefaultAsync(d => d.Id == id);
             if (disease == null)
                 return new ReturnDiseaseDto { Message = "No Disease is Found" };
             disease.Name = diseaseDto.Name ?? disease.Name;
@@ -107,11 +80,13 @@ namespace FIHS.Services.DiseaseService
             disease.Description = diseaseDto.Description ?? disease.Description;
             disease.Symptoms = diseaseDto.Symptoms ?? disease.Symptoms;
             disease.Treatments= diseaseDto.Treatments ??disease.Treatments;
+            disease.ScientificName = diseaseDto.ScientificName ?? disease.ScientificName;
+            disease.Causes = diseaseDto.Causes ?? disease.Causes;
+            disease.Species=diseaseDto.Species ?? disease.Species;
             disease.ImageUrl=diseaseDto.Image!=null?_imageService.SetImage(diseaseDto.Image,disease.ImageUrl):disease.ImageUrl;
             _context.Update(disease);
             await _context.SaveChangesAsync();
             var diseaseView = _mapper.Map<ReturnDiseaseDto>(disease);
-            diseaseView.ImageUrl = _baseUrl + disease.ImageUrl;
             return diseaseView;
         }
     }

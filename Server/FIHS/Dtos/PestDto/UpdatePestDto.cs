@@ -8,6 +8,8 @@ namespace FIHS.Dtos.PestDto
         public string? Species { get; set; }
         [StringLength(50)]
         public string? Name { get; set; }
+        [StringLength(128)]
+        public string? ScientificName { get; set; }
         public IFormFile? Image { get; set; }
         [StringLength(128)]
         public string? DamageSymptoms { get; set; }
