@@ -14,7 +14,6 @@ using FIHS.Interfaces.IPlantType;
 using FIHS.Interfaces.IUser;
 using FIHS.Interfaces.IWeather;
 using FIHS.Models.AuthModels;
-using FIHS.Models.PlantModels;
 using FIHS.Services.ArticleService;
 using FIHS.Services.ChatServices;
 using FIHS.Services.DiseaseService;
@@ -35,6 +34,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
+using FIHS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

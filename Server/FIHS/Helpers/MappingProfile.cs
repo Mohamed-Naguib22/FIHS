@@ -14,8 +14,6 @@ using FIHS.Models.DiseaseModels;
 using FIHS.Models.Fertilizer;
 using FIHS.Models.PestModels;
 using FIHS.Models.Pesticide;
-using FIHS.Models.Plant;
-using FIHS.Services;
 using FIHS.Models.PlantModels;
 using Microsoft.Identity.Client;
 using System.Configuration;
