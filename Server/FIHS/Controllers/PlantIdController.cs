@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FIHS.Interfaces.IPlantId;
+using FIHS.Dtos;
 
 namespace FIHS.Controllers
 {
@@ -15,32 +16,29 @@ namespace FIHS.Controllers
         }
 
         [HttpPost("identify-plant")]
-        public IActionResult Identify([FromForm] IFormFile imageFile)
+        public IActionResult Identify([FromForm] ImageDto imgDto)
         {
-            if (imageFile == null || imageFile.Length == 0)
+            if (imgDto.ImgFile == null || imgDto.ImgFile.Length == 0)
                 return BadRequest("Image file is required.");
 
-            if (!_allowedExtensions.Contains(Path.GetExtension(imageFile.FileName).ToLower()))
+            if (!_allowedExtensions.Contains(Path.GetExtension(imgDto.ImgFile.FileName).ToLower()))
                 return BadRequest("نوع الملف هذا غير مسموح به");
 
-            var result = _plantIdService.Identify(imageFile);
-            
-            if (!result.Succeeded)
-                return BadRequest(result.Message);
+            var result = _plantIdService.Identify(imgDto.ImgFile);
 
-            return Ok(result);
+            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
         }
 
         [HttpPost("detect-disease")]
-        public IActionResult DetectDisease([FromForm] IFormFile imageFile)
+        public IActionResult DetectDisease([FromForm] ImageDto imgDto)
         {
-            if (imageFile == null || imageFile.Length == 0)
+            if (imgDto.ImgFile == null || imgDto.ImgFile.Length == 0)
                 return BadRequest("Image file is required.");
 
-            if (!_allowedExtensions.Contains(Path.GetExtension(imageFile.FileName).ToLower()))
+            if (!_allowedExtensions.Contains(Path.GetExtension(imgDto.ImgFile.FileName).ToLower()))
                 return BadRequest("نوع الملف هذا غير مسموح به");
 
-            var result = _plantIdService.DetectDisease(imageFile);
+            var result = _plantIdService.DetectDisease(imgDto.ImgFile);
 
             if (!result.Succeeded)
                 return BadRequest(result.Message);
