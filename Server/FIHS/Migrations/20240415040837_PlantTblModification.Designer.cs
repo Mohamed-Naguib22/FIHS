@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIHS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240415040837_PlantTblModification")]
+    partial class PlantTblModification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,18 +216,13 @@ namespace FIHS.Migrations
                     b.ToTable("Users", "security");
                 });
 
-            modelBuilder.Entity("FIHS.Models.DiseaseModels.Disease", b =>
+            modelBuilder.Entity("FIHS.Models.Disease.Disease", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Causes")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -244,16 +242,6 @@ namespace FIHS.Migrations
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ScientificName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Species")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Symptoms")
                         .IsRequired()
@@ -329,7 +317,7 @@ namespace FIHS.Migrations
                     b.ToTable("Fertilizers");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PestModels.Pest", b =>
+            modelBuilder.Entity("FIHS.Models.Pest.Pest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -376,11 +364,6 @@ namespace FIHS.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("ScientificName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
                     b.Property<string>("Species")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -389,21 +372,6 @@ namespace FIHS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Pests");
-                });
-
-            modelBuilder.Entity("FIHS.Models.PestModels.PlantsPests", b =>
-                {
-                    b.Property<int>("PlantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PestId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlantId", "PestId");
-
-                    b.HasIndex("PestId");
-
-                    b.ToTable("PlantsPests");
                 });
 
             modelBuilder.Entity("FIHS.Models.Pesticide.Pesticide", b =>
@@ -449,7 +417,7 @@ namespace FIHS.Migrations
                     b.ToTable("Pesticides");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.Plant", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
@@ -518,7 +486,7 @@ namespace FIHS.Migrations
                     b.ToTable("Plants");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.PlantSoilTypes", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
                 {
                     b.Property<int>("PlantId")
                         .HasColumnType("int");
@@ -533,7 +501,7 @@ namespace FIHS.Migrations
                     b.ToTable("PlantSoilTypes");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.PlantType", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.PlantType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -569,7 +537,7 @@ namespace FIHS.Migrations
                     b.ToTable("PlantTypes");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.PlantsTypesOfPlant", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
                 {
                     b.Property<int>("PlantId")
                         .HasColumnType("int");
@@ -584,7 +552,7 @@ namespace FIHS.Migrations
                     b.ToTable("PlantTypesOfPlant");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.Soil", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.Soil", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -644,21 +612,6 @@ namespace FIHS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Soils");
-                });
-
-            modelBuilder.Entity("FIHS.Models.PlantsDiseases", b =>
-                {
-                    b.Property<int>("PlantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DiseaseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlantId", "DiseaseId");
-
-                    b.HasIndex("DiseaseId");
-
-                    b.ToTable("PlantsDiseases");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -883,34 +836,15 @@ namespace FIHS.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PestModels.PlantsPests", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.PlantSoilTypes", b =>
                 {
-                    b.HasOne("FIHS.Models.PestModels.Pest", "Pest")
-                        .WithMany("Plants")
-                        .HasForeignKey("PestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FIHS.Models.PlantModels.Plant", "Plant")
-                        .WithMany("Pests")
-                        .HasForeignKey("PlantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pest");
-
-                    b.Navigation("Plant");
-                });
-
-            modelBuilder.Entity("FIHS.Models.PlantModels.PlantSoilTypes", b =>
-                {
-                    b.HasOne("FIHS.Models.PlantModels.Plant", "Plant")
+                    b.HasOne("FIHS.Models.Plant.Plant", "Plant")
                         .WithMany("Soils")
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FIHS.Models.PlantModels.Soil", "Soil")
+                    b.HasOne("FIHS.Models.Plant.Soil", "Soil")
                         .WithMany("Plants")
                         .HasForeignKey("SoilId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -921,15 +855,15 @@ namespace FIHS.Migrations
                     b.Navigation("Soil");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.PlantsTypesOfPlant", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.PlantsTypesOfPlant", b =>
                 {
-                    b.HasOne("FIHS.Models.PlantModels.Plant", "Plant")
+                    b.HasOne("FIHS.Models.Plant.Plant", "Plant")
                         .WithMany("PlantTypes")
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FIHS.Models.PlantModels.PlantType", "PlantType")
+                    b.HasOne("FIHS.Models.Plant.PlantType", "PlantType")
                         .WithMany("Plants")
                         .HasForeignKey("PlantTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -938,25 +872,6 @@ namespace FIHS.Migrations
                     b.Navigation("Plant");
 
                     b.Navigation("PlantType");
-                });
-
-            modelBuilder.Entity("FIHS.Models.PlantsDiseases", b =>
-                {
-                    b.HasOne("FIHS.Models.DiseaseModels.Disease", "Disease")
-                        .WithMany("Plants")
-                        .HasForeignKey("DiseaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FIHS.Models.PlantModels.Plant", "Plant")
-                        .WithMany("Diseases")
-                        .HasForeignKey("PlantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Disease");
-
-                    b.Navigation("Plant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1027,33 +942,19 @@ namespace FIHS.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FIHS.Models.DiseaseModels.Disease", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.Plant", b =>
                 {
-                    b.Navigation("Plants");
-                });
-
-            modelBuilder.Entity("FIHS.Models.PestModels.Pest", b =>
-                {
-                    b.Navigation("Plants");
-                });
-
-            modelBuilder.Entity("FIHS.Models.PlantModels.Plant", b =>
-                {
-                    b.Navigation("Diseases");
-
-                    b.Navigation("Pests");
-
                     b.Navigation("PlantTypes");
 
                     b.Navigation("Soils");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.PlantType", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.PlantType", b =>
                 {
                     b.Navigation("Plants");
                 });
 
-            modelBuilder.Entity("FIHS.Models.PlantModels.Soil", b =>
+            modelBuilder.Entity("FIHS.Models.Plant.Soil", b =>
                 {
                     b.Navigation("Plants");
                 });

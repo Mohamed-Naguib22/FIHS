@@ -1,5 +1,5 @@
 ﻿using FIHS.Dtos;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 
 namespace FIHS.Interfaces.IPlant
 {

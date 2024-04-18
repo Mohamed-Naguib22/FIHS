@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace FIHS.Models.Pest
+namespace FIHS.Models.PestModels
 {
     public class Pest
     {
@@ -12,6 +12,8 @@ namespace FIHS.Models.Pest
         public string Species { get; set; }
         [MinLength(2),MaxLength(50)]
         public string Name { get; set; }
+        [MinLength(2),MaxLength(128)]
+        public string ScientificName { get; set; }
         public string ImageUrl { get; set; }
         [MinLength(2), MaxLength(128)]
         public string DamageSymptoms { get; set; }
@@ -27,6 +29,8 @@ namespace FIHS.Models.Pest
         public string  Reproduction { get; set; }
         [JsonIgnore,ValidateNever,NotMapped]
         public string Message { get; set; }
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public virtual IEnumerable<PlantsPests> Plants { get; set; }
 
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 using AutoMapper;
 using FIHS.Dtos;
 using FIHS.Interfaces.IPlant;
@@ -60,7 +60,7 @@ namespace FIHS.Controllers
             {
                 var plant = _mapper.Map<Plant>(plantInDto);
                 await _plantRepository.AddPlant(plant, plantInDto);
-                return Ok("Plant Added Succefully");
+                return Ok("تمت اضافة النبات بنجاح");
             }
            return BadRequest();
         }

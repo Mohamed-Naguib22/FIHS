@@ -1,29 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FIHS.Dtos.PestDto
 {
-    public class PestDto
+    public class ReturnPestDto
     {
-        
-        [Required,StringLength(50)]
+        public int Id { get; set; }
         public string Species { get; set; }
-        [Required,StringLength(50)]
         public string Name { get; set; }
-        [Required, StringLength(128)]
         public string ScientificName { get; set; }
-        [Required]
-        public IFormFile Image { get; set; }
-        [Required,StringLength(128)]
+        public string ImageUrl { get; set; }
         public string DamageSymptoms { get; set; }
-        [Required, StringLength(128)]
         public string ControlMethods { get; set; }
-        [Required, StringLength(128)]
         public string Description { get; set; }
-        [Required, StringLength(128)]
         public string LifeCycle { get; set; }
-        [Required, StringLength(50)]
         public string GeographicDistribution { get; set; }
-        [Required, StringLength(128)]
         public string Reproduction { get; set; }
+        public ICollection<PlantInDto> Plants { get; set; } 
+        [JsonIgnore]
+        public string Message { get; set; }
     }
 }

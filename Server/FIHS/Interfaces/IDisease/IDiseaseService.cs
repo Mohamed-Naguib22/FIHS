@@ -1,16 +1,17 @@
 ﻿using FIHS.Dtos.DiseaseDto;
-using FIHS.Models.Disease;
+using FIHS.Models.DiseaseModels;
 
 
 namespace FIHS.Interfaces.IDisease
 {
     public interface IDiseaseService
     {
-        Task<Disease> AddDiseaseAsync(DiseaseDto diseaseDto);
-        Task<IEnumerable<Disease>> GetDiseasesAsync();
-        Task<Disease> DeleteDiseaseAsync(int id);
-        Task<Disease> GetDiseaseByNameAsync(string name);
-        Task<Disease> UpdateDiseaseAsync(UpdateDiseaseDto diseaseDto, int id);
-        Task<IEnumerable<Disease>> SearchForDiseaseByNameAsync(string name);
+        Task<ReturnDiseaseDto> AddDiseaseAsync(DiseaseDto diseaseDto);
+        Task<IEnumerable<ReturnDiseaseDto>> GetDiseasesAsync();
+        Task<ReturnDiseaseDto> DeleteDiseaseAsync(int id);
+        Task<ReturnDiseaseDto> GetDiseaseByNameAsync(string name);
+        Task<ReturnDiseaseDto> UpdateDiseaseAsync(UpdateDiseaseDto diseaseDto, int id);
+        Task<IEnumerable<ReturnDiseaseDto>> SearchForDiseaseByNameAsync(string name);
+        Task<ReturnDiseaseDto> GetDiseaseByIdAsync(int id);
     }
 }

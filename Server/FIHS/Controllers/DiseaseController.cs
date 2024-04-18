@@ -22,6 +22,14 @@ namespace FIHS.Controllers
             var diseases =await _diseaseService.GetDiseasesAsync();
             return Ok(diseases);
         }
+        [HttpGet("GetDiseaseById/{id}")]
+        public async Task<IActionResult> GetDiseaseByIdAsync(int id)
+        {
+            var disease = await _diseaseService.GetDiseaseByIdAsync(id);
+            if (!string.IsNullOrEmpty(disease.Message))
+                return NotFound(disease.Message);
+            return Ok(disease);
+        }
         [HttpGet("GetDiseaseByName/{name}")]
         public async Task<IActionResult> GetDiseaseByNameAsync(string name)
         {

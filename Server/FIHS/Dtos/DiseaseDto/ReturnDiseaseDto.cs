@@ -1,25 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace FIHS.Models.Disease
+namespace FIHS.Dtos.DiseaseDto
 {
-    public class Disease
+    public class ReturnDiseaseDto
     {
         public int Id { get; set; }
-        [MinLength(2), MaxLength(50)]
+        public string Species { get; set; }
         public string Name { get; set; }
+        public string ScientificName { get; set; }
+        public string Causes { get; set; }
         public string ImageUrl { get; set; }
-        [MinLength(2), MaxLength(128)]
         public string Description { get; set; }
-        [MinLength(2), MaxLength(128)]
         public string Treatments { get; set; }
-        [MinLength(2), MaxLength(128)]
         public string Symptoms { get; set; }
-        [MinLength(2), MaxLength(128)]
         public string PreventionMethods { get; set; }
-        [JsonIgnore,ValidateNever,NotMapped]
+        public ICollection<PlantInDto> Plants { get; set; }
+        [JsonIgnore]
         public string Message { get; set; }
     }
 }

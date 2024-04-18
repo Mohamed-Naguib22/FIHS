@@ -1,11 +1,13 @@
-﻿using FIHS.Models.ArticleModels;
+﻿using FIHS.Models;
+using FIHS.Models.ArticleModels;
 using FIHS.Models.AuthModels;
-using FIHS.Models.Disease;
+using FIHS.Models.DiseaseModels;
 using FIHS.Models.FavouriteModels;
 using FIHS.Models.Fertilizer;
-using FIHS.Models.Pest;
+using FIHS.Models.PestModels;
+
 using FIHS.Models.Pesticide;
-using FIHS.Models.Plant;
+using FIHS.Models.PlantModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +32,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", "security");
         modelBuilder.Entity<PlantsTypesOfPlant>().HasKey(ptypes => new { ptypes.PlantId, ptypes.PlantTypeId });
         modelBuilder.Entity<PlantSoilTypes>().HasKey(ps => new { ps.PlantId, ps.SoilId });
+        modelBuilder.Entity<PlantsDiseases>().HasKey(pd => new { pd.PlantId, pd.DiseaseId });
+        modelBuilder.Entity<PlantsPests>().HasKey(pp => new { pp.PlantId, pp.PestId });
         /*        properties for fertilizer & pestocide*/
+
+
         modelBuilder.Entity<Pesticide>().HasIndex(n => n.Name).IsUnique();
         modelBuilder.Entity<Fertilizer>().HasIndex(n => n.Name).IsUnique();
     }

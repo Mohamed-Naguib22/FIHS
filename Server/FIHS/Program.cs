@@ -1,6 +1,7 @@
 using FHIS.Services;
 using FIHS.Helpers;
 using FIHS.Interfaces;
+using FIHS.Repositories;
 using FIHS.Interfaces.IArticle;
 using FIHS.Interfaces.IChat;
 using FIHS.Interfaces.IDisease;
@@ -9,11 +10,11 @@ using FIHS.Interfaces.IPest;
 using FIHS.Interfaces.IPesticide;
 using FIHS.Interfaces.IPlant;
 using FIHS.Interfaces.IPlantId;
+using FIHS.Interfaces.IPlantType;
 using FIHS.Interfaces.IUser;
 using FIHS.Interfaces.IWeather;
 using FIHS.Models.AuthModels;
-using FIHS.Repositories;
-using FIHS.Services;
+using FIHS.Models.PlantModels;
 using FIHS.Services.ArticleService;
 using FIHS.Services.ChatServices;
 using FIHS.Services.DiseaseService;
@@ -22,6 +23,7 @@ using FIHS.Services.PesticideService;
 using FIHS.Services.PestService;
 using FIHS.Services.PlantIdServices;
 using FIHS.Services.PlantservicesImp;
+using FIHS.Services.PlantTypeServices;
 using FIHS.Services.UserServices;
 using FIHS.Services.WeatherServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -66,6 +68,7 @@ builder.Services.AddScoped<IPesticide, PesticideService>();
 builder.Services.AddScoped<IFertilizer, FertilizerService>();
 builder.Services.AddScoped<IPestService, PestService>();
 builder.Services.AddScoped<IDiseaseService, DiseaseService>();
+builder.Services.AddScoped<IPlantType, PlantTypeServices>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -116,36 +119,8 @@ builder.Services.AddCors();
 // Set configuration for MappingProfile
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSwaggerGen();
-//builder.Services.AddSwaggerGen(opt =>
-//{
-//    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "FIHS", Version = "v1" });
-
-//    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-//    {
-//        In = ParameterLocation.Header,
-//        Description = "Please enter token",
-//        Name = "Authorization",
-//        Type = SecuritySchemeType.Http,
-//        BearerFormat = "JWT",
-//        Scheme = "bearer"
-//    });
-//    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-//    {
-//        {
-//            new OpenApiSecurityScheme
-//            {
-//                Reference = new OpenApiReference
-//                {
-//                    Type=ReferenceType.SecurityScheme,
-//                    Id="Bearer"
-//                }
-//            },
-//            new string[]{}
-//        }
-//    });
-//});
-
 builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

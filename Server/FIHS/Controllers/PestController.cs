@@ -22,6 +22,14 @@ namespace FIHS.Controllers
             var pests=await _pestService.GetPestsAsync();
             return Ok(pests);
         }
+        [HttpGet("GetPestById/{id}")]
+        public async Task<IActionResult> GetPestByIdAsync(int id)
+        {
+            var pest = await _pestService.GetPestByIdAsync(id);
+            if (!string.IsNullOrEmpty(pest.Message))
+                return NotFound(pest.Message);
+            return Ok(pest);
+        }
         [HttpGet("GetPestByName/{name}")]
         public async Task<IActionResult> GetPestByNameAsync(string name)
         {
