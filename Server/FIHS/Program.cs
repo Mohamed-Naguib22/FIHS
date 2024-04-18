@@ -12,9 +12,9 @@ using FIHS.Interfaces.IPlantId;
 using FIHS.Interfaces.IUser;
 using FIHS.Interfaces.IWeather;
 using FIHS.Models.AuthModels;
+using FIHS.Repositories;
 using FIHS.Services;
 using FIHS.Services.ArticleService;
-using FIHS.Services.ArticleServices;
 using FIHS.Services.ChatServices;
 using FIHS.Services.DiseaseService;
 using FIHS.Services.FertilizerService;
@@ -24,17 +24,13 @@ using FIHS.Services.PlantIdServices;
 using FIHS.Services.PlantservicesImp;
 using FIHS.Services.UserServices;
 using FIHS.Services.WeatherServices;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -53,13 +49,16 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// Articles
+builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IChatGPTService, ChatGPTService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IPlantIdService, PlantIdService>();
-builder.Services.AddScoped<IArticleService, ArticleService>();
-builder.Services.AddScoped<IArticleInteractionService, ArticleInteractionService>();
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -113,35 +112,38 @@ builder.Services.Configure<KestrelServerOptions>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
-builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddSwaggerGen(opt =>
-{
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "FIHS", Version = "v1" });
 
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-});
+// Set configuration for MappingProfile
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen(opt =>
+//{
+//    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "FIHS", Version = "v1" });
+
+//    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+//    {
+//        In = ParameterLocation.Header,
+//        Description = "Please enter token",
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.Http,
+//        BearerFormat = "JWT",
+//        Scheme = "bearer"
+//    });
+//    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+//    {
+//        {
+//            new OpenApiSecurityScheme
+//            {
+//                Reference = new OpenApiReference
+//                {
+//                    Type=ReferenceType.SecurityScheme,
+//                    Id="Bearer"
+//                }
+//            },
+//            new string[]{}
+//        }
+//    });
+//});
 
 builder.Services.AddMemoryCache();
 var app = builder.Build();

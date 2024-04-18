@@ -10,28 +10,32 @@ using Microsoft.Extensions.Options;
 
 namespace FIHS.Services.UserServices
 {
-    public class UserService : BaseService, IUserService
+    public class UserService : IUserService
     {
         private readonly IImageService _imageService; 
-        public UserService(UserManager<ApplicationUser> userManager, IMapper mapper, 
-            IConfiguration configuration, IImageService imageService, IOptions<JWT> jwt) : base (userManager, mapper, configuration, jwt)
+        private readonly ITokenService _tokenService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public UserService(UserManager<ApplicationUser> userManager, 
+             IImageService imageService, ITokenService tokenService)
         {
             _imageService = imageService;
+            _tokenService = tokenService;
+            _userManager = userManager;
         }
 
-        public async Task<UserDto> GetProfileAsync(string refreshToken)
+        public async Task<AuthModel> GetProfileAsync(string refreshToken)
         {
-            var user = await GetUserByRefreshToken(refreshToken);
+            var user = await _tokenService.GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "Invalid token." };
+                return new AuthModel { Succeeded = false, Message = "Invalid token." };
 
-            return MapUserToDto(user);
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<AuthModel> UpdateProfileAsync(string refreshToken, UpdateProfileModel model)
         {
-            var user = await GetUserByRefreshToken(refreshToken);
+            var user = await _tokenService.GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return new AuthModel { Succeeded = false, Message = "Invalid token." };
@@ -49,12 +53,12 @@ namespace FIHS.Services.UserServices
                 return new AuthModel { Succeeded = false, Message = errorMessage };
             }
 
-            return await MapToAuthModel(user);
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<AuthModel> ChangePasswordAsync(string refreshToken, ChangePasswordModel model)
         {
-            var user = await GetUserByRefreshToken(refreshToken);
+            var user = await _tokenService.GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return new AuthModel { Succeeded = false, Message = "Invalid token." };
@@ -67,15 +71,15 @@ namespace FIHS.Services.UserServices
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(r => r.Description).ToList();
-                string errorMessage = string.Join(", ", errors);
+                var errorMessage = string.Join(", ", errors);
                 return new AuthModel { Succeeded = false, Message = errorMessage };
             }
-            return await MapToAuthModel(user);
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<UserDto> DeleteAccountAsync(string refreshToken)
         {
-            var user = await GetUserByRefreshToken(refreshToken);
+            var user = await _tokenService.GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
@@ -91,7 +95,7 @@ namespace FIHS.Services.UserServices
 
         public async Task<AuthModel> SetImageAsync(string refreshToken, IFormFile imgFile)
         {
-            var user = await GetUserByRefreshToken(refreshToken);
+            var user = await _tokenService.GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return new AuthModel { Succeeded = false, Message = "المستخدم غير موجود" };
@@ -103,12 +107,12 @@ namespace FIHS.Services.UserServices
             if (!result.Succeeded)
                 return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
-            return await MapToAuthModel(user);
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<AuthModel> DeleteImageAsync(string refreshToken)
         {
-            var user = await GetUserByRefreshToken(refreshToken);
+            var user = await _tokenService.GetUserByRefreshToken(refreshToken);
 
             if (user == null)
                 return new AuthModel { Succeeded = false, Message = "المستخدم غير موجود" };
@@ -121,7 +125,7 @@ namespace FIHS.Services.UserServices
             if (!result.Succeeded)
                 return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
-            return await MapToAuthModel(user);
+            return await _tokenService.CreateAuthModel(user);
         }
     }
 }

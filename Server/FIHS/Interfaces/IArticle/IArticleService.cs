@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FHIS.Services;
+using FIHS.Dtos;
 using FIHS.Dtos.ArticleDtos;
 using FIHS.Models.ArticleModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,10 @@ namespace FIHS.Interfaces.IArticle
 {
     public interface IArticleService
     {
-        Task<(IEnumerable<ReturnArticleDto>, int? nextPage)> GetAllArticlesAsync(int offest, int limit);
+        Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> GetAllArticlesAsync(int offest, int limit);
         Task<ReturnArticleDto> GetArticleAsync(int articleId, string? refreshToken);
-        Task<(IEnumerable<ReturnArticleDto>, int? nextPage)> SearchAsync(string query, int offset, int limit);
+        Task<BaseDto> LikeAsync(int articleId, string refreshToken);
+        Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> SearchAsync(string query, int offset, int limit);
         Task<Article> AddArticleAsync(AddArticleDto articleDto);
         Task<ArticleTag> AddTagAsync(TagDto tagDto);
         Task<ArticleSection> AddSectionAsync(AddSectionDto sectionDto);

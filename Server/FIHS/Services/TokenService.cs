@@ -2,7 +2,9 @@
 using FIHS.Dtos.AuthModels;
 using FIHS.Dtos.UserDtos;
 using FIHS.Helpers;
+using FIHS.Interfaces.IUser;
 using FIHS.Models.AuthModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,37 +16,24 @@ using System.Text;
 
 namespace FIHS.Services
 {
-    public class BaseService
+    public class TokenService : ITokenService
     {
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly IMapper _mapper;
-        protected readonly string _baseUrl;
         private readonly JWT _jwt;
 
-        public BaseService(UserManager<ApplicationUser> userManager, 
-            IMapper mapper, IConfiguration configuration, IOptions<JWT> jwt =  null)
+        public TokenService(UserManager<ApplicationUser> userManager, 
+            IMapper mapper, IOptions<JWT> jwt)
         {
             _mapper = mapper;
             _userManager = userManager;
-            _baseUrl = configuration["BaseUrl"];
             _jwt = jwt?.Value;
         }
-        protected async Task<ApplicationUser?> GetUserByRefreshToken(string refreshToken)
-        {
-            return await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
-        }
-        protected string GetBaseUrl()
-        {
-            return _baseUrl;
-        }
-        protected UserDto MapUserToDto(ApplicationUser user)
-        {
-            var userDto = _mapper.Map<UserDto>(user);
-            userDto.ImgUrl = _baseUrl + user.ImgUrl;
-            userDto.Succeeded = true;
-            return userDto;
-        }
-        protected async Task<AuthModel> MapToAuthModel(ApplicationUser user)
+
+        public async Task<ApplicationUser?> GetUserByRefreshToken(string refreshToken) =>
+            await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+        
+        public async Task<AuthModel> CreateAuthModel(ApplicationUser user)
         {
             var jwtSecurityToken = await CreateJwtToken(user);
             var roles = await _userManager.GetRolesAsync(user);
@@ -69,7 +58,6 @@ namespace FIHS.Services
             authModel.RefreshToken = refreshToken.Token;
             authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
             authModel.Roles = roles.ToList();
-            authModel.ImgUrl = _baseUrl + user.ImgUrl;
             authModel.Succeeded = true;
             return authModel;
         }
