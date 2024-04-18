@@ -1,5 +1,5 @@
 ﻿using FIHS.Dtos.PesticideDto;
-using FIHS.Models.Pesticide;
+using FIHS.Models.PesticideModels;
 
 namespace FIHS.Interfaces.IPesticide
 {

@@ -1,6 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FIHS.Models.PestModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace FIHS.Models.Pesticide
+namespace FIHS.Models.PesticideModels
 {
     public class Pesticide
     {
@@ -16,6 +19,8 @@ namespace FIHS.Models.Pesticide
         public string? Toxicity { get; set; }
         public string? Type { get; set; }
         public string? ImageURL { get; set; }
+        [ValidateNever]
+        public virtual IEnumerable<PestsPesticides> Pests { get; set; }
 
     }
 

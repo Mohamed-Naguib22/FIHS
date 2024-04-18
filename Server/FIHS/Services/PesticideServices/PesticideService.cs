@@ -2,7 +2,7 @@
 using FIHS.Dtos.PesticideDto;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IPesticide;
-using FIHS.Models.Pesticide;
+using FIHS.Models.PesticideModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Services.PesticideService

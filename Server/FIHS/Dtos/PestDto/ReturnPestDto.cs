@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using FIHS.Dtos.PesticideDto;
 
 namespace FIHS.Dtos.PestDto
 {
@@ -19,6 +20,7 @@ namespace FIHS.Dtos.PestDto
         public string GeographicDistribution { get; set; }
         public string Reproduction { get; set; }
         public ICollection<PlantInDto> Plants { get; set; } 
+        public ICollection<PesticideReturnDto> Pesticides { get; set; } 
         [JsonIgnore]
         public string Message { get; set; }
     }

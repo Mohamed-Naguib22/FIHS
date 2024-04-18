@@ -34,7 +34,7 @@ namespace FIHS.Services.PestService
 
         public async Task<ReturnPestDto> DeletePestAsync(int id)
         {
-            var pest = await _context.Pests.Include(p=>p.Plants).ThenInclude(p=>p.Plant).SingleOrDefaultAsync(p=>p.Id==id);
+            var pest = await _context.Pests.Include(p=>p.Plants).ThenInclude(p=>p.Plant).Include(p=>p.Pesticides).ThenInclude(p=>p.Pesticide).SingleOrDefaultAsync(p=>p.Id==id);
             if (pest == null)
                 return new ReturnPestDto { Message = "No Pest is Found" };
             _imageService.DeleteImage(pest.ImageUrl);
@@ -46,7 +46,7 @@ namespace FIHS.Services.PestService
 
         public async Task<ReturnPestDto> GetPestByIdAsync(int id)
         {
-            var pest = await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).SingleOrDefaultAsync(p => p.Id == id);
+            var pest = await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).SingleOrDefaultAsync(p => p.Id == id);
             if (pest == null)
                 return new ReturnPestDto { Message = "No pest is found" };
             var pestView = _mapper.Map<ReturnPestDto>(pest);
@@ -55,7 +55,7 @@ namespace FIHS.Services.PestService
 
         public async Task<ReturnPestDto> GetPestByNameAsync(string name)
         {
-            var pest =await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).SingleOrDefaultAsync(p=>p.Name.ToLower().Trim()==name.ToLower().Trim());
+            var pest =await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).SingleOrDefaultAsync(p=>p.Name.ToLower().Trim()==name.ToLower().Trim());
             if (pest == null)
                 return new ReturnPestDto { Message = "No Pest is Found" };
             var pestView = _mapper.Map<ReturnPestDto>(pest);
@@ -64,12 +64,12 @@ namespace FIHS.Services.PestService
 
         public async Task<IEnumerable<ReturnPestDto>> GetPestsAsync()
         {
-           return _mapper.Map<IEnumerable<ReturnPestDto>>(await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).ToListAsync());
+           return _mapper.Map<IEnumerable<ReturnPestDto>>(await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).ToListAsync());
         }
 
         public async Task<ReturnPestDto> UpdatePestAsync(UpdatePestDto pestDto, int id)
         {
-            var pest = await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).SingleOrDefaultAsync(p=>p.Id==id);
+            var pest = await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).SingleOrDefaultAsync(p=>p.Id==id);
             if (pest == null)
                 return new ReturnPestDto { Message = "No Pest is Found" };
             pest.Species = pestDto.Species ?? pest.Species;
@@ -89,7 +89,7 @@ namespace FIHS.Services.PestService
 
         public async Task<IEnumerable<ReturnPestDto>> SearchForPestByNameAsync(string name)
         {
-            return _mapper.Map<IEnumerable<ReturnPestDto>>(await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Where(p=>p.Name.ToLower().Trim().Contains(name.ToLower().Trim())).ToListAsync());
+            return _mapper.Map<IEnumerable<ReturnPestDto>>(await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).Where(p=>p.Name.ToLower().Trim().Contains(name.ToLower().Trim())).ToListAsync());
         }
     }
 }
