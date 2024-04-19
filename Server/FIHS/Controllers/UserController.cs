@@ -91,10 +91,7 @@ namespace FIHS.Controllers
 
             var result = await _userService.DeleteAccountAsync(refreshToken);
 
-            if (!result.Succeeded)
-                return BadRequest(result.Message);
-
-            return Ok("تم حذف الحساب بنجاح");
+            return result.Succeeded ? Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpPost("set-image")]
@@ -141,6 +138,8 @@ namespace FIHS.Controllers
 
             if (!result.Succeeded)
                 return BadRequest(result.Message);
+
+            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
             return Ok(result);
         }

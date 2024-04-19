@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using FIHS.Dtos.AuthModels;
-using FIHS.Dtos.UserDtos;
-using FIHS.Helpers;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IUser;
 using FIHS.Models.AuthModels;
@@ -116,7 +114,7 @@ namespace FIHS.Services.UserServices
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            string resetPasswordCode = GenerateRandomCode();
+            var resetPasswordCode = GenerateRandomCode();
 
             await _emailSender.SendEmailAsync(user.Email, "Reset Password Code", $"Your reset password code is {resetPasswordCode}");
 
@@ -144,8 +142,6 @@ namespace FIHS.Services.UserServices
                 return new AuthModel { Succeeded = false, Message = "Invalid token" };
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
-
-            await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
                 return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };

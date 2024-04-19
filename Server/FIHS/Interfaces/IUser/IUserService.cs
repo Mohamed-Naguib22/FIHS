@@ -8,7 +8,7 @@ namespace FIHS.Interfaces.IUser
         Task<AuthModel> GetProfileAsync(string refreshToken);
         Task<AuthModel> UpdateProfileAsync(string refreshToken, UpdateProfileModel model);
         Task<AuthModel> ChangePasswordAsync(string refreshToken, ChangePasswordModel passwordDto);
-        Task<UserDto> DeleteAccountAsync(string refreshToken);
+        Task<AuthModel> DeleteAccountAsync(string refreshToken);
         Task<AuthModel> SetImageAsync(string refreshToken, IFormFile imgFile);
         Task<AuthModel> DeleteImageAsync(string refreshToken);
     }

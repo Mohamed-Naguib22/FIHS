@@ -32,12 +32,20 @@ public class UserServiceTests
     [Fact]
     public async Task SetImageAsync_ImageSetSuccessfully_ReturnAuthModel()
     {
-        var refreshToken = "refreshToken";
+        var refreshToken = "validToken";
         var expectedUser = new ApplicationUser();
         var updatedImageUrl = "new_image.png";
+        var mockFile = A.Fake<IFormFile>();
+        var authModel = new AuthModel { Succeeded = true };
 
         A.CallTo(() => _fakeTokenService.GetUserByRefreshToken(refreshToken)).Returns(Task.FromResult(expectedUser));
-        A.CallTo(() => _fakeImageService.SetImage(A<IFormFile>.Ignored, A<string>.Ignored)).Returns(updatedImageUrl);
+        A.CallTo(() => _fakeImageService.SetImage(mockFile, A<string>.Ignored)).Returns(updatedImageUrl);
+        A.CallTo(() => _fakeUserManager.UpdateAsync(expectedUser)).Returns(Task.FromResult(IdentityResult.Success));
+        A.CallTo(() => _fakeTokenService.CreateAuthModel(expectedUser)).Returns(authModel);
+
+        var result = await _userService.SetImageAsync(refreshToken, mockFile);
+
+        Assert.True(result.Succeeded);
     }
 
     [Fact]
@@ -50,8 +58,7 @@ public class UserServiceTests
 
         A.CallTo(() => _fakeTokenService.GetUserByRefreshToken(refreshToken)).Returns(Task.FromResult(expectedUser));
         A.CallTo(() => _fakeUserManager.CheckPasswordAsync(expectedUser, model.CurrentPassword)).Returns(Task.FromResult(true));
-        A.CallTo(() => _fakeUserManager.ChangePasswordAsync(expectedUser, model.CurrentPassword, model.NewPassword))
-            .Returns(Task.FromResult(IdentityResult.Success));
+        A.CallTo(() => _fakeUserManager.ChangePasswordAsync(expectedUser, model.CurrentPassword, model.NewPassword)).Returns(Task.FromResult(IdentityResult.Success));
         A.CallTo(() => _fakeTokenService.CreateAuthModel(expectedUser)).Returns(authModel);
 
         var result = await _userService.ChangePasswordAsync(refreshToken, model);
@@ -63,7 +70,7 @@ public class UserServiceTests
     public async Task ChangePasswordAsync_IncorrectPassword_ReturnErrorMessage()
     {
         var refreshToken = "refreshToken";
-        var expectedUser = new ApplicationUser { PasswordHash = "currentPassword" };
+        var expectedUser = new ApplicationUser();
         var model = new ChangePasswordModel { CurrentPassword = "currentPassword", NewPassword = "newPassword" };
 
         A.CallTo(() => _fakeTokenService.GetUserByRefreshToken(refreshToken)).Returns(Task.FromResult(expectedUser));
@@ -90,5 +97,20 @@ public class UserServiceTests
         A.CallTo(() => _fakeUserManager.CheckPasswordAsync(A<ApplicationUser>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
         A.CallTo(() => _fakeUserManager.ChangePasswordAsync(A<ApplicationUser>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
         A.CallTo(() => _fakeTokenService.CreateAuthModel(A<ApplicationUser>.Ignored)).MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task DeleteAccountAsync_ValidToken_ReturnSuccessMessage()
+    {
+        var refreshToken = "invalidToken";
+        var expectedUser = new ApplicationUser { ImgUrl = "URL" };
+
+        A.CallTo(() => _fakeTokenService.GetUserByRefreshToken(refreshToken)).Returns(Task.FromResult(expectedUser));
+        A.CallTo(() => _fakeImageService.DeleteImage(expectedUser.ImgUrl));
+        A.CallTo(() => _fakeUserManager.DeleteAsync(expectedUser)).Returns(Task.FromResult(IdentityResult.Success));
+
+        var result = await _userService.DeleteAccountAsync(refreshToken);
+
+        Assert.True(result.Succeeded);
     }
 }

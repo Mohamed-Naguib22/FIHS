@@ -12,6 +12,7 @@ namespace FIHS.Services.UserServices
 {
     public class UserService : IUserService
     {
+        private const string DEFAUTLT_USER_IMG_PATH = "\\images\\Default_User_Image.png";
         private readonly IImageService _imageService; 
         private readonly ITokenService _tokenService;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -77,20 +78,20 @@ namespace FIHS.Services.UserServices
             return await _tokenService.CreateAuthModel(user);
         }
 
-        public async Task<UserDto> DeleteAccountAsync(string refreshToken)
+        public async Task<AuthModel> DeleteAccountAsync(string refreshToken)
         {
             var user = await _tokenService.GetUserByRefreshToken(refreshToken);
 
             if (user == null)
-                return new UserDto { Succeeded = false, Message = "المستخدم غير موجود" };
+                return new AuthModel { Succeeded = false, Message = "المستخدم غير موجود" };
 
             _imageService.DeleteImage(user.ImgUrl);
             var result = await _userManager.DeleteAsync(user);
 
             if (!result.Succeeded)
-                return new UserDto { Succeeded = false, Message = "حدث خطأ ما" };
+                return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
-            return new UserDto { Succeeded = true };
+            return new AuthModel { Succeeded = true, Message = "تم حذف الحساب بنجاح" };
         }
 
         public async Task<AuthModel> SetImageAsync(string refreshToken, IFormFile imgFile)
@@ -119,7 +120,7 @@ namespace FIHS.Services.UserServices
             
             _imageService.DeleteImage(user.ImgUrl);
 
-            user.ImgUrl = "\\images\\Default_User_Image.png";
+            user.ImgUrl = DEFAUTLT_USER_IMG_PATH;
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
