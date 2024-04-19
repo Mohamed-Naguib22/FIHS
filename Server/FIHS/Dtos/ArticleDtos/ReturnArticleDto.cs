@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace FIHS.Dtos.ArticleDtos
 {
-    public class ReturnArticleDto
+    public class ReturnArticleDto : BaseDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -13,16 +13,8 @@ namespace FIHS.Dtos.ArticleDtos
         public DateTime? PublicationDate { get; set; }
         public bool Liked { get; set; }
         public int NumOfLikes { get; set; }
-        [JsonIgnore]
-        public string? Message { get; set; }
-        [JsonIgnore]
-        public bool Succeeded { get; set; }
         public IEnumerable<ArticleSection> ArticleSections { get; set; }
-        public IEnumerable<ArticleTag> ArticleTags { get; set; }
-        public IEnumerable<ReturnArticleDto> SimilarArticles { get; set; }
-        public ReturnArticleDto()
-        {
-            Succeeded = true;
-        }
+        public IEnumerable<string> ArticleTags { get; set; }
+        public IEnumerable<ReturnArticlesDto> SimilarArticles { get; set; }
     }
 }

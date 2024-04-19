@@ -1,6 +1,7 @@
 using FHIS.Services;
 using FIHS.Helpers;
 using FIHS.Interfaces;
+using FIHS.Repositories;
 using FIHS.Interfaces.IArticle;
 using FIHS.Interfaces.IChat;
 using FIHS.Interfaces.IDisease;
@@ -13,10 +14,7 @@ using FIHS.Interfaces.IPlantType;
 using FIHS.Interfaces.IUser;
 using FIHS.Interfaces.IWeather;
 using FIHS.Models.AuthModels;
-using FIHS.Models.PlantModels;
-using FIHS.Services;
 using FIHS.Services.ArticleService;
-using FIHS.Services.ArticleServices;
 using FIHS.Services.ChatServices;
 using FIHS.Services.DiseaseService;
 using FIHS.Services.FertilizerService;
@@ -27,19 +25,16 @@ using FIHS.Services.PlantservicesImp;
 using FIHS.Services.PlantTypeServices;
 using FIHS.Services.UserServices;
 using FIHS.Services.WeatherServices;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using FIHS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,13 +51,16 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// Articles
+builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IChatGPTService, ChatGPTService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IPlantIdService, PlantIdService>();
-builder.Services.AddScoped<IArticleService, ArticleService>();
-builder.Services.AddScoped<IArticleInteractionService, ArticleInteractionService>();
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -109,22 +107,20 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
-//builder.Services.Configure<KestrelServerOptions>(options =>
-//{
-//    options.Listen(IPAddress.Loopback, 7184);
-//    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
-//});
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Listen(IPAddress.Loopback, 7184);
+    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
+
+// Set configuration for MappingProfile
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddSwaggerGen(opt =>
-{
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "FIHS", Version = "v1" });
-
-});
-
+builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

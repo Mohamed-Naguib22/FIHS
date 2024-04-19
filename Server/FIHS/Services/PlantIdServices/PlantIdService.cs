@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using RestSharp;
 using FIHS.Interfaces.IPlantId;
 using FIHS.Dtos.PlantIdDtos;
-using Google.Apis.Translate.v2.Data;
 
 namespace FIHS.Services.PlantIdServices
 {
@@ -22,7 +21,7 @@ namespace FIHS.Services.PlantIdServices
         }
         public PlantIdentificationDto Identify(IFormFile imageFile)
         {
-            string API_KEY = _configuration["ApiKeys:PlantId"];
+            var API_KEY = _configuration["ApiKeys:PlantId"];
 
             var imgBased64 = Base64EncodeFromFormFile(imageFile);
 
@@ -41,7 +40,7 @@ namespace FIHS.Services.PlantIdServices
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
 
-            IRestResponse response = client.Execute(request);
+            var response = client.Execute(request);
 
             if (!response.IsSuccessful)
                 return new PlantIdentificationDto { Succeeded = false, Message = "حدث خطأ ما" };
@@ -72,7 +71,7 @@ namespace FIHS.Services.PlantIdServices
         }
         public HealthAssessmentDto DetectDisease(IFormFile imageFile)
         {
-            string API_KEY = _configuration["ApiKeys:PlantId"];
+            var API_KEY = _configuration["ApiKeys:PlantId"];
 
             var imgBased64 = Base64EncodeFromFormFile(imageFile);
 
@@ -91,7 +90,7 @@ namespace FIHS.Services.PlantIdServices
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
 
-            IRestResponse response = client.Execute(request);
+            var response = client.Execute(request);
 
             if (!response.IsSuccessful)
                 return new HealthAssessmentDto { Succeeded = false, Message = "حدث خطأ ما" };
@@ -125,7 +124,7 @@ namespace FIHS.Services.PlantIdServices
         {
             using MemoryStream ms = new();
             file.CopyTo(ms);
-            byte[] fileBytes = ms.ToArray();
+            var fileBytes = ms.ToArray();
             return Convert.ToBase64String(fileBytes);
         }
     }

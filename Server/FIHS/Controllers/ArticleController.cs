@@ -14,32 +14,50 @@ namespace FIHS.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleService _articleService;
-        private readonly IArticleInteractionService _articleInteractionService;
 
-        public ArticleController(IArticleService articleService, IArticleInteractionService articleInteractionService)
+        public ArticleController(IArticleService articleService)
         {
             _articleService = articleService;
-            _articleInteractionService = articleInteractionService;
         }
 
         [HttpGet("get-all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllArticlesAsync([FromQuery] int offset, [FromQuery] int limit)
         {
-            var (articles, nextPage) = await _articleService.GetAllArticlesAsync(offset, limit);
+            var(articles, nextPage) = await _articleService.GetAllArticlesAsync(offset, limit);
             return Ok(new { Articles = articles, NextPage = nextPage });
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("get/{articleId}")]
         public async Task<IActionResult> GetArticleAsync(int articleId)
         {
             var refreshToken = Request.Cookies["refreshToken"];
-
             var result = await _articleService.GetArticleAsync(articleId, refreshToken);
 
-            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
+            return result.Succeeded ? Ok(result) : NotFound(result.Message);
+        }
+
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpGet("like/{articleId}")]
+        public async Task<IActionResult> LikeAsync(int articleId)
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return BadRequest("Token is required!");
+
+            var result = await _articleService.LikeAsync(articleId, refreshToken);
+
+            return result.Succeeded ? Ok(result.Message) : NotFound(result.Message);
         }
 
         [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> SearchAsync([FromQuery] string query, [FromQuery] int offset, [FromQuery] int limit)
         {
             var (articles, nextPage) = await _articleService.SearchAsync(query, offset, limit);
@@ -149,20 +167,6 @@ namespace FIHS.Controllers
                 BadRequest("Â–« «·ﬁ”„ €Ì— „ÊÃÊœ");
 
             return Ok(" „ Õ–› «·ﬁ”„ »‰Ã«Õ");
-        }
-
-        [Authorize]
-        [HttpGet("like/{articleId}")]
-        public async Task<IActionResult> LikeAsync(int articleId)
-        {
-            var refreshToken = Request.Cookies["refreshToken"];
-
-            if (string.IsNullOrEmpty(refreshToken))
-                return BadRequest("Token is required!");
-
-            var result = await _articleInteractionService.LikeAsync(articleId, refreshToken);
-
-            return result.Succeeded ? Ok(result.Message) : BadRequest(result.Message);
         }
     }
 }

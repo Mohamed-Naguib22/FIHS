@@ -13,7 +13,6 @@ using FIHS.Models.AuthModels;
 using FIHS.Models.DiseaseModels;
 using FIHS.Models.Fertilizer;
 using FIHS.Models.PestModels;
-
 using FIHS.Models.PesticideModels;
 using FIHS.Models.PlantModels;
 using Microsoft.Identity.Client;
@@ -29,22 +28,29 @@ namespace FIHS.Helpers
         public MappingProfile() 
         {
             _baseUrl = configuration.GetSection("BaseUrl").Value;
+            
+            //User
             CreateMap<ApplicationUser, UserDto>()
                 .ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
             CreateMap<RegisterModel, ApplicationUser>()
                 .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => "\\images\\Default_User_Image.png"))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
             CreateMap<ApplicationUser, AuthModel>()
-                .ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => _baseUrl + src.ImgUrl));
 
             //Article
-            CreateMap<AddArticleDto, Article>().ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
+            CreateMap<AddArticleDto, Article>()
+                .ForMember(dest => dest.ImgUrl, opt => opt.Ignore());
             CreateMap<Article, ReturnArticleDto>()
-                .ForMember(dest => dest.ImgUrl, opt => opt.Ignore())
-                .ForMember(dest => dest.NumOfLikes, opt => opt.MapFrom(src => src.ArticleLikes.Where(al => al.ArticleId == src.Id).Count()));
-
+                .ForMember(dest => dest.NumOfLikes, opt => opt.MapFrom(src => src.ArticleLikes.Where(a => a.ArticleId == src.Id).Count()))
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => _baseUrl + src.ImgUrl))
+                .ForMember(dest => dest.ArticleTags, opt => opt.MapFrom(src => src.ArticleTags.Select(at => at.Tag)));
+            CreateMap<Article, ReturnArticlesDto>()
+                .ForMember(dest => dest.NumOfLikes, opt => opt.MapFrom(src => src.ArticleLikes.Where(a => a.ArticleId == src.Id).Count()))
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => _baseUrl + src.ImgUrl));
             CreateMap<AddSectionDto, ArticleSection>();
             CreateMap<TagDto, ArticleTag>();
+
             // Plants&Soils
             CreateMap<Plant, PlantDto>()
                 .ForMember(des => des.ImageUrl, opt => opt.MapFrom(src => configuration.GetSection("BaseUrl").Value + src.ImageUrl));
@@ -75,5 +81,4 @@ namespace FIHS.Helpers
             CreateMap<Pesticide, IEnumerable<PesticideReturnDto>>();
         }
     }
-    
 }

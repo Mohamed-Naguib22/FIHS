@@ -2,6 +2,7 @@
 using FIHS.Dtos.AuthModels;
 using FIHS.Dtos.UserDtos;
 using FIHS.Helpers;
+using FIHS.Interfaces;
 using FIHS.Interfaces.IUser;
 using FIHS.Models.AuthModels;
 using FIHS.Models.FavouriteModels;
@@ -13,27 +14,30 @@ using Microsoft.Extensions.Options;
 
 namespace FIHS.Services.UserServices
 {
-    public class AuthService : BaseService, IAuthService
+    public class AuthService : IAuthService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
-        private readonly IMemoryCache _memoryCache;
-        private readonly TimeSpan _CodeExpiration = TimeSpan.FromMinutes(5);
-        public AuthService(IConfiguration configuration, UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt, IEmailSender emailSender, 
-            IMemoryCache memoryCache, IMapper mapper) : base (userManager, mapper, configuration, jwt)
+        private readonly ICacheService _cacheService;
+        private readonly TimeSpan _codeExpiration = TimeSpan.FromMinutes(5);
+        public AuthService(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager, IEmailSender emailSender,
+            ICacheService cacheService, IMapper mapper, ITokenService tokenService)
         {
             _roleManager = roleManager;
             _emailSender = emailSender;
-            _memoryCache = memoryCache;
+            _cacheService = cacheService;
+            _userManager = userManager;
+            _tokenService = tokenService;
+            _mapper = mapper;
         }
 
         public async Task<AuthModel> RegisterAysnc(RegisterModel model)
         {
             var registeredUser = await _userManager.FindByEmailAsync(model.Email);
-            
-            if (registeredUser != null && !await _userManager.IsEmailConfirmedAsync(registeredUser))
-                return new AuthModel { IsVerified = false };
 
             if (registeredUser != null )
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
@@ -45,7 +49,7 @@ namespace FIHS.Services.UserServices
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(r => r.Description).ToList();
-                string errorMessage = string.Join(", ", errors);
+                var errorMessage = string.Join(", ", errors);
                 return new AuthModel { Succeeded = false, Message = errorMessage };
             }
 
@@ -56,7 +60,7 @@ namespace FIHS.Services.UserServices
 
             await _emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your verification code is {verificationCode}");
 
-            _memoryCache.Set($"{user.Id}_VerificationCode", verificationCode, _CodeExpiration);
+            _cacheService.Set($"{user.Id}_VerificationCode", verificationCode, _codeExpiration);
 
             return new AuthModel { Succeeded = true, Message = "يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك" };
         }
@@ -68,16 +72,18 @@ namespace FIHS.Services.UserServices
             if (user == null)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني غير صحيح" };
 
-            if (!_memoryCache.TryGetValue($"{user.Id}_VerificationCode", out string cachedCode) || model.VerificationCode != cachedCode)
+            var cachedCode = _cacheService.Get<string>($"{user.Id}_VerificationCode");
+
+            if (cachedCode == null || model.VerificationCode != cachedCode)
                 return new AuthModel { Succeeded = false, Message = "رمز التحقق غير موجود أو انتهت صلاحيته" };
 
             if(user.EmailConfirmed)
                 return new AuthModel { Succeeded = false, Message = "هذا الحساب مفعل بالفعل" };
-
+            
             user.EmailConfirmed = true;
             user.Favourite = new Favourite { ApplicationUserId = user.Id, CreatedAt = DateTime.Now };
 
-            return await MapToAuthModel(user);
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<AuthModel> ResendVerificationCodeAsync(EmailModel model)
@@ -87,16 +93,16 @@ namespace FIHS.Services.UserServices
             if (user == null)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني غير صحيح" };
 
-            string key = $"{user.Id}_VerificationCode";
+            var key = $"{user.Id}_VerificationCode";
 
-            if (_memoryCache.TryGetValue(key, out _))
-                _memoryCache.Remove(key);
+            if (_cacheService.Get<string>(key) != null)
+                _cacheService.Remove(key);
 
-            string verificationCode = GenerateRandomCode();
+            var verificationCode = GenerateRandomCode();
 
             await _emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your verification code is {verificationCode}");
 
-            _memoryCache.Set(key, verificationCode, _CodeExpiration);
+            _cacheService.Set(key, verificationCode, _codeExpiration);
 
             return new AuthModel { Succeeded = true, Message = "تم ارسال رمز التحقق بنجاح" };
         }
@@ -114,7 +120,7 @@ namespace FIHS.Services.UserServices
 
             await _emailSender.SendEmailAsync(user.Email, "Reset Password Code", $"Your reset password code is {resetPasswordCode}");
 
-            _memoryCache.Set($"{user.Id}_ResetPasswordCode", resetPasswordCode, _CodeExpiration);
+            _cacheService.Set($"{user.Id}_ResetPasswordCode", resetPasswordCode, _codeExpiration);
 
             return new ResetTokenModel { Token = token };
         }
@@ -126,7 +132,9 @@ namespace FIHS.Services.UserServices
             if (user == null)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني غير صحيح" };
 
-            if (!_memoryCache.TryGetValue($"{user.Id}_ResetPasswordCode", out string cachedCode) || model.Code != cachedCode)
+            var cachedCode = _cacheService.Get<string>($"{user.Id}_ResetPasswordCode");
+
+            if (cachedCode == null || model.Code != cachedCode)
                 return new AuthModel { Succeeded = false, Message = "رمز التحقق غير موجود أو انتهت صلاحيته" };
 
             var tokenIsValid = await _userManager
@@ -142,7 +150,7 @@ namespace FIHS.Services.UserServices
             if (!result.Succeeded)
                 return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
 
-            return await MapToAuthModel(user);
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<AuthModel> LoginAsync(TokenrRequestModel model)
@@ -151,11 +159,11 @@ namespace FIHS.Services.UserServices
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني أو كلمة المرور غير صحيحة" };
-            
-            if (!user.EmailConfirmed)
-                return new AuthModel{ IsVerified = false };
 
-            return await MapToAuthModel(user);
+            if (!user.EmailConfirmed)
+                return new AuthModel { IsVerified = false };
+
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<string> AddRoleAysnc(AddRoleModel model)
@@ -187,7 +195,7 @@ namespace FIHS.Services.UserServices
 
             refreshToken.RevokedOn = DateTime.Now;
 
-            return await MapToAuthModel(user);
+            return await _tokenService.CreateAuthModel(user);
         }
 
         public async Task<bool> RevokeTokenAsync(string token)

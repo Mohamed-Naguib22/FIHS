@@ -11,6 +11,7 @@ namespace FIHS.Models.ArticleModels
         public string Title { get; set; }
         [MaxLength(500)]
         public string Content { get; set; }
+        [JsonIgnore]
         public int ArticleId { get; set; }
         [ValidateNever, JsonIgnore]
         public Article Article { get; set; }
