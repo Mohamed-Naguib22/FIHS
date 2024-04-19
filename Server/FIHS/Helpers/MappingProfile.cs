@@ -13,7 +13,7 @@ using FIHS.Models.AuthModels;
 using FIHS.Models.DiseaseModels;
 using FIHS.Models.Fertilizer;
 using FIHS.Models.PestModels;
-using FIHS.Models.Pesticide;
+using FIHS.Models.PesticideModels;
 using FIHS.Models.PlantModels;
 using Microsoft.Identity.Client;
 using System.Configuration;
@@ -75,6 +75,7 @@ namespace FIHS.Helpers
             CreateMap<Fertilizer, FertilizerDto>().ReverseMap().ForMember(i => i.ImageURL, opt => opt.Ignore());
             CreateMap<Pesticide, PesticideReturnDto>();
             CreateMap<Fertilizer, FertilizerReturnDto>();
+            CreateMap<PestsPesticides, PesticideReturnDto>().IncludeMembers(src => src.Pesticide);
 
             CreateMap<Fertilizer, IEnumerable<FertilizerReturnDto>>();
             CreateMap<Pesticide, IEnumerable<PesticideReturnDto>>();

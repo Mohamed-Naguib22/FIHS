@@ -1,6 +1,6 @@
 ﻿using FIHS.Dtos.FertilizerDto;
 using FIHS.Models.Fertilizer;
-using FIHS.Models.Pesticide;
+using FIHS.Models.PesticideModels;
 
 namespace FIHS.Interfaces.IFertilizer
 {

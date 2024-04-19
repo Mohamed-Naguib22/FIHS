@@ -6,7 +6,7 @@ using FIHS.Models.FavouriteModels;
 using FIHS.Models.Fertilizer;
 using FIHS.Models.PestModels;
 
-using FIHS.Models.Pesticide;
+using FIHS.Models.PesticideModels;
 using FIHS.Models.PlantModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -34,6 +34,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<PlantSoilTypes>().HasKey(ps => new { ps.PlantId, ps.SoilId });
         modelBuilder.Entity<PlantsDiseases>().HasKey(pd => new { pd.PlantId, pd.DiseaseId });
         modelBuilder.Entity<PlantsPests>().HasKey(pp => new { pp.PlantId, pp.PestId });
+        modelBuilder.Entity<PestsPesticides>().HasKey(pp => new { pp.PesticideId, pp.PestId });
         /*        properties for fertilizer & pestocide*/
 
 

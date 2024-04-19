@@ -31,6 +31,8 @@ namespace FIHS.Models.PestModels
         public string Message { get; set; }
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual IEnumerable<PlantsPests> Plants { get; set; }
+        [ValidateNever]
+        public virtual IEnumerable<PestsPesticides> Pesticides { get; set; }
 
     }
 }
