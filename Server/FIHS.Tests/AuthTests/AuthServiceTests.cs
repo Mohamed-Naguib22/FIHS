@@ -38,6 +38,7 @@ public class AuthServiceTests
             _fakeEmailSender, _fakeMemoryCache, _fakeMapper, _fakeTokenService);
     }
 
+    // -----------------------------------------------Register Tests--------------------------------------------------
     [Fact]
     public async Task RegisterAysnc_Success_ReturnsSuccessAndVerificationMessage()
     {
@@ -89,6 +90,7 @@ public class AuthServiceTests
         Assert.Equal("البريد الإلكتروني مستخدم بالفعل", result.Message);
     }
 
+    // -----------------------------------------------Login Tests--------------------------------------------------
     [Fact]
     public async Task LoginAsync_ValidCredentials_ReturnsAuthToken()
     {
@@ -137,6 +139,7 @@ public class AuthServiceTests
         Assert.False(result.IsVerified);
     }
 
+    // -----------------------------------------------Verify Account Tests--------------------------------------------------
     [Fact]
     public async Task VerifyAccountAsync_ValidCode_ReturnsAuthToken()
     {
@@ -200,6 +203,7 @@ public class AuthServiceTests
         Assert.False(result.Succeeded);
     }
 
+    // -----------------------------------------------Resend Verification Code Tests--------------------------------------------------
     [Fact]
     public async Task ResendVerificationCodeAsync_Success_ReturnsSuccess()
     {
@@ -219,5 +223,115 @@ public class AuthServiceTests
         var result = await _authService.ResendVerificationCodeAsync(model);
 
         Assert.True(result.Succeeded);
+    }
+
+    // -----------------------------------------------Forget Password Tests--------------------------------------------------
+    [Fact]
+    public async Task ForgetPasswordAsync_EmailExists_ReturnToken()
+    {
+        var model = new EmailModel { Email = "test@example.com" };
+        var expectedUser = new ApplicationUser { Id = "test", Email = "test@example.com" };
+        var expectedToken = "token";
+        var code = 123456;
+
+        A.CallTo(() => _fakeUserManager.FindByEmailAsync(model.Email)).Returns(Task.FromResult(expectedUser));
+        A.CallTo(() => _fakeUserManager.GeneratePasswordResetTokenAsync(expectedUser)).Returns(Task.FromResult(expectedToken));
+        A.CallTo(() => _fakeEmailSender.SendEmailAsync(expectedUser.Email, A<string>.Ignored, A<string>.Ignored));
+        A.CallTo(() => _fakeMemoryCache.Set($"{expectedUser.Id}_ResetPasswordCode", code, A<TimeSpan>.Ignored));
+
+        var result = await _authService.ForgetPasswordAsync(model);
+
+        Assert.True(result.Succeeded);
+    }
+
+    [Fact]
+    public async Task ForgetPasswordAsync_EmailNotFound_ReturnErrorMessage()
+    {
+        var model = new EmailModel { Email = "test@example.com" };
+
+        A.CallTo(() => _fakeUserManager.FindByEmailAsync(model.Email)).Returns(Task.FromResult<ApplicationUser>(null));
+
+        var result = await _authService.ForgetPasswordAsync(model);
+
+        Assert.False(result.Succeeded);
+        Assert.Equal("البريد الإلكتروني غير صحيح", result.Message);
+        A.CallTo(() => _fakeUserManager.GeneratePasswordResetTokenAsync(A<ApplicationUser>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeEmailSender.SendEmailAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeMemoryCache.Set(A<string>.Ignored, A<string>.Ignored, A<TimeSpan>.Ignored)).MustNotHaveHappened();
+    }
+
+    // -----------------------------------------------Forget Password Tests--------------------------------------------------
+    [Fact]
+    public async Task ResetPasswordAsync_ValidToken_ReturnAuthModel()
+    {
+        var model = new ResetPasswordModel { Email = "test@example.com", Token = "validToken", Code = "123456", NewPassword = "newPassword" };
+        var expectedUser = new ApplicationUser { Email = "test@example.com" };
+        var authModel = new AuthModel { Succeeded = true };
+        var expectedCahcedCode = "123456";
+
+        A.CallTo(() => _fakeUserManager.FindByEmailAsync(model.Email)).Returns(Task.FromResult(expectedUser));
+        A.CallTo(() => _fakeMemoryCache.Get<string>($"{expectedUser.Id}_ResetPasswordCode")).Returns(expectedCahcedCode);
+        A.CallTo(() => _fakeUserManager.VerifyUserTokenAsync(expectedUser, A<string>.Ignored, "ResetPassword", model.Token)).Returns(Task.FromResult(true));
+        A.CallTo(() => _fakeUserManager.ResetPasswordAsync(expectedUser, model.Token, model.NewPassword)).Returns(Task.FromResult(IdentityResult.Success));
+        A.CallTo(() => _fakeTokenService.CreateAuthModel(expectedUser)).Returns(Task.FromResult(authModel));
+
+        var result = await _authService.ResetPasswordAsync(model);
+
+        Assert.True(result.Succeeded);
+        Assert.Equal(expectedCahcedCode, model.Code);
+    }
+
+    [Fact]
+    public async Task ResetPasswordAsync_EmailNotFound_ReturnErrorMessage()
+    {
+        var model = new ResetPasswordModel { Email = "test@example.com", Token = "validToken", Code = "123456", NewPassword = "newPassword" };
+
+        A.CallTo(() => _fakeUserManager.FindByEmailAsync(model.Email)).Returns(Task.FromResult<ApplicationUser>(null));
+
+        var result = await _authService.ResetPasswordAsync(model);
+
+        Assert.False(result.Succeeded);
+        A.CallTo(() => _fakeMemoryCache.Get<string>(A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeUserManager.VerifyUserTokenAsync(A<ApplicationUser>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeUserManager.ResetPasswordAsync(A<ApplicationUser>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeTokenService.CreateAuthModel(A<ApplicationUser>.Ignored)).MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task ResetPasswordAsync_IncorrectCode_ReturnErrorMessage()
+    {
+        var model = new ResetPasswordModel { Email = "test@example.com", Token = "validToken", Code = "654321", NewPassword = "newPassword" };
+        var expectedUser = new ApplicationUser { Email = "test@example.com" };
+        var expectedCahcedCode = "123456";
+
+        A.CallTo(() => _fakeUserManager.FindByEmailAsync(model.Email)).Returns(Task.FromResult(expectedUser));
+        A.CallTo(() => _fakeMemoryCache.Get<string>($"{expectedUser.Id}_ResetPasswordCode")).Returns(expectedCahcedCode);
+
+        var result = await _authService.ResetPasswordAsync(model);
+
+        Assert.False(result.Succeeded);
+        Assert.NotEqual(expectedCahcedCode, model.Code);
+        A.CallTo(() => _fakeUserManager.VerifyUserTokenAsync(A<ApplicationUser>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeUserManager.ResetPasswordAsync(A<ApplicationUser>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeTokenService.CreateAuthModel(A<ApplicationUser>.Ignored)).MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task ResetPasswordAsync_InValidToken_ReturnErrorMessage()
+    {
+        var model = new ResetPasswordModel { Email = "test@example.com", Token = "validToken", Code = "123456", NewPassword = "newPassword" };
+        var expectedUser = new ApplicationUser { Email = "test@example.com" };
+        var authModel = new AuthModel { Succeeded = true };
+        var expectedCahcedCode = "123456";
+
+        A.CallTo(() => _fakeUserManager.FindByEmailAsync(model.Email)).Returns(Task.FromResult(expectedUser));
+        A.CallTo(() => _fakeMemoryCache.Get<string>($"{expectedUser.Id}_ResetPasswordCode")).Returns(expectedCahcedCode);
+        A.CallTo(() => _fakeUserManager.VerifyUserTokenAsync(expectedUser, A<string>.Ignored, "ResetPassword", model.Token)).Returns(Task.FromResult(false));
+
+        var result = await _authService.ResetPasswordAsync(model);
+
+        Assert.False(result.Succeeded);
+        A.CallTo(() => _fakeUserManager.ResetPasswordAsync(A<ApplicationUser>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _fakeTokenService.CreateAuthModel(A<ApplicationUser>.Ignored)).MustNotHaveHappened();
     }
 }
