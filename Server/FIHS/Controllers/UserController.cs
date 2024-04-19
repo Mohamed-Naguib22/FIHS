@@ -21,6 +21,8 @@ namespace FIHS.Controllers
         }
 
         [HttpGet("profile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProfileAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -30,13 +32,12 @@ namespace FIHS.Controllers
 
             var result = await _userService.GetProfileAsync(refreshToken);
 
-            if (!result.Succeeded)
-                return BadRequest(result.Message);
-
-            return Ok(result);
+            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
         }
 
         [HttpPut("update-profile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileModel model)
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -59,6 +60,8 @@ namespace FIHS.Controllers
         }
 
         [HttpPut("change-password")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -77,6 +80,8 @@ namespace FIHS.Controllers
         }
 
         [HttpDelete("delete-account")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteAccountAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -93,6 +98,8 @@ namespace FIHS.Controllers
         }
 
         [HttpPost("set-image")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SetImageAsync([FromForm] ImageDto imageDto)
         {
             var imgFile = imageDto.ImgFile;
@@ -121,6 +128,8 @@ namespace FIHS.Controllers
         }
 
         [HttpDelete("delete-image")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteImageAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
