@@ -49,7 +49,7 @@ namespace FIHS.Services.UserServices
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(r => r.Description).ToList();
-                string errorMessage = string.Join(", ", errors);
+                var errorMessage = string.Join(", ", errors);
                 return new AuthModel { Succeeded = false, Message = errorMessage };
             }
 

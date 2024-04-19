@@ -22,12 +22,12 @@ public class ArticleServiceTests
     private readonly IArticleRepository _fakeArticleRepository;
     private readonly IMapper _fakeMapper;
     private readonly IImageService _fakeImageService;
-    private readonly IJwtService _fakeJwtService;
+    private readonly ITokenService _fakeJwtService;
     public ArticleServiceTests()
     {
         _fakeArticleRepository = A.Fake<IArticleRepository>();
         _fakeImageService = A.Fake<IImageService>();
-        _fakeJwtService = A.Fake<IJwtService>();
+        _fakeJwtService = A.Fake<ITokenService>();
         _fakeMapper = A.Fake<IMapper>();
         _articleService = new ArticleService(_fakeArticleRepository, _fakeImageService, _fakeMapper, _fakeJwtService);
     }
