@@ -11,6 +11,7 @@ import { useRouter } from "expo-router";
 import useSession from "@/hooks/state/useSession";
 import { Logout } from "@/hooks/useLogin";
 import Loading from "@/components/layout/Loading";
+import  allPlantTypes  from '@/app/allPlantTypes';
 
 export default function TabOneScreen() {
   const { data: arts, isLoading } = useArticles(5);
@@ -41,7 +42,7 @@ export default function TabOneScreen() {
           return <ArticleCard key={art.id} {...art} />;
         })}
       </Section>
-      <Section name='أنواع النباتات' link='/plants/'>
+      <Section name='أنواع النباتات' link='/allPlantTypes/'>
         <PlantsTypes />
       </Section>
     </TabsPageContainer>
