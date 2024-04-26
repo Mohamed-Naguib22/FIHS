@@ -14,9 +14,9 @@ namespace FIHS.Controllers
         }
 
         [HttpGet("get-forecast")]
-        public IActionResult GetForecast(string city)
+        public async Task<IActionResult> GetForecast(string city)
         {
-            var result = _weatherService.GetForecast(city);
+            var result = await _weatherService.GetForecast(city);
 
             if (!result.Succeeded)
                 return BadRequest(result.Message);

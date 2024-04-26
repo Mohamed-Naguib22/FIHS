@@ -17,13 +17,13 @@ namespace FIHS.Services.WeatherServices
         {
             _configuration = configuration;
         }
-        public WeatherDto GetForecast(string city)
+        public async Task<WeatherDto> GetForecast(string city)
         {
             string APP_ID = _configuration["ApiKeys:Weather"];
 
             var client = new RestClient($"{API_URL}?q={city}&appid={APP_ID}&lang={LANGUAGE}&units={UNITS}");
             var request = new RestRequest(Method.GET);
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = await client.ExecuteAsync(request);
 
             if (!response.IsSuccessful)
                 return new WeatherDto { Succeeded = false, Message = "ادخل اسم مدينة صالح" };

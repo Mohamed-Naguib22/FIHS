@@ -10,17 +10,17 @@ namespace FIHS.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ChatGPTController : ControllerBase
+    public class ChatbotController : ControllerBase
     {
-        private readonly IChatGPTService _chatGPTService;
-        public ChatGPTController(IChatGPTService chatGPTService)
+        private readonly IChatbotService _chatbotService;
+        public ChatbotController(IChatbotService chatbotService)
         {
-            _chatGPTService = chatGPTService;
+            _chatbotService = chatbotService;
         }
-        [HttpPost("ask")]
+        [HttpPost("gemini")]
         public async Task<IActionResult> AskQuestionAsync([FromForm] QuestionModel questionModel)
         {
-            var result = await _chatGPTService.AskQuestionAsync(questionModel);
+            var result = await _chatbotService.AskQuestionAsync(questionModel);
 
             return result.Succeeded ? Ok(result) : StatusCode(result.StatusCode, result.Message);
         }
