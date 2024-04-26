@@ -24,7 +24,11 @@ const Article = (props: Props) => {
   }
   return (
     <TabsPageContainer>
-      <Image style={styles.articlePhotoId} source={{ uri: article?.imgUrl }} />
+      <Image
+        style={styles.articlePhotoId}
+        source={{ uri: article?.imgUrl }}
+        alt={article?.title}
+      />
       <VStack>
         <ScrollView horizontal style={{ marginBottom: 30 }}>
           <HStack justifyContent='flex-end' gap={10} mt={10} mr={5} ml={5}>
@@ -149,7 +153,7 @@ const SimilarArticle = ({ art }: { art: Article }) => {
       }}
       onPress={() => router.push(`/(articles)/${art.id}`)}
     >
-      <Image style={styles.similar} source={art.imgUrl} />
+      <Image style={styles.similar} source={art.imgUrl} alt={art.title} />
       <Text
         textAlign='center'
         color='#000'

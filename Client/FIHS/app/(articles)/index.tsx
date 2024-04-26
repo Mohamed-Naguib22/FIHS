@@ -101,6 +101,7 @@ const ArticleRowCard = ({ art }: { art: Article }) => {
       >
         <Image
           style={styles.articlePhoto}
+          alt={art.title}
           source={require("@/assets/images/PlantType.jpg")}
         />
         <Text

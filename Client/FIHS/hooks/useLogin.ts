@@ -44,7 +44,7 @@ const useLogin = () => {
 export default useLogin
 
 export const Logout = () => {
-    const { setSession, setLoading, token } = useSession()
+    const { setSession, setLoading, token, setChatMessages } = useSession()
     const rf = storage.load({ key: 'refreshToken' })
     const router = useRouter()
     return useMutation({
@@ -54,6 +54,7 @@ export const Logout = () => {
                 storage.remove({ key: 'refreshToken' })
                 //@ts-ignore
                 setSession(DEFAULT_SESSION)
+                setChatMessages([])
                 setLoading(false)
                 Toast.show({
                     type: 'success',

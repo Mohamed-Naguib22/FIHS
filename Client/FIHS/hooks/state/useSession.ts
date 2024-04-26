@@ -1,11 +1,14 @@
 import storage from "@/utils/storage";
+import { IMessage } from "react-native-gifted-chat";
 import { create } from "zustand";
 
 
 interface SessionState extends Session {
     isLoading: boolean,
+    chatMessages: IMessage[],
     setEmail: (email: string | undefined) => void,
     setLoading: (status: boolean) => void,
+    setChatMessages: (chatMessages: IMessage[]) => void,
     setSession: (session: Session) => void,
 }
 
@@ -19,6 +22,7 @@ const useSession = create<SessionState>((set) => (
         email: '',
         emailConfirmed: false,
         expiresOn: '',
+        chatMessages: [],
         imgUrl: null,
         isAuthenticated: false,
         refreshTokenExpiration: '',
@@ -42,6 +46,23 @@ const useSession = create<SessionState>((set) => (
                 }
             }
         }),
+        setChatMessages: (chatMessages: IMessage[]) => set((state) => {
+            if (chatMessages.length) {
+                storage.save({
+                    key: 'chat',
+                    data: chatMessages
+                })
+            } else {
+                storage.remove({
+                    key: 'chat'
+                })
+            }
+            return {
+                chatMessages: chatMessages
+            }
+        }
+
+        ),
         setSession: (session: Partial<Session>) => set((state) => {
             if (session.token) {
                 storage.save({

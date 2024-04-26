@@ -117,8 +117,16 @@ function RootLayoutNav(props: { token: string }) {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name='diseasesType'
+                name='(diseasesType)'
                 options={{ headerShown: false }}
+              />
+              <Stack.Screen name='(scan)' options={{ headerShown: false }} />
+              <Stack.Screen
+                name='chat'
+                options={{
+                  title: "مساعد الفلاح الذكي",
+                  headerShown: true,
+                }}
               />
             </Stack>
             <Toast />

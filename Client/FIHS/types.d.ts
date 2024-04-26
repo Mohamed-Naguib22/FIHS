@@ -42,7 +42,8 @@ type Fertilizer = AgroCare & {
 type Pesticide = AgroCare & {
     description: string,
     toxicity: string,
-    type: string
+    type: string,
+    imageUrl: string
 }
 
 type GPT_Response = {
@@ -73,3 +74,46 @@ type Session = {
 }
 
 type Paginate<T, N extends string> = Record<N, T[]> & { nextPage: number | null }
+
+
+type Plant = HasImage & {
+    name: string,
+    description: string,
+    commonUses: string,
+    nutritionalValue: string,
+    averageYield: number,
+    sunlightReqs: string,
+    irrigationReqs: number,
+    plantingSeason: string,
+    harvistingSeason: string,
+    culivationTips: string,
+    imageUrl: string
+}
+
+type Pest = HasImage & {
+    imageUrl: string,
+    species: string,
+    name: string,
+    scientificName: string,
+    damageSymptoms: string,
+    controlMethods: string,
+    description: string,
+    lifeCycle: string,
+    geographicDistribution: string,
+    reproduction: string,
+    plants: Plant[],
+    pesticides: Pesticide[]
+}
+
+type Disease = HasImage & {
+    imageUrl: string,
+    species: string,
+    name: string,
+    scientificName: string,
+    causes: string,
+    description: string,
+    treatments: string,
+    symptoms: string,
+    preventionMethods: string,
+    plants: Plant[]
+}
