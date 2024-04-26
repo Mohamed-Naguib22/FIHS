@@ -48,6 +48,7 @@ const ArticleCard = ({
                 borderTopLeftRadius: 20,
               }}
               source={imgUrl}
+              alt={title}
             />
             <View
               position='absolute'

@@ -38,7 +38,7 @@ export default function TabOneScreen() {
         </Button>
       )}
       <Section name='المقالات' link='/(articles)'>
-        {arts?.slice(0, 6).map((art) => {
+        {arts?.slice(0, 6)?.map((art) => {
           return <ArticleCard key={art.id} {...art} />;
         })}
       </Section>

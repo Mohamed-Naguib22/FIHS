@@ -9,8 +9,8 @@ const DiseasesPestslayout = (props: Props) => {
             headerShown:false,
             animation:'slide_from_right',
         }}>
-            <Stack.Screen name='pests'/>
-             <Stack.Screen name='diseases'/>
+            <Stack.Screen name='(pests)'/>
+             <Stack.Screen name='(diseases)'/>
          </Stack>
     )
 }
