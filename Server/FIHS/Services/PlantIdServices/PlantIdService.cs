@@ -19,7 +19,7 @@ namespace FIHS.Services.PlantIdServices
         {
             _configuration = configuration;
         }
-        public PlantIdentificationDto Identify(IFormFile imageFile)
+        public async Task<PlantIdentificationDto> Identify(IFormFile imageFile)
         {
             var API_KEY = _configuration["ApiKeys:PlantId"];
 
@@ -40,7 +40,7 @@ namespace FIHS.Services.PlantIdServices
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
 
-            var response = client.Execute(request);
+            var response = await client.ExecuteAsync(request);
 
             if (!response.IsSuccessful)
                 return new PlantIdentificationDto { Succeeded = false, Message = "حدث خطأ ما" };
@@ -69,7 +69,7 @@ namespace FIHS.Services.PlantIdServices
 
             return plant;
         }
-        public HealthAssessmentDto DetectDisease(IFormFile imageFile)
+        public async Task<HealthAssessmentDto> DetectDisease(IFormFile imageFile)
         {
             var API_KEY = _configuration["ApiKeys:PlantId"];
 
@@ -90,7 +90,7 @@ namespace FIHS.Services.PlantIdServices
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
 
-            var response = client.Execute(request);
+            var response = await client.ExecuteAsync(request);
 
             if (!response.IsSuccessful)
                 return new HealthAssessmentDto { Succeeded = false, Message = "حدث خطأ ما" };

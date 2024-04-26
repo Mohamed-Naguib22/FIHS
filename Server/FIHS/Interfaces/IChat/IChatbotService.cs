@@ -3,7 +3,7 @@ using FIHS.Models.ChatGPT;
 
 namespace FIHS.Interfaces.IChat
 {
-    public interface IChatGPTService
+    public interface IChatbotService
     {
         Task<AnswerModel> AskQuestionAsync(QuestionModel questionModel);
     }

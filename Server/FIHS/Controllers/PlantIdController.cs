@@ -16,7 +16,7 @@ namespace FIHS.Controllers
         }
 
         [HttpPost("identify-plant")]
-        public IActionResult Identify([FromForm] ImageDto imgDto)
+        public async Task<IActionResult> Identify([FromForm] ImageDto imgDto)
         {
             if (imgDto.ImgFile == null || imgDto.ImgFile.Length == 0)
                 return BadRequest("Image file is required.");
@@ -24,13 +24,13 @@ namespace FIHS.Controllers
             if (!_allowedExtensions.Contains(Path.GetExtension(imgDto.ImgFile.FileName).ToLower()))
                 return BadRequest("نوع الملف هذا غير مسموح به");
 
-            var result = _plantIdService.Identify(imgDto.ImgFile);
+            var result = await _plantIdService.Identify(imgDto.ImgFile);
 
             return result.Succeeded ? Ok(result) : BadRequest(result.Message);
         }
 
         [HttpPost("detect-disease")]
-        public IActionResult DetectDisease([FromForm] ImageDto imgDto)
+        public async Task<IActionResult> DetectDisease([FromForm] ImageDto imgDto)
         {
             if (imgDto.ImgFile == null || imgDto.ImgFile.Length == 0)
                 return BadRequest("Image file is required.");
@@ -38,7 +38,7 @@ namespace FIHS.Controllers
             if (!_allowedExtensions.Contains(Path.GetExtension(imgDto.ImgFile.FileName).ToLower()))
                 return BadRequest("نوع الملف هذا غير مسموح به");
 
-            var result = _plantIdService.DetectDisease(imgDto.ImgFile);
+            var result = await _plantIdService.DetectDisease(imgDto.ImgFile);
 
             if (!result.Succeeded)
                 return BadRequest(result.Message);

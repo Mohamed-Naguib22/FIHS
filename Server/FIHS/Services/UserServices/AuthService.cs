@@ -37,7 +37,7 @@ namespace FIHS.Services.UserServices
         {
             var registeredUser = await _userManager.FindByEmailAsync(model.Email);
 
-            if (registeredUser != null )
+            if (registeredUser != null)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
 
             var user = _mapper.Map<ApplicationUser>(model);
@@ -75,9 +75,9 @@ namespace FIHS.Services.UserServices
             if (cachedCode == null || model.VerificationCode != cachedCode)
                 return new AuthModel { Succeeded = false, Message = "رمز التحقق غير موجود أو انتهت صلاحيته" };
 
-            if(user.EmailConfirmed)
+            if (user.EmailConfirmed)
                 return new AuthModel { Succeeded = false, Message = "هذا الحساب مفعل بالفعل" };
-            
+
             user.EmailConfirmed = true;
             user.Favourite = new Favourite { ApplicationUserId = user.Id, CreatedAt = DateTime.Now };
 
