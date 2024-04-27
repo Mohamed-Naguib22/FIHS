@@ -30,10 +30,10 @@ namespace FIHS.Controllers
         [HttpGet("GetAllPlants")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllPlants()
+        public async Task<IActionResult> GetAllPlants(int offset=1 , int limit=10)
         {
-            var plantsDto = _mapper.Map<List<PlantDto>>(await _plantRepository.GetAllPlantsAsync());
-            return Ok(plantsDto);
+            var plantsDto = _mapper.Map<List<PlantDto>>(await _plantRepository.GetAllPlantsAsync(offset,limit));
+            return Ok(new  {Plant = plantsDto.Take(limit).ToList(),NextPage = limit < plantsDto.Count ?offset+1:0 });
         }
         [HttpGet("GetPlantById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

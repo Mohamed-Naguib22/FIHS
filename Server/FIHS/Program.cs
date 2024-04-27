@@ -108,11 +108,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
-builder.Services.Configure<KestrelServerOptions>(options =>
-{
-    options.Listen(IPAddress.Loopback, 7184);
-    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
-});
+//builder.Services.Configure<KestrelServerOptions>(options =>
+//{
+//    options.Listen(IPAddress.Loopback, 7184);
+//    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
+//});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
