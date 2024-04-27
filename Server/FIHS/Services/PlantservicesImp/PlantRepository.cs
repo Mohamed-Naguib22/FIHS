@@ -29,12 +29,13 @@ namespace FIHS.Services.PlantservicesImp
             _context.SaveChanges();
         }
 
-        public async Task<IEnumerable<Plant>> GetAllPlantsAsync()
+        public async Task<IEnumerable<Plant>> GetAllPlantsAsync(int offset=1 , int limit=10)
         {
-            var plant = await _context.Plants.Include(pt => pt.PlantTypes).ThenInclude(p => p.PlantType)
-                .Include(p => p.Soils).ThenInclude(ps => ps.Soil)
-                .Include(p => p.Diseases).ThenInclude(pd => pd.Disease)
-                .Include(p => p.Pests).ThenInclude(pp => pp.Pest)
+            var plant = await _context.Plants.Skip((offset - 1) * limit).Take(offset * limit+1)
+                //.Include(pt => pt.PlantTypes).ThenInclude(p => p.PlantType)
+                //.Include(p => p.Soils).ThenInclude(ps => ps.Soil)
+                //.Include(p => p.Diseases).ThenInclude(pd => pd.Disease)
+                //.Include(p => p.Pests).ThenInclude(pp => pp.Pest)
                 .ToListAsync();
             return plant;
         }
