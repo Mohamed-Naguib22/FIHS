@@ -1,4 +1,5 @@
 ﻿using FIHS.Models.DiseaseModels;
+using FIHS.Models.FavouriteModels;
 using FIHS.Models.PestModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
@@ -41,13 +42,15 @@ namespace FIHS.Models.PlantModels
         [NotMapped]
         public IFormFile ImgFile { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public virtual ICollection<PlantsTypesOfPlant> PlantTypes { get; set; }
+        public virtual ICollection<PlantsTypesOfPlant> PlantTypes { get; set; } = null;
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public virtual IEnumerable<PlantSoilTypes> Soils { get; set; }
+        public virtual IEnumerable<PlantSoilTypes> Soils { get; set; } = null;
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public virtual IEnumerable<PlantsDiseases> Diseases { get; set; }
+        public virtual IEnumerable<PlantsDiseases> Diseases { get; set; } = null;
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual IEnumerable<PlantsPests> Pests { get; set; }
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public virtual IEnumerable<FavouritePlant> FavouritePlants { get; set; } = null;
 
 
 

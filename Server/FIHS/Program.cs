@@ -35,6 +35,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 using FIHS.Services;
+using FIHS.Interfaces.IFavourite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +71,7 @@ builder.Services.AddScoped<IFertilizer, FertilizerService>();
 builder.Services.AddScoped<IPestService, PestService>();
 builder.Services.AddScoped<IDiseaseService, DiseaseService>();
 builder.Services.AddScoped<IPlantType, PlantTypeServices>();
+builder.Services.AddScoped<IFavourite,FavouriteRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)

@@ -17,6 +17,9 @@ using FIHS.Models.PesticideModels;
 using FIHS.Models.PlantModels;
 using Microsoft.Identity.Client;
 using System.Configuration;
+using FIHS.Dtos.Favourite;
+using FIHS.Models.FavouriteModels;
+using FIHS.Dtos.FavouriteDto;
 
 namespace FIHS.Helpers
 {
@@ -79,6 +82,9 @@ namespace FIHS.Helpers
 
             CreateMap<Fertilizer, IEnumerable<FertilizerReturnDto>>();
             CreateMap<Pesticide, IEnumerable<PesticideReturnDto>>();
+            // Favourite & Favourite Item
+            CreateMap<FavouritePlant, FavouriteItemAddRequest>().ReverseMap();
+            CreateMap<Favourite,GetAllFavPlantsDto>().ReverseMap();
         }
     }
 }

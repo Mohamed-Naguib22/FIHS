@@ -33,6 +33,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<PlantsTypesOfPlant>().HasKey(ptypes => new { ptypes.PlantId, ptypes.PlantTypeId });
         modelBuilder.Entity<PlantSoilTypes>().HasKey(ps => new { ps.PlantId, ps.SoilId });
         modelBuilder.Entity<PlantsDiseases>().HasKey(pd => new { pd.PlantId, pd.DiseaseId });
+        modelBuilder.Entity<FavouritePlant>().HasKey(fp => new { fp.PlantId, fp.FavouriteId });
         modelBuilder.Entity<PlantsPests>().HasKey(pp => new { pp.PlantId, pp.PestId });
         modelBuilder.Entity<PestsPesticides>().HasKey(pp => new { pp.PesticideId, pp.PestId });
         /*        properties for fertilizer & pestocide*/
@@ -54,4 +55,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Pest> Pests { get; set; }
     public DbSet<Disease> Diseases { get; set; }
     public DbSet<Favourite> Favourites { get; set; }
+    public DbSet<FavouritePlant> FavouritePlants { get; set; }
 }
