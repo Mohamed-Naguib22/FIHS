@@ -8,5 +8,6 @@ namespace FIHS.Models.FavouriteModels
         public string ApplicationUserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        public virtual ICollection<FavouritePlant> FavPlants { get; set; }
     }
 }
