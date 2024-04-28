@@ -46,7 +46,7 @@ type Pesticide = AgroCare & {
     imageUrl: string
 }
 
-type GPT_Response = {
+type ChatResponse = {
     answer: string
 }
 
@@ -116,4 +116,12 @@ type Disease = HasImage & {
     symptoms: string,
     preventionMethods: string,
     plants: Plant[]
+}
+
+
+type PlantType = DBItem & {
+    name: string,
+    heightRange: string,
+    spreadRange: string,
+    lifeCycle: string
 }

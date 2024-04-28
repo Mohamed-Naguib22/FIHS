@@ -1,6 +1,6 @@
 import Loading from "@/components/layout/Loading";
 import useSession from "@/hooks/state/useSession";
-import useGPT from "@/hooks/useGPT";
+import useGemini from "@/hooks/useChat";
 import storage from "@/utils/storage";
 import { FontAwesome } from "@expo/vector-icons";
 import {
@@ -41,13 +41,15 @@ const ChatScreen = (props: Props) => {
       });
   }, []);
   const [messages, setMessages] = useState<IMessage[]>(chatMessages);
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
   const [isTyping, setIsTyping] = useState(false);
   const [message, setMessage] = useState("");
-  const [msgID, setMsgID] = useState(1);
-  const ask = useGPT();
+  const ask = useGemini();
   const onSend = useCallback(async (messages: IMessage[] = []) => {
     setMessage("");
-    setMessages((prevMsgs) => GiftedChat.append(prevMsgs, messages));
+    setMessages((prevMsgs) => GiftedChat.prepend(prevMsgs, messages));
     setChatMessages([...chatMessages, ...messages]);
     setIsTyping(true);
 
@@ -56,11 +58,10 @@ const ChatScreen = (props: Props) => {
       {
         onSuccess(data, variables, context) {
           setIsTyping(false);
-          setMsgID((prev) => prev + 1);
           setMessages((prevMsgs) =>
             GiftedChat.append(prevMsgs, [
               {
-                _id: msgID,
+                _id: Math.random(),
                 createdAt: new Date(),
                 text: data.answer,
                 user: {
@@ -75,7 +76,7 @@ const ChatScreen = (props: Props) => {
           setChatMessages([
             ...chatMessages,
             {
-              _id: msgID,
+              _id: Math.random(),
               createdAt: new Date(),
               text: data.answer,
               user: {
@@ -152,10 +153,9 @@ const ChatScreen = (props: Props) => {
               </View>
               <Button
                 onPress={() => {
-                  setMsgID((prev) => prev + 1);
                   onSend([
                     {
-                      _id: msgID,
+                      _id: Math.random(),
                       createdAt: new Date(),
                       text: message,
                       user: {
