@@ -24,7 +24,12 @@ const Peats = (props: Props) => {
         </Text>
         {pests?.map((pest, i, arr) => {
           return (
-            <HStack justifyContent='space-between' alignItems='center' gap={18}>
+            <HStack
+              justifyContent='space-between'
+              alignItems='center'
+              gap={18}
+              px={"$3"}
+            >
               <Pest key={pest.id} pest={pest} />
               {arr[i + 1] && <Pest key={arr[i + 1].id} pest={arr[i + 1]} />}
             </HStack>

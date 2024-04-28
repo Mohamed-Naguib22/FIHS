@@ -24,7 +24,12 @@ export default function Diseases() {
         </Text>
         {diseases?.map((disease, i, arr) => {
           return (
-            <HStack justifyContent='space-between' alignItems='center' gap={18}>
+            <HStack
+              justifyContent='space-between'
+              alignItems='center'
+              gap={18}
+              px={"$3"}
+            >
               <Disease key={disease.id} disease={disease} />
               {arr[i + 1] && (
                 <Disease key={arr[i + 1].id} disease={arr[i + 1]} />
