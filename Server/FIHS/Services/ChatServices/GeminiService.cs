@@ -18,7 +18,7 @@ namespace FIHS.Services.ChatServices
             var apiKey = _configuration["ApiKeys:Gemini"];
 
             if (apiKey == null)
-                return new AnswerModel { StatusCode = 400, Message = "API key for ChatGPT is missing or invalid.", Succeeded = false };
+                return new AnswerModel { StatusCode = 400, Message = "API key for Gemini is missing or invalid.", Succeeded = false };
 
             var body = new
             {
