@@ -30,9 +30,9 @@ namespace FIHS.Controllers
         [HttpGet("GetAllPlants")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllPlants(int offset=1 , int limit=10)
+        public async Task<IActionResult> GetAllPlants(int plantTypeId, int offset=1 , int limit=10)
         {
-            var plantsDto = _mapper.Map<List<PlantDto>>(await _plantRepository.GetAllPlantsAsync(offset,limit));
+            var plantsDto = _mapper.Map<List<PlantDto>>(await _plantRepository.GetAllPlantsAsync(plantTypeId, offset,limit));
             return Ok(new  {Plant = plantsDto.Take(limit).ToList(),NextPage = limit < plantsDto.Count ?offset+1:0 });
         }
         [HttpGet("GetPlantById/{id}")]
@@ -41,14 +41,6 @@ namespace FIHS.Controllers
         {
             var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByIdAsync(id));
             return plantDto == null ?   NotFound() : Ok(plantDto);
-        }
-        [HttpGet("GetPlantByName/{name}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetPlantByName(string name)
-        {
-            var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByNameAsync(name));
-            return  Ok(plantDto);
         }
 
         [HttpPost("AddPlant")]

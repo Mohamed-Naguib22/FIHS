@@ -16,6 +16,8 @@ namespace FIHS.Models.PlantModels
         public int? Id { get; set; }
         [Required,MaxLength(50),MinLength(2)]
         public string Name { get; set; }
+        [Required, MaxLength(50), MinLength(2)]
+        public string ScientificName { get; set; }
         [Required, MaxLength(516), MinLength(5)]
         public string Description { get; set; }
         [Required, MaxLength(50),MinLength(2)]
@@ -28,8 +30,10 @@ namespace FIHS.Models.PlantModels
         public double AverageYield { get; set; }
         [Required, MaxLength(128), MinLength(2)]
         public string SunlightReqs { get; set; }
-        [Required]
-        public double IrrigationReqs { get; set; }
+        [Required, MaxLength(128), MinLength(2)]
+        public string IrrigationReqs { get; set; }
+        [Required, MaxLength(128), MinLength(2)]
+        public string Temperature { get; set; }
         [Required, MaxLength(128), MinLength(2)]
         public string PlantingSeason { get; set; }
         [Required, MaxLength(128), MinLength(2)]
