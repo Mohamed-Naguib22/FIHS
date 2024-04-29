@@ -17,9 +17,9 @@ namespace FIHS.Services.PlantTypeServices
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PlantTypeDto>> GetAllPlantTypesAsync()
+        public async Task<IEnumerable<PlantTypeDto>> GetAllPlantTypesAsync(int offset = 1, int limit = 10)
         {
-            return  _mapper.Map<IEnumerable<PlantTypeDto>>(await _context.PlantTypes.ToListAsync());
+            return  _mapper.Map<IEnumerable<PlantTypeDto>>(await _context.PlantTypes.Skip((offset - 1) * limit).Take(offset * (limit + 1)).ToListAsync());
         }
 
         public async Task<PlantTypeDto> GetPlantTypeByNameAsync(string plantTypeName)

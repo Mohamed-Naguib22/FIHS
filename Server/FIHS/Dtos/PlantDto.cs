@@ -3,6 +3,7 @@ using FIHS.Dtos.PestDto;
 using FIHS.Models.PlantModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FIHS.Dtos
 {
@@ -26,6 +27,7 @@ namespace FIHS.Dtos
             public string HarvistingSeason { get; set; }
             public string CulivationTips { get; set; }
             public string ImageUrl { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
             public string Message { get; set; } = string.Empty;
             public ICollection<PlantTypeDto> PlantTypes { get; set; }
             public ICollection<SoilDto> Soils { get; set; }

@@ -1,4 +1,5 @@
 ﻿using FIHS.Interfaces.IPlantType;
+using FIHS.Models.PlantModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +16,10 @@ namespace FIHS.Controllers
             _plantType = plantType;
         }
         [HttpGet("GetAllPlantTypes")]
-        public async Task<IActionResult> GetAllPlantTypes()
+        public async Task<IActionResult> GetAllPlantTypes(int offset = 1, int limit = 10)
         {
-            
-            return Ok(await _plantType.GetAllPlantTypesAsync());
+            var plantTypes = await _plantType.GetAllPlantTypesAsync(offset, limit);
+            return Ok(new { PlantTypes = plantTypes.Take(limit).ToList(),NextPage = limit < plantTypes.Count() ? offset + 1 : 0 });
         }
         [HttpGet("GetPlantTypeByName/{PlantTypeName}")]
         public async Task<IActionResult> GetPlantTypeByName(string PlantTypeName)
