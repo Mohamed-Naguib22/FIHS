@@ -1,0 +1,2764 @@
+{
+	"info": {
+		"_postman_id": "0b337335-b5a7-4b10-ac59-8f55484b1dc5",
+		"name": "FIHS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26537505",
+		"_collection_link": "https://cloudy-capsule-811517.postman.co/workspace/Team-Workspace~820eb23e-b3c8-40b5-81b7-f8d78d05ed68/collection/23324925-0b337335-b5a7-4b10-ac59-8f55484b1dc5?action=share&source=collection_link&creator=26537505"
+	},
+	"item": [
+		{
+			"name": "External APIs",
+			"item": [
+				{
+					"name": "Weather",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/WeatherForecast/get-forecast?city=cairo",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"WeatherForecast",
+								"get-forecast"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "cairo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Identify Plant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imgFile",
+									"type": "file",
+									"src": "/C:/Naguib/Test Cases/plant_test1.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/PlantId/identify-plant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"PlantId",
+								"identify-plant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detect Disease",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imgFile",
+									"type": "file",
+									"src": "/C:/Naguib/Test Cases/health_test4.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/PlantId/detect-disease",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"PlantId",
+								"detect-disease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ask ChatGPT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIiLCJqdGkiOiIzODQ0YTUzNy1lNGIxLTQzMWQtYjI3ZS05ZGM5NmVlNjZmYTkiLCJlbWFpbCI6Im1vaGFtZWRuYWdlYjIwMTcyQGdtYWlsLmNvbSIsInVpZCI6IjRhZTZlMGFhLTkxYTYtNGNkOS1hYTE5LWFmOTVhMWUwODA4NSIsInJvbGVzIjoiVXNlciIsImV4cCI6MTcwNTgzNjI1MSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.RwWp75FRqT1zbPzi8R5rRILRhmQwT7bRkAiD2zNc-io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "question",
+									"value": "",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://192.168.1.11:7184/api/Chatbot/Gemini",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"11"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Chatbot",
+								"Gemini"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\": \"mohamednaguib20220@gmail.com\",\r\n    \"Password\": \"A1692002a@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\": \"mohamednaguib20220@gmail.com\",\r\n    \"FirstName\": \"Mohamed\",\r\n    \"LastName\": \"Naguib\",\r\n    \"password\": \"M1692002m@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"mohamednaguib20220@gmail.com\",\r\n    \"verificationCode\" : \"256473\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/verify-account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"verify-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Verification Code",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"mohamednaguib20220@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/resend-verification-code?email=mohamednaguib20220@gmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"resend-verification-code"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "mohamednaguib20220@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forget Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"mohamednaguib20220@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/forget-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"forget-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIiLCJqdGkiOiI2NmE1Njk2ZC1iM2NlLTQ0MjAtOGVlMy03YWZlYjNiNmVkYjciLCJlbWFpbCI6Im1vaGFtZWRuYWdlYjIyQGdtYWlsLmNvbSIsInVpZCI6ImIwZGUwYTg3LTQ1MTMtNDk2ZS1hMWRhLWRlNWU4MDgyMDE2NyIsInJvbGVzIjoiVXNlciIsImV4cCI6MTY5ODg0NTE2MSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.jZ0Qrkt-2le88WMeWPQfzS3iW6ckEzKDTxVCfse_OfI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"mohamednaguib20220@gmail.com\",\r\n    \"newPassword\": \"A1692002a@\",\r\n    \"code\":\"980157\",\r\n    \"token\": \"CfDJ8D1g48L8yZNPvHCCxRYDzyFVV/4IKNj3KGqDcuZJPe73+LTiNdjZaPaoInpMac8uES0/wtf6gHhpBKgdRHGGMou2KSahF0fwaaVzqEnO93ESiNvVUA7p3ZEq4UgaffT7ZRnCmNrFOjNBmgbnKq7NX5RTvpRLWngpQWF3XIwdADzWl5k4cjAl18cnY4OUjPye2WO3UtfxDh6H4GSV+cqMA9hCMPE/kVSM1N+c8e1I6jfa\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/reset-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Auth/revokeToken",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"revokeToken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":\"8759db47-cfa1-4149-a3d1-c643579303fe\",\r\n    \"Role\":\"Admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/add-role",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"add-role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/refresh-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiNjVjY2ZkYTQtNThkMy00OWQ0LTljYzUtYTRkODU3YWMxZDcwIiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiY2Y2YWY4OWUtY2FkZS00ZjM4LTljNDgtMjRjYzU0MTFkMzE1Iiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzEzNTYzNDM2LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.WJ96JknceUC8H6MpszVc-mny1bhw16rzLjO0k3LCJ3U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/User/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"User",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiMmZkZGYzYmUtOGMxYS00MjMwLWJmNTQtOTlmNjVjNDUwMDc4IiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiMzhkMzVkZDQtNmFmZi00YTUwLTgzNDktMzgyNGEwNjMzYzZiIiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzExNjYyNTY1LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.nksLt0Ezq0x4Un5NRiz7kYPX6oXYSsca1YB7QycgA8A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"محمد\",\r\n    \"lastName\": \"نجيب\",\r\n    \"phoneNumber\": \"01069083521\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/User/update-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"User",
+								"update-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiZWFlMzA0ZWQtZjM5NS00NjQ0LWI0ZmEtN2M1MDMwNzZkOTgyIiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiY2Y2YWY4OWUtY2FkZS00ZjM4LTljNDgtMjRjYzU0MTFkMzE1Iiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzEzNTYzNjU2LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.epdsGNsB9w3r9bnoV0bDpKmEJexIeO8GqpLZrWAEJgo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imgFile",
+									"type": "file",
+									"src": "/C:/Naguib/Mohamed/M.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/User/set-image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"User",
+								"set-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiZWFlMzA0ZWQtZjM5NS00NjQ0LWI0ZmEtN2M1MDMwNzZkOTgyIiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiY2Y2YWY4OWUtY2FkZS00ZjM4LTljNDgtMjRjYzU0MTFkMzE1Iiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzEzNTYzNjU2LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.epdsGNsB9w3r9bnoV0bDpKmEJexIeO8GqpLZrWAEJgo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/User/delete-image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"User",
+								"delete-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiMzUxMTFiYWItZDhjMy00NGQ2LWIxMDUtYzUyZjRjZDAzZTFkIiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiMzhkMzVkZDQtNmFmZi00YTUwLTgzNDktMzgyNGEwNjMzYzZiIiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzEzMTkwOTQzLCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.SWQEOwnWZifuCfiRoE01giIEuoyBoElPgoF4vwuQ4ZQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/User/delete-account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"User",
+								"delete-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiZTA3NWMxNmQtMWEwNy00OTY1LTkwMTMtOTA0MzVlNDY1Yzg0IiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiY2Y2YWY4OWUtY2FkZS00ZjM4LTljNDgtMjRjYzU0MTFkMzE1Iiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzEzNTYzMDUxLCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.c9dE7k2qvG4uHw-4hFvl8-OddWKcgyGiy1LhqvzODfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\": \"A1692002a@\",\r\n    \"newPassword\": \"M1692002m@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/User/change-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"User",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plant",
+			"item": [
+				{
+					"name": "GetPlantByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/GetPlantByName?name=حمراا",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"GetPlantByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "حمراا"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPlants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/GetAllPlants",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"GetAllPlants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllSoils",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/AllSoils",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"AllSoils"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPlantTypes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/AllPlantTypes",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"AllPlantTypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPlantById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/GetPlantById?id=1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"GetPlantById"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Plant",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/DeletePlant/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"DeletePlant",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Plant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Name",
+									"value": "يشسييشسي",
+									"type": "text"
+								},
+								{
+									"key": "Description",
+									"value": "شسيشسيشسي",
+									"type": "text"
+								},
+								{
+									"key": "CommonUses",
+									"value": "يبليلب",
+									"type": "text"
+								},
+								{
+									"key": "NutritionalValue",
+									"value": "شسييشسي",
+									"type": "text"
+								},
+								{
+									"key": "AverageYield",
+									"value": "20",
+									"type": "text"
+								},
+								{
+									"key": "SunlightReqs",
+									"value": "شسيشسي",
+									"type": "text"
+								},
+								{
+									"key": "IrrigationReqs",
+									"value": "20",
+									"type": "text"
+								},
+								{
+									"key": "PlantingSeason",
+									"value": "شسيشسي",
+									"type": "text"
+								},
+								{
+									"key": "HarvistingSeason",
+									"value": "شسيشسي",
+									"type": "text"
+								},
+								{
+									"key": "CulivationTips",
+									"value": "سترنج",
+									"type": "text"
+								},
+								{
+									"key": "ImgFile",
+									"type": "file",
+									"src": "/C:/Users/mozam/Pictures/Screenshots/Screenshot (8).png"
+								},
+								{
+									"key": "PlantTypesId",
+									"value": "1",
+									"description": "can be assigned repeatedly",
+									"type": "text"
+								},
+								{
+									"key": "PlantTypesId",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "SoilsId",
+									"value": "1",
+									"description": "can be assigned repeatedly",
+									"type": "text"
+								},
+								{
+									"key": "SoilIsId",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/AddPlant",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"AddPlant"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Article",
+			"item": [
+				{
+					"name": "Get All Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7184/api/Article/get-all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"get-all"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Article",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7184/api/Article/get/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"get",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7184/api/Article/search?query=ر",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"search"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "query",
+									"value": "ر"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Title",
+									"value": "الزراعة المائية في الإمارات",
+									"type": "text"
+								},
+								{
+									"key": "Overview",
+									"value": "الزراعة المائية هي تقنية لنمو النباتات في المحاليل المغذية التي تمد النبات بكل ما يحتاجه من العناصر المغذية الضرورية للنمو المثالي، وتُطَبق على زراعة الخضروات ذات المد الجذري الملائم. وتُستعمل نفس المياه لري المزروعات لأكثر من مرة، مما يعمل على توفير كبير في مياه السقي. أي أنَّ التقنية تستغني عن وجود التربة، فعمل التربة يقتصر على كونها مستودعاً يخزن المغذيات المعدنية وهي نفسها غير ضرورية لنمو النبات.",
+									"type": "text"
+								},
+								{
+									"key": "Author",
+									"value": "ليلى صالح العلي",
+									"type": "text"
+								},
+								{
+									"key": "PublicationDate",
+									"value": "2017-02-7",
+									"type": "text"
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Naguib/agi-3.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Article/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Tag",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIyMiIsImp0aSI6ImZhNGNjZjY3LTk0YWYtNGFiNy1iYWNjLWVmY2VhMzNjNGU3OSIsImVtYWlsIjoibW9oYW1lZG5hZ2ViMjAxNzJAZ21haWwuY29tIiwidWlkIjoiMzIwODcyYWYtYjk4NS00YTBjLTliY2YtMmMxYjUyODE1MDc3Iiwicm9sZXMiOlsiQWRtaW4iLCJVc2VyIl0sImV4cCI6MTcwNzk0Njk2NCwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.L4YO0lo73HzgEbFxbeB4NHPLbHe3zASjRw-bow7FXI4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tag\": \"ري\",\r\n    \"articleId\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Article/add-tag",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"add-tag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Section",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiYmExNzIxZGUtNWY5MC00ZTNlLTg2NjEtODM0OTc4OTg3YzZlIiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiYzRmMjI2YWUtYjhmNS00NTk5LWJlZTItNjM4YWUwZjNhZWJkIiwicm9sZXMiOlsiQWRtaW4iLCJVc2VyIl0sImV4cCI6MTcwOTUwNzM1MSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.tqy74QDw2PzMK3wjUw56mely5jCOJqPrCplEClRw0zc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"مزارع الإمارات المائية للخضار\",\r\n    \"content\": \"تقع هذه المزارع التي تأسست في العام 2005 على الطريق بين دبي وأبوظبي، والبداية كانت مع 1000 متر مربع، وتمكنت من زراعة المنتجات على مدار السنة. وبعد إطلاق أول إنتاج، أجريت العديد من الدراسات والبحوث التطويرية وتوسّعت إلى 20000 متر مربع. وتستخدم المزرعة تقنية «أن ف تيNFT » الذي هو عبارة عن نظام من المواسير سهل الاستخدام لا يحتاج سوى إلى خزان ماء وأنابيب صغيرة وأنبوب للتغذية ومضخّة تساعد على توصيل الماء إلى النبات.\",\r\n    \"articleId\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Article/add-section",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"add-section"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIiLCJqdGkiOiJmZDM3YjZkZi1jMzE1LTQ3MjEtOWI4MC04MTc1YWNjODA4ZmQiLCJlbWFpbCI6Im1vaGFtZWRuYWdlYjIwMTcyQGdtYWlsLmNvbSIsInVpZCI6Ijg5NjhmOWIwLTI2MTMtNGFkMi04ZGE4LTdkODRhODM3NmU1OCIsInJvbGVzIjoiVXNlciIsImV4cCI6MTcwNjAzMjE0OSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.PlSsiOsUOq-48UQFYZihloIG8XsV4zNzxDxVht_qPD0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Overview",
+									"value": "mohamed",
+									"type": "text"
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Naguib/Back grounds/1041621.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Article/update/2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"update",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Section",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIiLCJqdGkiOiJmZDM3YjZkZi1jMzE1LTQ3MjEtOWI4MC04MTc1YWNjODA4ZmQiLCJlbWFpbCI6Im1vaGFtZWRuYWdlYjIwMTcyQGdtYWlsLmNvbSIsInVpZCI6Ijg5NjhmOWIwLTI2MTMtNGFkMi04ZGE4LTdkODRhODM3NmU1OCIsInJvbGVzIjoiVXNlciIsImV4cCI6MTcwNjAzMjE0OSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.PlSsiOsUOq-48UQFYZihloIG8XsV4zNzxDxVht_qPD0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Content",
+									"value": "Test Test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Article/update-section/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"update-section",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiYmExNzIxZGUtNWY5MC00ZTNlLTg2NjEtODM0OTc4OTg3YzZlIiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiYzRmMjI2YWUtYjhmNS00NTk5LWJlZTItNjM4YWUwZjNhZWJkIiwicm9sZXMiOlsiQWRtaW4iLCJVc2VyIl0sImV4cCI6MTcwOTUwNzM1MSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.tqy74QDw2PzMK3wjUw56mely5jCOJqPrCplEClRw0zc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7184/api/Article/delete/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tag",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIyMiIsImp0aSI6ImIwMGUxNjU0LTFlZTEtNDhkNy1hODBhLTA5MjczMTkwY2U4ZiIsImVtYWlsIjoibW9oYW1lZG5hZ2ViMjAxNzJAZ21haWwuY29tIiwidWlkIjoiMzIwODcyYWYtYjk4NS00YTBjLTliY2YtMmMxYjUyODE1MDc3Iiwicm9sZXMiOlsiQWRtaW4iLCJVc2VyIl0sImV4cCI6MTcwNzg1NTE4NCwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.vuj37q0ulSP7yYWNDNPlo4V0VVBn2icRgxZC20bHOks",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Article/delete-tag/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"delete-tag",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Section",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Article/delete-section/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"delete-section",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Like",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiZTA3NWMxNmQtMWEwNy00OTY1LTkwMTMtOTA0MzVlNDY1Yzg0IiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiY2Y2YWY4OWUtY2FkZS00ZjM4LTljNDgtMjRjYzU0MTFkMzE1Iiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzEzNTYzMDUxLCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.c9dE7k2qvG4uHw-4hFvl8-OddWKcgyGiy1LhqvzODfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7184/api/Article/like/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"like",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Like",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwianRpIjoiZGJmNWVjMTMtZjEwYy00MDlkLTk1YTMtYzkyYjIzMmU2ZGRiIiwiZW1haWwiOiJtb2hhbWVkbmFndWliMjAyMjBAZ21haWwuY29tIiwidWlkIjoiOTVmN2EyYTQtMDRlZC00YTBjLTk1MDItZDk1ZmJmMzczYTMyIiwicm9sZXMiOiJVc2VyIiwiZXhwIjoxNzA5Njc3MzQ5LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0._vzfVnAyjJiqmlnWIrESYzNs-OktAsuuGPWmIaNnUu8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7184/api/Article/remove-like/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Article",
+								"remove-like",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fertilizer",
+			"item": [
+				{
+					"name": "Get All Fertilizers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Fertilizer",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Fertilizer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fertilizer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Fertilizer/GetByName?name=p",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Fertilizer",
+								"GetByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "p"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Fertilizer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Name",
+									"value": "FIHS",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "3000",
+									"type": "text"
+								},
+								{
+									"key": "ImageURL",
+									"type": "file",
+									"src": "/C:/Naguib/Back grounds/bb.jpg"
+								},
+								{
+									"key": "UsageInstructions",
+									"value": "Take care",
+									"type": "text"
+								},
+								{
+									"key": "Manufactuer",
+									"value": "FIHS",
+									"type": "text"
+								},
+								{
+									"key": "NutrientContent",
+									"value": "Very healthy",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Fertilizer",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Fertilizer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Fertilizer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIiLCJqdGkiOiJmZDM3YjZkZi1jMzE1LTQ3MjEtOWI4MC04MTc1YWNjODA4ZmQiLCJlbWFpbCI6Im1vaGFtZWRuYWdlYjIwMTcyQGdtYWlsLmNvbSIsInVpZCI6Ijg5NjhmOWIwLTI2MTMtNGFkMi04ZGE4LTdkODRhODM3NmU1OCIsInJvbGVzIjoiVXNlciIsImV4cCI6MTcwNjAzMjE0OSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.PlSsiOsUOq-48UQFYZihloIG8XsV4zNzxDxVht_qPD0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Overview",
+									"value": "mohamed",
+									"type": "text"
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Naguib/Back grounds/1041621.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Fertilizer/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Fertilizer",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Fertilizer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Fertilizer/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Fertilizer",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pesticide",
+			"item": [
+				{
+					"name": "Get All Pesticides",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Pesticide",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pesticide"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pesticide",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Pesticide/GetByName?name=م",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pesticide",
+								"GetByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "م"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Pesticide",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Name",
+									"value": "FIHS",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "3000",
+									"type": "text"
+								},
+								{
+									"key": "ImageURL",
+									"type": "file",
+									"src": "/C:/Naguib/Back grounds/bb.jpg"
+								},
+								{
+									"key": "UsageInstructions",
+									"value": "Take care",
+									"type": "text"
+								},
+								{
+									"key": "Manufactuer",
+									"value": "FIHS",
+									"type": "text"
+								},
+								{
+									"key": "NutrientContent",
+									"value": "Very healthy",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Pesticide",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Pesticide"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pesticide",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb2hhbWVkbmFnZWIiLCJqdGkiOiJmZDM3YjZkZi1jMzE1LTQ3MjEtOWI4MC04MTc1YWNjODA4ZmQiLCJlbWFpbCI6Im1vaGFtZWRuYWdlYjIwMTcyQGdtYWlsLmNvbSIsInVpZCI6Ijg5NjhmOWIwLTI2MTMtNGFkMi04ZGE4LTdkODRhODM3NmU1OCIsInJvbGVzIjoiVXNlciIsImV4cCI6MTcwNjAzMjE0OSwiaXNzIjoiU2VjdXJlQXBpIiwiYXVkIjoiU2VjdXJlQXBpVXNlciJ9.PlSsiOsUOq-48UQFYZihloIG8XsV4zNzxDxVht_qPD0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Overview",
+									"value": "mohamed",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Naguib/Back grounds/1041621.jpg",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7153/api/Pesticide/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pesticide",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Pesticide",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Pesticide/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pesticide",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "APIs",
+			"item": [
+				{
+					"name": "Detect Disease",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Api-Key",
+								"value": "vkwFxjVRCr8BmosOA9S0gDcFPpJf4vGj4wvHrUgNqF54VLU6ZY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Naguib/Test Cases/health_test3.jpeg"
+								},
+								{
+									"key": "disease_details",
+									"value": "[\"description\", \"treatment\", \"common_names\", \"url\", \"classification\"]",
+									"type": "text"
+								},
+								{
+									"key": "language",
+									"value": "ar",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://plant.id/api/v2/health_assessment",
+							"protocol": "https",
+							"host": [
+								"plant",
+								"id"
+							],
+							"path": [
+								"api",
+								"v2",
+								"health_assessment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Identify Plant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Api-Key",
+								"value": "vkwFxjVRCr8BmosOA9S0gDcFPpJf4vGj4wvHrUgNqF54VLU6ZY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Naguib/Test Cases/plant_test3.jpg"
+								},
+								{
+									"key": "plant_details",
+									"value": "[\"common_names\", \"url\", \"wiki_description\",\"taxonomy\", \"wiki_image\"]",
+									"type": "text"
+								},
+								{
+									"key": "plant_language",
+									"value": "ar",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://plant.id/api/v2/identify",
+							"protocol": "https",
+							"host": [
+								"plant",
+								"id"
+							],
+							"path": [
+								"api",
+								"v2",
+								"identify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Weather",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "api.openweathermap.org/data/2.5/weather?q=القاهرة&appid=623c868fbd60076c9a7c81172eefdd43&units=metric",
+							"host": [
+								"api",
+								"openweathermap",
+								"org"
+							],
+							"path": [
+								"data",
+								"2.5",
+								"weather"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "القاهرة"
+								},
+								{
+									"key": "appid",
+									"value": "623c868fbd60076c9a7c81172eefdd43"
+								},
+								{
+									"key": "lang",
+									"value": "ar",
+									"disabled": true
+								},
+								{
+									"key": "units",
+									"value": "metric"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recommend Crops",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"N\":\"90\",\r\n    \"P\":\"42\",\r\n    \"K\":\"43\",\r\n    \"ph\":\"6.5\",\r\n    \"rainfall\":\"202\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/recommend",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"recommend"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pest",
+			"item": [
+				{
+					"name": "AddPest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Species",
+									"value": "افة",
+									"type": "text"
+								},
+								{
+									"key": "Name",
+									"value": "جراد",
+									"type": "text"
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Naguib/images.jpeg"
+								},
+								{
+									"key": "DamageSymptoms",
+									"value": "تحدث ثقوب في السيقان وتدهور النبات",
+									"type": "text"
+								},
+								{
+									"key": "ControlMethods",
+									"value": "استخدام مبيدات حشرية وتفقد منتظم للحد من الإصابة",
+									"type": "text"
+								},
+								{
+									"key": "Description",
+									"value": "ثاقبة السيقان هي حشرة تخترق النباتات وتسبب ضرراً جسيماً.",
+									"type": "text"
+								},
+								{
+									"key": "LifeCycle",
+									"value": "تشمل مراحل البيض واليرقات والعذارى والحشرة الكاملة",
+									"type": "text"
+								},
+								{
+									"key": "GeographicDistribution",
+									"value": "تنتشر في المناطق الزراعية حول العالم",
+									"type": "text"
+								},
+								{
+									"key": "Reproduction",
+									"value": "تتكاثر ثاقبة السيقان بواسطة وضع البيض ونمو اليرقات",
+									"type": "text"
+								},
+								{
+									"key": "ScientificName",
+									"value": "Cimex lectularius",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:7184/api/Pest/AddPest",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Pest",
+								"AddPest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7184/api/Pest/GetAllPests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Pest",
+								"GetAllPests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Pest/SearchForPestByName/ال",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pest",
+								"SearchForPestByName",
+								"ال"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Pest/GetPestByName/دودة القارضة",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pest",
+								"GetPestByName",
+								"دودة القارضة"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePest",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Species",
+									"value": "افه",
+									"type": "text"
+								},
+								{
+									"key": "Name",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "DamageSymptoms",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "ControlMethods",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "Description",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "LifeCycle",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "GeographicDistribution",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "Reproduction",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7153/api/Pest/UpdatePest/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pest",
+								"UpdatePest",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePest",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Pest/DeletePest/12",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Pest",
+								"DeletePest",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/pest/getpestbyid/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"pest",
+								"getpestbyid",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Disease",
+			"item": [
+				{
+					"name": "AddDisease",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Name",
+									"value": "تساقط الثمار المبكرk",
+									"type": "text"
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Users/alaay/Downloads/Images/0d3a62ec-ac83-4879-abe6-5addcf169c86.jpeg"
+								},
+								{
+									"key": "Description",
+									"value": "تساقط الثمار المبكر يحدث عندما تسقط الثمار قبل أن تكتمل نموها بشكل كامل.",
+									"type": "text"
+								},
+								{
+									"key": "Treatments",
+									"value": "توفير العناية الكاملة للنبات، استخدام الأسمدة المتوازنة",
+									"type": "text"
+								},
+								{
+									"key": "Symptoms",
+									"value": "تساقط الثمار دون نضج كامل، قد تظهر بقع بنية على الثمار",
+									"type": "text"
+								},
+								{
+									"key": "PreventionMethods",
+									"value": "توفير الري الكافي، مراقبة الظروف البيئية",
+									"type": "text"
+								},
+								{
+									"key": "Species",
+									"value": "flsklfndlfsn",
+									"type": "text"
+								},
+								{
+									"key": "Causes",
+									"value": "sfdpk;sfdlm",
+									"type": "text"
+								},
+								{
+									"key": "ScientificName",
+									"value": "fsdlnfslkdnf",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7153/api/Disease/AddDisease",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Disease",
+								"AddDisease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllDiseases",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Disease/GetAllDiseases",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Disease",
+								"GetAllDiseases"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44360/api/Disease/SearchForDiseaseByName/الص",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44360",
+							"path": [
+								"api",
+								"Disease",
+								"SearchForDiseaseByName",
+								"الص"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44360/api/Disease/GetDiseaseByName/الصدأ",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44360",
+							"path": [
+								"api",
+								"Disease",
+								"GetDiseaseByName",
+								"الصدأ"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateDisease",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Name",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "Description",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "Treatments",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "Symptoms",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "PreventionMethods",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "Species",
+									"value": ".1",
+									"type": "text"
+								},
+								{
+									"key": "Causes",
+									"value": ".1",
+									"type": "text"
+								},
+								{
+									"key": "ScientificName",
+									"value": ".1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7153/api/Disease/UpdateDisease/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Disease",
+								"UpdateDisease",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteDisease",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7153/api/Disease/DeleteDisease/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7153",
+							"path": [
+								"api",
+								"Disease",
+								"DeleteDisease",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44360/api/disease/getdiseasebyid/4",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44360",
+							"path": [
+								"api",
+								"disease",
+								"getdiseasebyid",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PlantType",
+			"item": [
+				{
+					"name": "GetPlantTypeByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/GetPlantByName?name=حمراا",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"GetPlantByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "حمراا"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPlantTypes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7184/api/Plant/GetAllPlants",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7184",
+							"path": [
+								"api",
+								"Plant",
+								"GetAllPlants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"\": \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://eapi.phone.email/send-sms",
+					"protocol": "https",
+					"host": [
+						"eapi",
+						"phone",
+						"email"
+					],
+					"path": [
+						"send-sms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Articles API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://serpapi.com/search?engine=google_scholar&q=زراعة&hl=ar&api_key=2a3680a66fc469f04c79ff8d1cc6c05ac79d242e995ee933afa493fb3aaf4586",
+					"protocol": "https",
+					"host": [
+						"serpapi",
+						"com"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "engine",
+							"value": "google_scholar"
+						},
+						{
+							"key": "q",
+							"value": "زراعة"
+						},
+						{
+							"key": "hl",
+							"value": "ar"
+						},
+						{
+							"key": "api_key",
+							"value": "2a3680a66fc469f04c79ff8d1cc6c05ac79d242e995ee933afa493fb3aaf4586"
+						},
+						{
+							"key": "output",
+							"value": "html",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Geminin API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"contents\":[\r\n      { \"parts\":[{\"text\": \"اهلا\"}]}\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=AIzaSyB5cbRMsCvIBHFqAIKi_6-1sNNf15jjE7U",
+					"protocol": "https",
+					"host": [
+						"generativelanguage",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"v1",
+						"models",
+						"gemini-pro:generateContent"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						},
+						{
+							"key": "key",
+							"value": "AIzaSyB5cbRMsCvIBHFqAIKi_6-1sNNf15jjE7U"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crop recommedation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"N\": 200,\r\n    \"P\": 40,\r\n    \"K\": 20,\r\n    \"rainfall\": 200,\r\n    \"ph\": 5,\r\n    \"city\": \"القاهرة\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/recommend",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"recommend"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
