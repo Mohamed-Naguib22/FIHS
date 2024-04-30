@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using RestSharp;
 using FIHS.Interfaces.IPlantId;
 using FIHS.Dtos.PlantIdDtos;
+using FIHS.Models.ArticleModels;
+using FIHS.Dtos.ArticleDtos;
 
 namespace FIHS.Services.PlantIdServices
 {
@@ -19,16 +21,19 @@ namespace FIHS.Services.PlantIdServices
         {
             _configuration = configuration;
         }
-        public async Task<PlantIdentificationDto> Identify(IFormFile imageFile)
+        public async Task<PlantIdentificationDto> IdentifyPlantAsync(IFormFile imageFile)
         {
-            var API_KEY = _configuration["ApiKeys:PlantId"];
+            var apiKey = _configuration["ApiKeys:PlantId"];
+            
+            if (apiKey == null)
+                return new PlantIdentificationDto { Message = "API key required", Succeeded = false };
 
             var imgBased64 = Base64EncodeFromFormFile(imageFile);
 
             var client = new RestClient(API_URL + "identify");
             var request = new RestRequest(Method.POST);
 
-            request.AddHeader("Api-Key", API_KEY);
+            request.AddHeader("Api-Key", apiKey);
 
             var requestBody = new
             {
@@ -39,37 +44,48 @@ namespace FIHS.Services.PlantIdServices
 
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
-
-            var response = await client.ExecuteAsync(request);
-
-            if (!response.IsSuccessful)
-                return new PlantIdentificationDto { Succeeded = false, Message = "حدث خطأ ما" };
-
-            var content = JsonConvert.DeserializeObject<JToken>(response.Content)?.ToObject<PlantIdentificationResponse>();
-
-            if (content == null)
-                return new PlantIdentificationDto { Succeeded = false, Message = "حدث خطأ ما" };
-
-
-            if (!content.Is_plant)
-                return new PlantIdentificationDto { Succeeded = false, Message = "ليس نباتا" };
-
-            var plantDetails = content.Suggestions?[0].Plant_details ?? null;
-
-            var plant = new PlantIdentificationDto
+            
+            try
             {
-                Name = plantDetails?.Common_names?[0],
-                ScientificName = plantDetails?.Scientific_name,
-                Description = plantDetails?.Wiki_description?.Value,
-                ImageUrl = plantDetails?.Wiki_image?.Value,
-                WikiUrl = plantDetails?.Wiki_description?.citation,
-                Taxonomy = plantDetails?.Taxonomy,
-                Succeeded = true
-            };
+                var response = await client.ExecuteAsync(request);
 
-            return plant;
+                if (!response.IsSuccessful)
+                    return new PlantIdentificationDto { Message = $"Error Identifing the plant: {response.StatusCode}", Succeeded = false };
+
+                var content = JsonConvert.DeserializeObject<JToken>(response.Content)?.ToObject<PlantIdentificationResponse>();
+
+                if (content == null)
+                    return new PlantIdentificationDto { Message = "JSON Serialization Error", Succeeded = false };
+
+                if (!content.Is_plant)
+                    return new PlantIdentificationDto { Succeeded = false, Message = "الرجاء ادخال صورة نبات" };
+
+                var suggestions = content.Suggestions.Take(3)
+                    ?.Select(suggestion => new SuggestionDto
+                    {
+                        CommonNames = suggestion.Plant_details?.Common_names,
+                        Probability = suggestion.Probability,
+                        Confirmed = suggestion.Confirmed,
+                        ScientificName = suggestion.Plant_details?.Scientific_name,
+                        Description = suggestion.Plant_details?.Wiki_description?.Value,
+                        ImageUrl = suggestion.Plant_details?.Wiki_image?.Value,
+                        WikiUrl = suggestion.Plant_details?.Wiki_description?.citation,
+                        Taxonomy = suggestion.Plant_details?.Taxonomy,
+                    }).ToList();
+
+                return new PlantIdentificationDto { Succeeded = true, Suggestions = suggestions };
+            }
+            catch (HttpRequestException ex)
+            {
+                return new PlantIdentificationDto { Message = $"Error Identifing the plant: {ex.Message}", Succeeded = false };
+            }
+            catch (JsonSerializationException ex)
+            {
+                return new PlantIdentificationDto { Message = $"JSON Serialization Error: {ex.Message}", Succeeded = false };
+            }
         }
-        public async Task<HealthAssessmentDto> DetectDisease(IFormFile imageFile)
+
+        public async Task<HealthAssessmentDto> DetectDiseaseAsync(IFormFile imageFile)
         {
             var API_KEY = _configuration["ApiKeys:PlantId"];
 
@@ -89,36 +105,49 @@ namespace FIHS.Services.PlantIdServices
 
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
-
-            var response = await client.ExecuteAsync(request);
-
-            if (!response.IsSuccessful)
-                return new HealthAssessmentDto { Succeeded = false, Message = "حدث خطأ ما" };
-
-            var content = JsonConvert.DeserializeObject<JToken>(response.Content)?.ToObject<HealthAssessmentResponse>();
-
-            if (content == null)
-                return new HealthAssessmentDto { Succeeded = false, Message = "حدث خطأ ما" };
-
-            if (!content.Is_plant)
-                return new HealthAssessmentDto { Succeeded = false, Message = "ليس نباتا" };
-
-            var predictedDisease = content.Health_assessment.Diseases?[0];
-            var diseaseDetails = predictedDisease?.Disease_details;
-
-            var disease = new HealthAssessmentDto
+            
+            try
             {
-                Name = diseaseDetails?.Local_name,
-                ScientificName = predictedDisease?.Name,
-                Url = diseaseDetails?.Url,
-                Description = diseaseDetails?.Description,
-                Treatment = diseaseDetails?.Treatment,
-                Classification = diseaseDetails?.Classification,
-                IsHealthy = content.Health_assessment.Is_healthy,
-                Succeeded = true
-            };
+                var response = await client.ExecuteAsync(request);
 
-            return disease;
+                if (!response.IsSuccessful)
+                    return new HealthAssessmentDto { Message = $"Error detecting the disease: {response.StatusCode}", Succeeded = false };
+
+                var content = JsonConvert.DeserializeObject<JToken>(response.Content)?.ToObject<HealthAssessmentResponse>();
+
+                if (content == null)
+                    return new HealthAssessmentDto { Message = "JSON Serialization Error", Succeeded = false };
+
+                if (!content.Is_plant)
+                    return new HealthAssessmentDto { Succeeded = false, Message = "الرجاء ادخال صورة نبات" };
+
+                var suggestions = content.Health_assessment.Diseases?.Take(3)
+                    ?.Select(suggestion => new DiseaseSuggestion
+                    {
+                        Name = suggestion.Disease_details?.Local_name,
+                        Probability = suggestion.Probability,
+                        ScientificName = suggestion.Name,
+                        Description = suggestion.Disease_details?.Description,
+                        Treatment = suggestion.Disease_details?.Treatment,
+                        Classification = suggestion.Disease_details?.Classification,
+                    }).ToList();
+
+                return new HealthAssessmentDto
+                {
+                    IsPlant = content.Is_plant,
+                    IsHealthy = content.Health_assessment.Is_healthy,
+                    Suggestions = suggestions,
+                    Succeeded = true
+                };
+            }
+            catch (HttpRequestException ex)
+            {
+                return new HealthAssessmentDto { Message = $"Error detecting the disease: {ex.Message}", Succeeded = false };
+            }
+            catch (JsonSerializationException ex)
+            {
+                return new HealthAssessmentDto { Message = $"JSON Serialization Error: {ex.Message}", Succeeded = false };
+            }
         }
         private static string Base64EncodeFromFormFile(IFormFile file)
         {

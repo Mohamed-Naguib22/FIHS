@@ -5,7 +5,7 @@ namespace FIHS.Interfaces.IPlantId
 {
     public interface IPlantIdService
     {
-        Task<PlantIdentificationDto> Identify(IFormFile imageFile);
-        Task<HealthAssessmentDto> DetectDisease(IFormFile imageFile);
+        Task<PlantIdentificationDto> IdentifyPlantAsync(IFormFile imageFile);
+        Task<HealthAssessmentDto> DetectDiseaseAsync(IFormFile imageFile);
     }
 }
