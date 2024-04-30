@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 appsettings.json
-Server/FIHS/Properties/launchSettings.json
+Properties/launchSettings.json
 # .gitignore
 
 # Python
