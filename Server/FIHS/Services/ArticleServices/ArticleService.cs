@@ -6,6 +6,9 @@ using FIHS.Interfaces.IArticle;
 using FIHS.Extensions;
 using FIHS.Dtos;
 using FIHS.Interfaces.IUser;
+using Newtonsoft.Json;
+using RestSharp;
+using Newtonsoft.Json.Linq;
 
 namespace FIHS.Services.ArticleService
 {
@@ -15,13 +18,65 @@ namespace FIHS.Services.ArticleService
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        public ArticleService(IArticleRepository articleRepository,
+        private readonly IConfiguration _configuration;
+        private const string API_URL = "https://serpapi.com/search";
+        public ArticleService(IArticleRepository articleRepository, IConfiguration configuration,
             IImageService imageService, IMapper mapper, ITokenService tokenService)
         {
+            _configuration = configuration;
             _imageService = imageService;
             _articleRepository = articleRepository;
             _mapper = mapper;
             _tokenService = tokenService;
+        }
+
+        public async Task<GetArticlesDto> ArticlesApi(string topic)
+        {
+            var apiKey = _configuration["ApiKeys:SerpApi"];
+
+            if (apiKey == null)
+                return new GetArticlesDto { Message = "API key required", Succeeded = false };
+
+            var client = new RestClient(API_URL);
+            var request = new RestRequest(Method.GET);
+
+            request.AddParameter("engine", "google_scholar");
+            request.AddParameter("q", topic);
+            request.AddParameter("api_key", apiKey);
+            request.AddParameter("hl", "ar");
+            request.AddParameter("num", 10);
+
+            try
+            {
+                var response = await client.ExecuteAsync(request);
+
+                if (!response.IsSuccessful)
+                    return new GetArticlesDto { Message = $"Error fetching articles: {response.StatusCode}", Succeeded = false };
+                
+                var content = JsonConvert.DeserializeObject<JToken>(response.Content)?.ToObject<ArticlesResponseDto>();
+
+                if (content == null)
+                    return new GetArticlesDto { Message = "JSON Serialization Error", Succeeded = false };
+
+                var articles = content.Organic_results?.Select(result => new ArticleApiModel
+                {
+                    Title = result.Title,
+                    Link = result.Link,
+                    Snippet = result.Snippet,
+                    Author = result.Publication_info?.Authors?.FirstOrDefault()?.Name,
+                    AuthorProfileLink = result.Publication_info?.Authors?.FirstOrDefault()?.Link
+                }).ToList();
+
+                return new GetArticlesDto { Articles = articles, Succeeded = true };
+            }
+            catch (HttpRequestException ex)
+            {
+                return new GetArticlesDto { Message = $"Error fetching articles: {ex.Message}", Succeeded = false };
+            }
+            catch (JsonSerializationException ex)
+            {
+                return new GetArticlesDto { Message = $"JSON Serialization Error: {ex.Message}", Succeeded = false };
+            }
         }
 
         public async Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> GetAllArticlesAsync(int offset, int limit)

@@ -6,6 +6,9 @@ using FIHS.Interfaces.IArticle;
 using OpenAI_API.Moderation;
 using System.Text.Json;
 using FIHS.Models.ArticleModels;
+using RestSharp;
+using Newtonsoft.Json;
+using System.Net;
 
 namespace FIHS.Controllers
 {
@@ -18,6 +21,13 @@ namespace FIHS.Controllers
         public ArticleController(IArticleService articleService)
         {
             _articleService = articleService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ArticlesApi([FromQuery] string topic)
+        {
+            var result = await _articleService.ArticlesApi(topic);
+            return result.Succeeded ? Ok(result.Articles) : StatusCode(500, result.Message);
         }
 
         [HttpGet("get-all")]
