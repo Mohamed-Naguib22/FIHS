@@ -24,9 +24,9 @@ namespace FIHS.Controllers
             if (!_allowedExtensions.Contains(Path.GetExtension(imgDto.ImgFile.FileName).ToLower()))
                 return BadRequest("نوع الملف هذا غير مسموح به");
 
-            var result = await _plantIdService.Identify(imgDto.ImgFile);
+            var result = await _plantIdService.IdentifyPlantAsync(imgDto.ImgFile);
 
-            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
+            return result.Succeeded ? Ok(result) : StatusCode(500, result.Message);
         }
 
         [HttpPost("detect-disease")]
@@ -38,10 +38,10 @@ namespace FIHS.Controllers
             if (!_allowedExtensions.Contains(Path.GetExtension(imgDto.ImgFile.FileName).ToLower()))
                 return BadRequest("نوع الملف هذا غير مسموح به");
 
-            var result = await _plantIdService.DetectDisease(imgDto.ImgFile);
+            var result = await _plantIdService.DetectDiseaseAsync(imgDto.ImgFile);
 
             if (!result.Succeeded)
-                return BadRequest(result.Message);
+                return StatusCode(500, result.Message);
 
             if (result.IsHealthy)
                 return Ok("النبات غير مصاب بامراض");

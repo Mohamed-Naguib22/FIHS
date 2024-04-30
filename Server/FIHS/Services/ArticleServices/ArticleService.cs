@@ -60,9 +60,11 @@ namespace FIHS.Services.ArticleService
 
                 var articles = content.Organic_results?.Select(result => new ArticleApiModel
                 {
+                    Position = result.Position,
                     Title = result.Title,
                     Link = result.Link,
                     Snippet = result.Snippet,
+                    ResourceLink = result.Resources?.FirstOrDefault()?.Link,
                     Author = result.Publication_info?.Authors?.FirstOrDefault()?.Name,
                     AuthorProfileLink = result.Publication_info?.Authors?.FirstOrDefault()?.Link
                 }).ToList();

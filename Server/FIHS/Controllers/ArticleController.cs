@@ -23,7 +23,7 @@ namespace FIHS.Controllers
             _articleService = articleService;
         }
 
-        [HttpGet]
+        [HttpGet("search")]
         public async Task<IActionResult> ArticlesApi([FromQuery] string topic)
         {
             var result = await _articleService.ArticlesApi(topic);
@@ -66,13 +66,13 @@ namespace FIHS.Controllers
             return result.Succeeded ? Ok(result.Message) : NotFound(result.Message);
         }
 
-        [HttpGet("search")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> SearchAsync([FromQuery] string query, [FromQuery] int offset, [FromQuery] int limit)
-        {
-            var (articles, nextPage) = await _articleService.SearchAsync(query, offset, limit);
-            return Ok(new { Articles = articles, NextPage = nextPage });
-        }
+        //[HttpGet("search")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //public async Task<IActionResult> SearchAsync([FromQuery] string query, [FromQuery] int offset, [FromQuery] int limit)
+        //{
+        //    var (articles, nextPage) = await _articleService.SearchAsync(query, offset, limit);
+        //    return Ok(new { Articles = articles, NextPage = nextPage });
+        //}
 
         [Authorize(Roles = "Admin")]
         [HttpPost("add")]
