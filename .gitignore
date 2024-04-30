@@ -4,7 +4,29 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 appsettings.json
-Server/FIHS/Properties/
+Server/FIHS/Properties/launchSettings.json
+# .gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+*.env
+
+# Editors
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
 # User-specific files
 *.rsuser
 *.suo
