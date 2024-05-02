@@ -1,0 +1,36 @@
+﻿using FIHS.Dtos.CommentDtos;
+using FIHS.Interfaces.IComment;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FIHS.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CommentController : ControllerBase
+    {
+        private readonly ICommentServices _commentServices;
+        public CommentController(ICommentServices commentServices)
+        {
+            _commentServices = commentServices;
+        }
+        [HttpPost("AddComment")]
+        public async Task<IActionResult> AddComment([FromQuery]AddCommentsDto addCommentsDto)
+        {
+             var result =   await _commentServices.AddCommentAsync(addCommentsDto);
+            return result ? Ok("تمت اضافة التعليق بنجاح") : BadRequest("حدث خطأ ما");
+        }
+        [HttpGet("GetAllComments")]
+        public async Task<IActionResult> GetAllComments( int entityId, string entityType)
+        {
+            var result = await _commentServices.GetAllEntityComments(entityId, entityType);
+            return Ok(result);
+        }
+        [HttpDelete("DeleteComment/{id}")]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            await _commentServices.DeleteCommentAsync(id);
+            return Ok();
+        }
+    }
+}
