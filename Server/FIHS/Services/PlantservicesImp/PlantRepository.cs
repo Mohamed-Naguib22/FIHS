@@ -71,6 +71,10 @@ namespace FIHS.Services.PlantservicesImp
         public async Task<IEnumerable<SoilDto>> GetAllSoils()=>
             _mapper.Map<IEnumerable<SoilDto>>(await _context.Soils.ToListAsync());
 
+        public bool IsPlantExist(int plantId) =>
+            _context.Plants.Any(p => p.Id == plantId);
+
+
         #region private methods
         private void SetPlantSoils(Plant plant, PlantInDto plantInDto)
         {
