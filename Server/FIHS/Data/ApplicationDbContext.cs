@@ -37,7 +37,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<FavouritePlant>().HasKey(fp => new { fp.PlantId, fp.FavouriteId });
         modelBuilder.Entity<PlantsPests>().HasKey(pp => new { pp.PlantId, pp.PestId });
         modelBuilder.Entity<PestsPesticides>().HasKey(pp => new { pp.PesticideId, pp.PestId });
-        /*        properties for fertilizer & pestocide*/
+        // Define foreign key relationship for Comment entity
+
 
 
         modelBuilder.Entity<Pesticide>().HasIndex(n => n.Name).IsUnique();

@@ -128,5 +128,7 @@ namespace FIHS.Services.UserServices
 
             return await _tokenService.CreateAuthModel(user);
         }
+
+        public async Task<bool> IsUserExist(string userId) => await _userManager.FindByIdAsync(userId) != null;
     }
 }
