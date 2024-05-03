@@ -8,7 +8,7 @@ namespace FIHS.Services.ChatServices
     public class GeminiService : IChatbotService
     {
         private readonly IConfiguration _configuration;
-        private const string API_UEL = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=";
+        private const string API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=";
         public GeminiService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -28,7 +28,7 @@ namespace FIHS.Services.ChatServices
                 }
             };
 
-            var client = new RestClient(API_UEL + apiKey);
+            var client = new RestClient(API_URL + apiKey);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
             request.AddJsonBody(body);
