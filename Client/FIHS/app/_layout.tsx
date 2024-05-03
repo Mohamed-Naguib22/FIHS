@@ -121,6 +121,8 @@ function RootLayoutNav(props: { token: string }) {
                 options={{ headerShown: false }}
               />
               <Stack.Screen name='(scan)' options={{ headerShown: false }} />
+              <Stack.Screen name='(admin)' options={{ headerShown: false }} />
+              <Stack.Screen name='(plants)' options={{ headerShown: false }} />
               <Stack.Screen
                 name='chat'
                 options={{

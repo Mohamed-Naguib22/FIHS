@@ -8,6 +8,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useDiseases } from "@/hooks/useDisease";
 import Loading from "@/components/layout/Loading";
+import SmallCardContainer from "@/components/layout/SmallCardContainer";
 
 export default function Diseases() {
   const router = useRouter();
@@ -22,21 +23,11 @@ export default function Diseases() {
           {" "}
           الأمراض
         </Text>
-        {diseases?.map((disease, i, arr) => {
-          return (
-            <HStack
-              justifyContent='space-between'
-              alignItems='center'
-              gap={18}
-              px={"$3"}
-            >
-              <Disease key={disease.id} disease={disease} />
-              {arr[i + 1] && (
-                <Disease key={arr[i + 1].id} disease={arr[i + 1]} />
-              )}
-            </HStack>
-          );
-        })}
+        <SmallCardContainer>
+          {diseases?.map((disease, i, arr) => {
+            return <Disease key={disease.id} disease={disease} />;
+          })}
+        </SmallCardContainer>
       </View>
     </TabsPageContainer>
   );
