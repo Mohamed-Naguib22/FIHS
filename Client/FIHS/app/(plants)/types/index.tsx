@@ -1,25 +1,50 @@
 import React from "react";
-import { HStack, VStack, Text } from "@gluestack-ui/themed";
+import { Text } from "@gluestack-ui/themed";
 import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
-import { usePlantTypes, usePlantTypesStatic } from "@/hooks/usePlantType";
-import Loading from "../layout/Loading";
-import AutoFetching from "../layout/AutoFetching";
+import TabsPageContainer from "@/components/layout/TabsPageContainer";
+import { usePlantTypes } from "@/hooks/usePlantType";
+import Loading from "@/components/layout/Loading";
+import SmallCardContainer from "@/components/layout/SmallCardContainer";
+import AutoFetching from "@/components/layout/AutoFetching";
 
-export default function PlantsTypes() {
-  const { data: types, isLoading } = usePlantTypesStatic();
+export default function AllPlantTypes() {
+  const {
+    data: types,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePlantTypes(6);
   if (isLoading && !types) {
     return <Loading />;
   }
   return (
-    <HStack flexWrap='wrap' justifyContent='space-between' px={"$3"} gap={15}>
-      {types?.plantTypes?.map((type) => (
-        <PlantType key={type.id} type={type} />
-      ))}
-    </HStack>
+    <AutoFetching
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+    >
+      <Text
+        textAlign='right'
+        mt={10}
+        mb={10}
+        mx={10}
+        fontWeight='900'
+        fontSize={"$lg"}
+      >
+        انواع النباتات
+      </Text>
+      <SmallCardContainer>
+        {types?.pages?.map((page) =>
+          page.plantTypes.map((type) => {
+            return <PlantType key={type.id} type={type} />;
+          })
+        )}
+      </SmallCardContainer>
+    </AutoFetching>
   );
 }
 

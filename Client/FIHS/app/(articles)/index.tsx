@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
-import {
-  View,
-  HStack,
-  VStack,
-  Text,
-  ButtonSpinner,
-} from "@gluestack-ui/themed";
+import { View, HStack, VStack, Text } from "@gluestack-ui/themed";
 import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Fontisto, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
-import useArticles, { useInfiniteArticles } from "@/hooks/useArticles";
+import { useInfiniteArticles } from "@/hooks/useArticles";
 import Loading from "@/components/layout/Loading";
-import { Button } from "@gluestack-ui/themed";
-import { ButtonText } from "@gluestack-ui/themed";
-import { IOScrollView, InView } from "react-native-intersection-observer";
+import AutoFetching from "@/components/layout/AutoFetching";
 
 type Props = {};
 
@@ -39,7 +31,11 @@ const Articles = (props: Props) => {
     return <Loading />;
   }
   return (
-    <IOScrollView>
+    <AutoFetching
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      fetchNextPage={fetchNextPage}
+    >
       <TabsPageContainer>
         <Text
           textAlign='right'
@@ -53,24 +49,8 @@ const Articles = (props: Props) => {
         {arts?.pages.map((page) =>
           page.articles.map((art) => <ArticleRowCard art={art} />)
         )}
-        {hasNextPage && (
-          <InView onChange={(inView: boolean) => setShow(inView)}>
-            {isFetchingNextPage && (
-              <Button
-                w={show ? "$8" : "$32"}
-                variant='solid'
-                alignSelf='center'
-                mt={"auto"}
-                rounded={"$md"}
-                onPress={() => fetchNextPage()}
-              >
-                <ButtonSpinner />
-              </Button>
-            )}
-          </InView>
-        )}
       </TabsPageContainer>
-    </IOScrollView>
+    </AutoFetching>
   );
 };
 

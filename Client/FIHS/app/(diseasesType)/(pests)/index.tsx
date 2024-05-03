@@ -7,6 +7,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { usePests } from "@/hooks/usePest";
 import Loading from "@/components/layout/Loading";
+import SmallCardContainer from "@/components/layout/SmallCardContainer";
 
 type Props = {};
 
@@ -22,19 +23,11 @@ const Peats = (props: Props) => {
           {" "}
           الأفات
         </Text>
-        {pests?.map((pest, i, arr) => {
-          return (
-            <HStack
-              justifyContent='space-between'
-              alignItems='center'
-              gap={18}
-              px={"$3"}
-            >
-              <Pest key={pest.id} pest={pest} />
-              {arr[i + 1] && <Pest key={arr[i + 1].id} pest={arr[i + 1]} />}
-            </HStack>
-          );
-        })}
+        <SmallCardContainer>
+          {pests?.map((pest, i, arr) => {
+            return <Pest key={pest.id} pest={pest} />;
+          })}
+        </SmallCardContainer>
       </View>
     </TabsPageContainer>
   );

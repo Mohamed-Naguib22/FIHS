@@ -3,7 +3,15 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-export const RelatedPlant = ({ plant }: { plant: Plant }) => {
+export const SmallCard = ({
+  img,
+  url,
+  name,
+}: {
+  img: string;
+  url: string;
+  name: string;
+}) => {
   const router = useRouter();
   return (
     <TouchableOpacity
@@ -18,9 +26,9 @@ export const RelatedPlant = ({ plant }: { plant: Plant }) => {
         marginRight: 10,
         marginVertical: 10,
       }}
-      onPress={() => router.push(`/(plants)/${plant.id}`)}
+      onPress={() => router.push(url as any)}
     >
-      <Image style={styles.similar} source={{ uri: plant.imageUrl }} />
+      <Image style={styles.similar} source={{ uri: img }} />
       <Text
         textAlign='center'
         color='#000'
@@ -28,7 +36,7 @@ export const RelatedPlant = ({ plant }: { plant: Plant }) => {
         fontWeight='700'
         pt={6}
       >
-        {plant.name}
+        {name}
       </Text>
     </TouchableOpacity>
   );

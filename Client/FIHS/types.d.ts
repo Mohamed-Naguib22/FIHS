@@ -73,7 +73,7 @@ type Session = {
     refreshTokenExpiration: string
 }
 
-type Paginate<T, N extends string> = Record<N, T[]> & { nextPage: number | null }
+type Paginate<T, N extends string> = Record<N, T[]> & { nextPage: number }
 
 
 type Plant = HasImage & {
@@ -88,6 +88,14 @@ type Plant = HasImage & {
     harvistingSeason: string,
     culivationTips: string,
     imageUrl: string
+}
+
+type FullPlant = Plant & {
+    color: string,
+    plantTypes: PlantType[],
+    soils: Soil[],
+    diseases: Disease[],
+    pests: Pest[]
 }
 
 type Pest = HasImage & {
@@ -118,6 +126,16 @@ type Disease = HasImage & {
     plants: Plant[]
 }
 
+type Soil = HasImage & {
+    texture: string,
+    structure: string,
+    pHLevel: string,
+    nutrientContent: string,
+    organicMatter: string,
+    moistureRetention: string,
+    drainage: string,
+    cationExchangeCapacity: string,
+}
 
 type PlantType = DBItem & {
     name: string,
