@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FIHS.Interfaces.IPlantId;
 using FIHS.Dtos;
+using FIHS.Models.CommentModels;
 
 namespace FIHS.Controllers
 {
@@ -44,7 +45,7 @@ namespace FIHS.Controllers
                 return StatusCode(500, result.Message);
 
             if (result.IsHealthy)
-                return Ok("النبات غير مصاب بامراض");
+                return Ok(new { result.IsHealthy });
 
             return Ok(result);
         }
