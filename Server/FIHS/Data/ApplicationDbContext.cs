@@ -11,6 +11,7 @@ using FIHS.Models.PlantModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using FIHS.Models.CommentModels;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
@@ -56,4 +57,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Disease> Diseases { get; set; }
     public DbSet<Favourite> Favourites { get; set; }
     public DbSet<FavouritePlant> FavouritePlants { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 }
