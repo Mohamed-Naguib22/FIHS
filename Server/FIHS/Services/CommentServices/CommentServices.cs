@@ -25,8 +25,8 @@ namespace FIHS.Services.CommentServices
 
         public async Task<bool> AddCommentAsync(AddCommentsDto addCommentsDto)
         {
-            if (!await _userService.IsUserExist(addCommentsDto.UserId))
-                return false;
+            //if (!await _userService.IsUserExist(addCommentsDto.UserId))
+            //    return false;
             if (await HandleDataForComment(addCommentsDto.EntityId, addCommentsDto.EntityType)) {
                 var comment = _mapper.Map<Comment>(addCommentsDto);
                 await _commentRepository.AddComment(comment);
@@ -51,15 +51,15 @@ namespace FIHS.Services.CommentServices
         } 
         private async Task<bool> HandleDataForComment(int entityId, string entityType)
         {
-            switch (entityType.ToLower())
-            {
-                case "plant":
-                    if (_plantRepository.IsPlantExist(entityId))
-                    {
-                        return true;
-                    }
-                    break;
-            }
+            //switch (entityType.ToLower())
+            //{
+            //    case "plant":
+            //        if (_plantRepository.IsPlantExist(entityId))
+            //        {
+            //            return true;
+            //        }
+            //        break;
+            //}
             return false;
 
         }
