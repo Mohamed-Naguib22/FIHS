@@ -3,6 +3,30 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# .gitignore
+
+# Python
+ML/__pycache__/
+ML/*.pyc
+ML/*.pyo
+ML/*.pyd
+
+# Virtual environments
+ML/venv/
+ML/env/
+ML/*.env
+
+# Editors
+ML/.vscode/
+ML/*.sublime-project
+ML/*.sublime-workspace
+
+# Miscellaneous
+ML/.DS_Store
+ML/Thumbs.db
+
+
+
 appsettings.json
 Server/FIHS/Properties/
 
