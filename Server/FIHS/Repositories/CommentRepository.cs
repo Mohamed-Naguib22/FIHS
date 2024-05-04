@@ -36,7 +36,8 @@ namespace FIHS.Repositories
             }
         }
 
-        public bool IsCommentExist(int commentId) =>  _context.Comments.Any(c => c.Id == commentId);
+        public bool IsCommentExist(int commentId) => _context.Comments.Any(c => c.Id == commentId);
+        public async Task<bool> HasReachedCommentsLimits(string userId,string entityType,int entityId) => await _context.Comments.CountAsync(c=>c.UserId == userId&&c.EntityType==entityType&&c.EntityId==entityId)>=5;
 
     }
 }
