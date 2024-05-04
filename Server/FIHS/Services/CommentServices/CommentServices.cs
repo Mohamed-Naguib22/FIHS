@@ -40,6 +40,15 @@ namespace FIHS.Services.CommentServices
             await _commentRepository.DeleteComment(commentId);
         }
 
+        public bool EditCommentAsync(AddCommentsDto addCommentsDto)
+        {
+            var comment = _mapper.Map<Comment>(addCommentsDto);
+            if (!_commentRepository.IsCommentExist(comment.Id))
+                return false;
+            _commentRepository.EditComment(comment);
+            return true;
+        }
+
         public async Task<IEnumerable<GetAllCommentsDto>> GetAllEntityComments(int entityId, string entityType)
         {
             if (await HandleDataForComment(entityId, entityType))

@@ -26,11 +26,17 @@ namespace FIHS.Controllers
             var result = await _commentServices.GetAllEntityComments(entityId, entityType);
             return Ok(result);
         }
+        [HttpPut("EditComment/{Id?}")]
+        public async Task<IActionResult> EditComment([FromBody]AddCommentsDto commentDto, int? Id = 0)
+        {
+           var result = _commentServices.EditCommentAsync(commentDto);
+            return result? Ok("تم تعديل التعليق بنجاح"):BadRequest("حدث خطأ ما");
+        }
         [HttpDelete("DeleteComment/{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
             await _commentServices.DeleteCommentAsync(id);
-            return Ok();
+            return Ok("تم حذف التعليق بنجاح");
         }
     }
 }

@@ -35,5 +35,8 @@ namespace FIHS.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public bool IsCommentExist(int commentId) =>  _context.Comments.Any(c => c.Id == commentId);
+
     }
 }
