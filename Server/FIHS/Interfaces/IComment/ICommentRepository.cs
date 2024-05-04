@@ -9,5 +9,6 @@ namespace FIHS.Interfaces.IComment
          void EditComment(Comment comment);
          Task DeleteComment(int commentId);
          bool IsCommentExist(int commentId);
+         Task<bool> HasReachedCommentsLimits(string userId, string entityType, int entityId);
     }
 }

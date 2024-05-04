@@ -91,5 +91,6 @@ namespace FIHS.Services.PestService
         {
             return _mapper.Map<IEnumerable<ReturnPestDto>>(await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).Where(p=>p.Name.ToLower().Trim().Contains(name.ToLower().Trim())).ToListAsync());
         }
+        public async Task<bool> IsPestExist(int pestId)=>await _context.Pests.AnyAsync(p=>p.Id== pestId);
     }
 }

@@ -13,5 +13,6 @@ namespace FIHS.Interfaces.IPest
         Task<ReturnPestDto> UpdatePestAsync(UpdatePestDto pestDto,int id);
         Task<IEnumerable<ReturnPestDto>> SearchForPestByNameAsync(string name);
         Task<ReturnPestDto> GetPestByIdAsync(int id);
+        Task<bool> IsPestExist(int pestId);
     }
 }

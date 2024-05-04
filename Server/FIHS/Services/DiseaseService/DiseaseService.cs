@@ -89,5 +89,6 @@ namespace FIHS.Services.DiseaseService
             var diseaseView = _mapper.Map<ReturnDiseaseDto>(disease);
             return diseaseView;
         }
+        public async Task<bool> IsDiseaseExist(int diseaseId)=>await _context.Diseases.AnyAsync(d=>d.Id==diseaseId);
     }
 }
