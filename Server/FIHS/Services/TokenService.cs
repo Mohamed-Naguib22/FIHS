@@ -19,15 +19,17 @@ namespace FIHS.Services
     public class TokenService : ITokenService
     {
         protected readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
         protected readonly IMapper _mapper;
         private readonly JWT _jwt;
 
         public TokenService(UserManager<ApplicationUser> userManager, 
-            IMapper mapper, IOptions<JWT> jwt)
+            IMapper mapper, IOptions<JWT> jwt, ApplicationDbContext context)
         {
             _mapper = mapper;
             _userManager = userManager;
             _jwt = jwt?.Value;
+            _context = context;
         }
 
         public async Task<ApplicationUser?> GetUserByRefreshToken(string refreshToken) =>
@@ -50,8 +52,11 @@ namespace FIHS.Services
                 await _userManager.UpdateAsync(user);
             }
 
+            var favourite =  await _context.Favourites.SingleOrDefaultAsync(f => f.ApplicationUserId == user.Id);
+
             var authModel = _mapper.Map<AuthModel>(user);
             authModel.IsAuthenticated = true;
+            authModel.FavouriteId = favourite.Id;
             authModel.IsVerified = true;
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             authModel.ExpiresOn = jwtSecurityToken.ValidTo;
