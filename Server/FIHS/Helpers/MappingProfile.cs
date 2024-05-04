@@ -20,6 +20,8 @@ using System.Configuration;
 using FIHS.Dtos.Favourite;
 using FIHS.Models.FavouriteModels;
 using FIHS.Dtos.FavouriteDto;
+using FIHS.Dtos.CommentDtos;
+using FIHS.Models.CommentModels;
 
 namespace FIHS.Helpers
 {
@@ -85,6 +87,10 @@ namespace FIHS.Helpers
             // Favourite & Favourite Item
             CreateMap<FavouritePlant, FavouriteItemAddRequest>().ReverseMap();
             CreateMap<Favourite,GetAllFavPlantsDto>().ReverseMap();
+            // Comment
+            CreateMap<AddCommentsDto, Comment>();
+            CreateMap<GetAllCommentsDto, Comment>().ReverseMap();
+            CreateMap<ApplicationUser, CommentUserDto>().ForMember(dest=>dest.ImgUrl , opt=> opt.MapFrom(src => _baseUrl + src.ImgUrl));
         }
     }
 }

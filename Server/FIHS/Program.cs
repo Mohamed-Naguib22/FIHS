@@ -36,6 +36,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 using FIHS.Services;
 using FIHS.Interfaces.IFavourite;
+using FIHS.Interfaces.IComment;
+using FIHS.Services.CommentServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +74,8 @@ builder.Services.AddScoped<IPestService, PestService>();
 builder.Services.AddScoped<IDiseaseService, DiseaseService>();
 builder.Services.AddScoped<IPlantType, PlantTypeServices>();
 builder.Services.AddScoped<IFavourite,FavouriteRepository>();
+builder.Services.AddScoped<ICommentServices, CommentServices>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)

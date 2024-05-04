@@ -12,5 +12,6 @@ namespace FIHS.Interfaces.IUser
         Task<AuthModel> SetImageAsync(string refreshToken, IFormFile imgFile);
         Task<AuthModel> DeleteImageAsync(string refreshToken);
         Task<bool> IsUserExist(string userId);
+        Task<string> GetUserIdByToken(string token);
     }
 }

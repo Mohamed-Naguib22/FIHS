@@ -5,6 +5,7 @@ using FIHS.Models.PlantModels;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using FIHS.Dtos.UserDtos;
 
 namespace FIHS.Dtos.CommentDtos
 {
@@ -15,6 +16,6 @@ namespace FIHS.Dtos.CommentDtos
         public string EntityType { get; set; }
         public int EntityId { get; set; }
         public string CommentBody { get; set; }
-        public virtual ApplicationUser User { get; set; }
+        public virtual CommentUserDto User { get; set; }
     }
 }

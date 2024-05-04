@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FIHS.Repositories
 {
-    public class FavouriteRepository:IFavourite
+    public class FavouriteRepository : IFavourite
     {
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
@@ -21,11 +21,11 @@ namespace FIHS.Repositories
             _context = context;
             _userManager = userManager;
         }
-        public async Task<IEnumerable<GetAllFavPlantsDto>> GetFavouritePlants(string userId)
+        public async Task<IEnumerable<GetAllFavPlantsDto>> GetFavouritePlants(int favouriteId)
         {
-           if(!_context.Users.Any(u => u.Id == userId))
+           if(!_context.Favourites.Any(f => f.Id == favouriteId))
                 return Enumerable.Empty<GetAllFavPlantsDto>();
-            var favPlants = await _context.Favourites.Where(u => u.ApplicationUserId == userId).Include(f => f.FavPlants).ThenInclude(fp => fp.Plant).ToListAsync();
+            var favPlants = await _context.Favourites.Where(f => f.Id == favouriteId).Include(f => f.FavPlants).ThenInclude(fp => fp.Plant).ToListAsync();
             var getAllFavPlantsDto = _mapper.Map<IEnumerable<GetAllFavPlantsDto>>(favPlants);
             return getAllFavPlantsDto;
         }
@@ -43,6 +43,15 @@ namespace FIHS.Repositories
         public async Task<bool> IsFavouriteItemExist(FavouriteItemAddRequest favourite)
         {
             return  _context.FavouritePlants.Any(fp => fp.PlantId == favourite.PlantId && fp.FavouriteId == favourite.FavouriteId);
+        }
+
+        public async Task<bool> DeleteFavouriteItem(int FavoriteId , int plantId)
+        {
+            var favourotePlant = await _context.FavouritePlants.Where(fp => fp.FavouriteId == FavoriteId && fp.PlantId == plantId ).FirstOrDefaultAsync();
+            if (favourotePlant == null)
+                return false;
+             _context.Remove(favourotePlant);
+            return true;
         }
     }
 }

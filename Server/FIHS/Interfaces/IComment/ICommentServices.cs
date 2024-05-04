@@ -7,6 +7,6 @@ namespace FIHS.Interfaces.IComment
         public Task<bool> AddCommentAsync(AddCommentsDto addCommentsDto);
         public Task DeleteCommentAsync(int commentId);
         public Task<IEnumerable<GetAllCommentsDto>> GetAllEntityComments(int entityId, string entityType);
-        //public Task<bool> EditCommentAsync(AddCommentsDto addCommentsDto);
+        public bool EditCommentAsync(AddCommentsDto addCommentsDto);
     }
 }

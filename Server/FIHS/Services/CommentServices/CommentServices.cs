@@ -14,21 +14,25 @@ namespace FIHS.Services.CommentServices
         private readonly IMapper _mapper;
         private readonly IPlantRepository _plantRepository;
         private readonly IUserService _userService;
+        private readonly ITokenService _tokenService;
 
-        public CommentServices(ICommentRepository commentRepository, IMapper mapper, IPlantRepository plantRepository, IUserService userService)
+        public CommentServices(ICommentRepository commentRepository, IMapper mapper, IPlantRepository plantRepository, IUserService userService, ITokenService tokenService)
         {
             _commentRepository = commentRepository;
             _mapper = mapper;
             _plantRepository = plantRepository;
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         public async Task<bool> AddCommentAsync(AddCommentsDto addCommentsDto)
         {
-            if (!await _userService.IsUserExist(addCommentsDto.UserId))
+            var userId = await _userService.GetUserIdByToken(addCommentsDto.refreshToken);
+            if (userId != null)
                 return false;
             if (await HandleDataForComment(addCommentsDto.EntityId, addCommentsDto.EntityType)) {
                 var comment = _mapper.Map<Comment>(addCommentsDto);
+                comment.UserId = userId;
                 await _commentRepository.AddComment(comment);
                 return true;
                     }
@@ -38,6 +42,19 @@ namespace FIHS.Services.CommentServices
         public async Task DeleteCommentAsync(int commentId)
         {
             await _commentRepository.DeleteComment(commentId);
+        }
+
+        public bool EditCommentAsync(AddCommentsDto addCommentsDto)
+        {
+            var userId =  _userService.GetUserIdByToken(addCommentsDto.refreshToken).Result;
+            if (userId != null)
+                return false;
+            var comment = _mapper.Map<Comment>(addCommentsDto);
+            if (!_commentRepository.IsCommentExist(comment.Id))
+                return false;
+            comment.UserId = userId;
+            _commentRepository.EditComment(comment);
+            return true;
         }
 
         public async Task<IEnumerable<GetAllCommentsDto>> GetAllEntityComments(int entityId, string entityType)
