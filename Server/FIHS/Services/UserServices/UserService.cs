@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FIHS.Dtos.AuthModels;
+using FIHS.Dtos.CommentDtos;
 using FIHS.Dtos.UserDtos;
 using FIHS.Helpers;
 using FIHS.Interfaces;
@@ -130,5 +131,11 @@ namespace FIHS.Services.UserServices
         }
 
         public async Task<bool> IsUserExist(string userId) => await _userManager.FindByIdAsync(userId) != null;
+
+        public async Task<string> GetUserIdByToke(string token)
+        {
+             var user =await _tokenService.GetUserByRefreshToken(token);
+             return user?.Id ?? "";
+        }
     }
 }

@@ -17,7 +17,9 @@ namespace FIHS.Controllers
         [HttpPost("AddComment")]
         public async Task<IActionResult> AddComment([FromQuery]AddCommentsDto addCommentsDto)
         {
-             var result =   await _commentServices.AddCommentAsync(addCommentsDto);
+            addCommentsDto.refreshToken = Request.Cookies["refreshToken"];
+            if ( addCommentsDto.refreshToken == null ) return BadRequest("حدث خطأ ما");
+            var result =   await _commentServices.AddCommentAsync(addCommentsDto);
             return result ? Ok("تمت اضافة التعليق بنجاح") : BadRequest("حدث خطأ ما");
         }
         [HttpGet("GetAllComments")]
@@ -29,7 +31,9 @@ namespace FIHS.Controllers
         [HttpPut("EditComment/{Id?}")]
         public async Task<IActionResult> EditComment([FromBody]AddCommentsDto commentDto, int? Id = 0)
         {
-           var result = _commentServices.EditCommentAsync(commentDto);
+            commentDto.refreshToken = Request.Cookies["refreshToken"];
+            if (commentDto.refreshToken == null) return BadRequest("حدث خطأ ما");
+            var result = _commentServices.EditCommentAsync(commentDto);
             return result? Ok("تم تعديل التعليق بنجاح"):BadRequest("حدث خطأ ما");
         }
         [HttpDelete("DeleteComment/{id}")]
@@ -37,6 +41,10 @@ namespace FIHS.Controllers
         {
             await _commentServices.DeleteCommentAsync(id);
             return Ok("تم حذف التعليق بنجاح");
+        }
+        private string GetRefreshToken()
+        {
+            return Request.Cookies["refreshToken"];
         }
     }
 }
