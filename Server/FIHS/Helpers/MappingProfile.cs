@@ -58,9 +58,9 @@ namespace FIHS.Helpers
 
             // Plants&Soils
             CreateMap<Plant, PlantDto>()
-                .ForMember(des => des.ImageUrl, opt => opt.MapFrom(src => configuration.GetSection("BaseUrl").Value + src.ImageUrl));
+                .ForMember(des => des.ImageUrl, opt => opt.MapFrom(src => configuration.GetSection("BaseUrl").Value + src.ImageUrl)).ReverseMap();
             CreateMap<PlantsTypesOfPlant, PlantTypeDto>().IncludeMembers(src=>src.PlantType).ReverseMap();
-            CreateMap<PlantType, PlantTypeDto>();
+            CreateMap<PlantType, PlantTypeDto>().ForMember(dest => dest.ImgURL, opt => opt.MapFrom(src => _baseUrl + src.ImgURL)).ReverseMap();
             CreateMap<PlantSoilTypes, SoilDto>().IncludeMembers(src => src.Soil);
             CreateMap<Soil, SoilDto>();
             CreateMap<Plant, PlantInDto>().ForMember(des => des.ImageUrl, opt => opt.MapFrom(src => configuration.GetSection("BaseUrl").Value + src.ImageUrl)).ReverseMap();
@@ -87,6 +87,7 @@ namespace FIHS.Helpers
             // Favourite & Favourite Item
             CreateMap<FavouritePlant, FavouriteItemAddRequest>().ReverseMap();
             CreateMap<Favourite,GetAllFavPlantsDto>().ReverseMap();
+            CreateMap<Plant, FavoritePlantDto>().ForMember(p => p.ImageUrl, opt => opt.MapFrom(src => _baseUrl + src.ImageUrl));
             // Comment
             CreateMap<AddCommentsDto, Comment>();
             CreateMap<GetAllCommentsDto, Comment>().ReverseMap();

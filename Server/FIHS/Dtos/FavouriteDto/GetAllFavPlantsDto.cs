@@ -6,6 +6,6 @@ namespace FIHS.Dtos.FavouriteDto
     public class GetAllFavPlantsDto
     {
         public DateTime CreatedAt { get; set; }
-        public virtual ICollection<FavouritePlant> FavPlants { get; set; }
+        public  IEnumerable<FavoritePlantDto> FavPlants { get; set; }
     }
 }
