@@ -132,7 +132,7 @@ namespace FIHS.Services.UserServices
 
         public async Task<bool> IsUserExist(string userId) => await _userManager.FindByIdAsync(userId) != null;
 
-        public async Task<string> GetUserIdByToke(string token)
+        public async Task<string> GetUserIdByToken(string token)
         {
              var user =await _tokenService.GetUserByRefreshToken(token);
              return user?.Id ?? "";
