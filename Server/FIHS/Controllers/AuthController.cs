@@ -17,20 +17,16 @@ namespace FIHS.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterAysnc([FromBody] RegisterModel model)
         {
             if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+                return BadRequest(ModelState);
 
             var result = await _authService.RegisterAysnc(model);
 
-            if (!result.IsVerified)
-                return Ok(new { IsVerified = false });
-
-            if (!result.Succeeded)
-                return BadRequest(result.Message);
-
-            return Ok(result.Message);
+            return result.Succeeded ? Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpPost("verify-account")]

@@ -11,6 +11,5 @@ namespace FIHS.Dtos.PlantIdDtos
         public string? Description { get; set; }
         public string? WikiUrl { get; set; }
         public string? ImageUrl { get; set; }
-        public Taxonomy? Taxonomy { get; set; }
     }
 }

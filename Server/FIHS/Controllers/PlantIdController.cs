@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FIHS.Interfaces.IPlantId;
 using FIHS.Dtos;
-using FIHS.Models.CommentModels;
 
 namespace FIHS.Controllers
 {
@@ -17,7 +16,9 @@ namespace FIHS.Controllers
         }
 
         [HttpPost("identify-plant")]
-        public async Task<IActionResult> Identify([FromForm] ImageDto imgDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> IdentifyPlantAsync([FromForm] ImageDto imgDto)
         {
             if (imgDto.ImgFile == null || imgDto.ImgFile.Length == 0)
                 return BadRequest("Image file is required.");
@@ -27,10 +28,12 @@ namespace FIHS.Controllers
 
             var result = await _plantIdService.IdentifyPlantAsync(imgDto.ImgFile);
 
-            return result.Succeeded ? Ok(result) : StatusCode(500, result.Message);
+            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
         }
 
         [HttpPost("detect-disease")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DetectDisease([FromForm] ImageDto imgDto)
         {
             if (imgDto.ImgFile == null || imgDto.ImgFile.Length == 0)
@@ -42,7 +45,7 @@ namespace FIHS.Controllers
             var result = await _plantIdService.DetectDiseaseAsync(imgDto.ImgFile);
 
             if (!result.Succeeded)
-                return StatusCode(500, result.Message);
+                return BadRequest(result.Message);
 
             if (result.IsHealthy)
                 return Ok(new { result.IsHealthy });
