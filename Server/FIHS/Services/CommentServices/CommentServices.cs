@@ -28,70 +28,71 @@ namespace FIHS.Services.CommentServices
             _diseaseService = diseaseService;
         }
 
-        public async Task<bool> AddCommentAsync(AddCommentsDto addCommentsDto)
+        public async Task<string> AddCommentAsync(AddCommentsDto addCommentsDto)
         {
             var userId = await _userService.GetUserIdByToken(addCommentsDto.refreshToken);
-            if (userId == null)
-                return false;
-            if(await _commentRepository.HasReachedCommentsLimits(userId,addCommentsDto.EntityType,addCommentsDto.EntityId))
-                return false;
-            if (await HandleDataForComment(addCommentsDto.EntityId, addCommentsDto.EntityType)) {
+            var result = await HandleDataForComment(userId, addCommentsDto);
+            if (string.IsNullOrEmpty(result))
+            {
                 var comment = _mapper.Map<Comment>(addCommentsDto);
                 comment.UserId = userId;
                 await _commentRepository.AddComment(comment);
-                return true;
-                    }
-            return false;
+            }
+            return result;
         }
 
-        public async Task DeleteCommentAsync(int commentId)
-        {
-            await _commentRepository.DeleteComment(commentId);
+        public async Task<bool> DeleteCommentAsync(int commentId)
+        { 
+            var comment=await _commentRepository.FindCommentById(commentId);
+            if (comment==null)
+                return false;
+            _commentRepository.DeleteComment(comment);
+            return true;
         }
 
-        public bool EditCommentAsync(int id,AddCommentsDto addCommentsDto)
+        public async Task<string> EditCommentAsync(int id,AddCommentsDto addCommentsDto)
         {
             if (id != addCommentsDto.Id)
-                return false;
+                return "Id sent in body doesn't match the Id sent in URL";
+            if (!await _commentRepository.IsCommentExist(addCommentsDto.Id))
+                return "لم يتم العثور علي اي تعليق";
             var userId = _userService.GetUserIdByToken(addCommentsDto.refreshToken).Result;
             if (userId == null)
-                return false;
+                return "لم يتم العثور علي اي مستخدم";
             var comment = _mapper.Map<Comment>(addCommentsDto);
-            if (!_commentRepository.IsCommentExist(comment.Id))
-                return false;
             comment.UserId = userId;
             _commentRepository.EditComment(comment);
-            return true;
+            return string.Empty;
         }
 
         public async Task<IEnumerable<GetAllCommentsDto>> GetAllEntityComments(int entityId, string entityType)
         {
             return _mapper.Map<IEnumerable<GetAllCommentsDto>>(await _commentRepository.GetAllComments(entityId, entityType));
         } 
-        private async Task<bool> HandleDataForComment(int entityId, string entityType)
+        private async Task<string> HandleDataForComment(string userId,AddCommentsDto commentsDto)
         {
-            switch (entityType.ToLower())
+            if (userId == null)
+                return "لم يتم العثور علي اي مستخدم";
+            if (await _commentRepository.HasReachedCommentsLimits(userId, commentsDto.EntityType, commentsDto.EntityId))
+                return "لقد تجاوزت الحد المسموح من التعليقات";
+            switch (commentsDto.EntityType.ToLower())
             {
                 case "plant":
-                    if (_plantRepository.IsPlantExist(entityId))
-                    {
-                        return true;
-                    }
+                    if (!_plantRepository.IsPlantExist(commentsDto.EntityId))
+                        return "لم يتم العثور علي اي نبات";
                     break;
                 case "disease":
-                    if(await _diseaseService.IsDiseaseExist(entityId))
-                    {
-                        return true;
-                    }
+                    if(!await _diseaseService.IsDiseaseExist(commentsDto.EntityId))
+                        return "لم يتم العثور علي اي مرض";
                     break;
                 case "pest":
-                    if(await _pestService.IsPestExist(entityId))
-                    {
-                        return true;
-                    }
+                    if(!await _pestService.IsPestExist(commentsDto.EntityId))
+                        return "لم يتم العثور علي اي افه";
                     break;
+                default:
+                       return "لم يتم العثور علي هذا الكيان";
             }
-            return false;
+            return string.Empty;
         }
     }
 }

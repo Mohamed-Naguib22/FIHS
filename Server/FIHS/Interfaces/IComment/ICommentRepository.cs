@@ -7,8 +7,9 @@ namespace FIHS.Interfaces.IComment
          Task AddComment(Comment comment);
          Task<IEnumerable<Comment>> GetAllComments(int entityId, string entityType);
          void EditComment(Comment comment);
-         Task DeleteComment(int commentId);
-         bool IsCommentExist(int commentId);
+         void DeleteComment(Comment comment);
          Task<bool> HasReachedCommentsLimits(string userId, string entityType, int entityId);
+         Task<Comment> FindCommentById(int commentId);
+         Task<bool> IsCommentExist(int commentId);
     }
 }
