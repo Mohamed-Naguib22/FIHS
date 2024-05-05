@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 using FIHS.Models.ChatGPT;
-using CarShopAPI.Helpers;
-using FIHS.Dtos;
 using FIHS.Interfaces.IChat;
 
 namespace FIHS.Controllers
@@ -17,7 +13,11 @@ namespace FIHS.Controllers
         {
             _chatbotService = chatbotService;
         }
+
         [HttpPost("gemini")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AskQuestionAsync([FromForm] QuestionModel questionModel)
         {
             var result = await _chatbotService.AskQuestionAsync(questionModel);
