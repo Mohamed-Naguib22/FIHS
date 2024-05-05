@@ -4,9 +4,9 @@ namespace FIHS.Interfaces.IComment
 {
     public interface ICommentServices
     {
-        public Task<bool> AddCommentAsync(AddCommentsDto addCommentsDto);
-        public Task DeleteCommentAsync(int commentId);
-        public Task<IEnumerable<GetAllCommentsDto>> GetAllEntityComments(int entityId, string entityType);
-        public bool EditCommentAsync(AddCommentsDto addCommentsDto);
+         Task<string> AddCommentAsync(AddCommentsDto addCommentsDto);
+         Task<bool> DeleteCommentAsync(int commentId);
+         Task<IEnumerable<GetAllCommentsDto>> GetAllEntityComments(int entityId, string entityType);
+         Task<string> EditCommentAsync(int id, AddCommentsDto addCommentsDto);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FIHS.Dtos.Favourite;
 using FIHS.Interfaces.IFavourite;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace FIHS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FavouriteController : ControllerBase
     {
         private readonly IFavourite _favourite;

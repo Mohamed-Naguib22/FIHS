@@ -13,5 +13,6 @@ namespace FIHS.Interfaces.IDisease
         Task<ReturnDiseaseDto> UpdateDiseaseAsync(UpdateDiseaseDto diseaseDto, int id);
         Task<IEnumerable<ReturnDiseaseDto>> SearchForDiseaseByNameAsync(string name);
         Task<ReturnDiseaseDto> GetDiseaseByIdAsync(int id);
+        Task<bool> IsDiseaseExist(int diseaseId);
     }
 }
