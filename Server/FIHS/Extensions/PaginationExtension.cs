@@ -2,7 +2,7 @@
 
 public static class PaginationExtension
 {
-    public static  (IEnumerable<T> result, int? nextPage) Paginate<T>(this IEnumerable<T> source, int offset, int limit) where T : class
+    public static  (IEnumerable<T> result, int nextPage) Paginate<T>(this IEnumerable<T> source, int offset, int limit) where T : class
     {
         if (offset <= 0)
             offset = 1;
@@ -13,7 +13,7 @@ public static class PaginationExtension
         var total = source.Count();
 
         var numberOfPages = (int)Math.Ceiling((decimal)total / limit);
-        var nextPage = offset < numberOfPages ? (int?)offset + 1 : null;
+        int nextPage = offset < numberOfPages ? offset + 1 : 0;
         var result = source.Skip((offset - 1) * limit).Take(limit).ToList();
 
         return (result, nextPage);

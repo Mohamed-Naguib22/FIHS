@@ -7,11 +7,10 @@ namespace FIHS.Interfaces.IPest
     public interface IPestService
     {
         Task<ReturnPestDto> AddPestAsync(PestDto pestDto);
-        Task<IEnumerable<ReturnPestDto>> GetPestsAsync();
+        PestsResultDto GetPests(int offset = 1, int limit = 10);
         Task<ReturnPestDto> DeletePestAsync(int id);
-        Task<ReturnPestDto> GetPestByNameAsync(string name);
         Task<ReturnPestDto> UpdatePestAsync(UpdatePestDto pestDto,int id);
-        Task<IEnumerable<ReturnPestDto>> SearchForPestByNameAsync(string name);
+        PestsResultDto SearchForPestByName(string name, int offset = 1, int limit = 10);
         Task<ReturnPestDto> GetPestByIdAsync(int id);
         Task<bool> IsPestExist(int pestId);
     }
