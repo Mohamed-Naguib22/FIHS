@@ -1,8 +1,6 @@
 ﻿using FIHS.Dtos.PestDto;
 using FIHS.Interfaces.IPest;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 
 namespace FIHS.Controllers
 {
@@ -17,56 +15,41 @@ namespace FIHS.Controllers
             _pestService = pestService;
         }
         [HttpGet("GetAllPests")]
-        public async Task<IActionResult> GetAllPestsAsync()
+        public IActionResult GetAllPests(int offset = 1, int limit = 10)
         {
-            var pests=await _pestService.GetPestsAsync();
+            var pests= _pestService.GetPests(offset,limit);
             return Ok(pests);
         }
         [HttpGet("GetPestById/{id}")]
         public async Task<IActionResult> GetPestByIdAsync(int id)
         {
             var pest = await _pestService.GetPestByIdAsync(id);
-            if (!string.IsNullOrEmpty(pest.Message))
-                return NotFound(pest.Message);
-            return Ok(pest);
+            return string.IsNullOrEmpty(pest.Message)? Ok(pest) : NotFound(pest.Message);
         }
-        [HttpGet("GetPestByName/{name}")]
-        public async Task<IActionResult> GetPestByNameAsync(string name)
-        {
-            var pest = await _pestService.GetPestByNameAsync(name);
-            if(!string.IsNullOrEmpty(pest.Message))
-                return NotFound(pest.Message);
-            return Ok(pest);
-        }
+       
         [HttpGet("SearchForPestByName/{name}")]
-        public async Task<IActionResult> SearchForPestByNameAsync(string name)
+        public IActionResult SearchForPestByName(string name,int offset = 1, int limit = 10)
         {
-            var pests = await _pestService.SearchForPestByNameAsync(name);
+            var pests = _pestService.SearchForPestByName(name,offset,limit);
             return Ok(pests);
         }
         [HttpPost("AddPest")]
         public async Task<IActionResult> AddPestAsync([FromForm]PestDto pestDto)
         {
             var pest = await _pestService.AddPestAsync(pestDto);
-            if(!string.IsNullOrEmpty(pest.Message))
-                return BadRequest(pest.Message);
             return Ok(pest);
         }
         [HttpPut("UpdatePest/{id}")]
-        public async Task<IActionResult> UpdatePestAsync([FromForm] UpdatePestDto updatePestDto,int id)
+        public async Task<IActionResult> UpdatePestAsync([FromForm] UpdatePestDto pestDto,int id)
         {
-            var pest = await _pestService.UpdatePestAsync(updatePestDto, id);
-            if(!string.IsNullOrEmpty(pest.Message))
-                return NotFound(pest.Message);
-            return Ok(pest);
+            var pest = await _pestService.UpdatePestAsync(pestDto, id);
+            return string.IsNullOrEmpty(pest.Message) ? Ok(pest) : NotFound(pest.Message);
         }
         [HttpDelete("DeletePest/{id}")]
         public async Task<IActionResult> DeletePestAsync(int id)
         {
             var pest =await _pestService.DeletePestAsync(id);
-            if(!string.IsNullOrEmpty(pest.Message))
-                return NotFound(pest.Message);
-            return Ok(pest);
+            return string.IsNullOrEmpty(pest.Message) ? Ok(pest) : NotFound(pest.Message);
         }
 
     }

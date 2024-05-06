@@ -213,6 +213,40 @@ namespace FIHS.Migrations
                     b.ToTable("Users", "security");
                 });
 
+            modelBuilder.Entity("FIHS.Models.CommentModels.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CommentBody")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+                        
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("FIHS.Models.DiseaseModels.Disease", b =>
                 {
                     b.Property<int>("Id")
@@ -300,6 +334,9 @@ namespace FIHS.Migrations
 
                     b.Property<int>("FavouriteId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("PlantId", "FavouriteId");
 
@@ -587,6 +624,10 @@ namespace FIHS.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ImgURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LifeCycle")
                         .IsRequired()
@@ -912,6 +953,17 @@ namespace FIHS.Migrations
                         });
 
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("FIHS.Models.CommentModels.Comment", b =>
+                {
+                    b.HasOne("FIHS.Models.AuthModels.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FIHS.Models.FavouriteModels.Favourite", b =>

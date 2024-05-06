@@ -70,7 +70,8 @@ type Session = {
     roles: string[],
     token: string,
     expiresOn: string,
-    refreshTokenExpiration: string
+    refreshTokenExpiration: string,
+    FavouriteId: number
 }
 
 type Paginate<T, N extends string> = Record<N, T[]> & { nextPage: number }
@@ -142,4 +143,65 @@ type PlantType = DBItem & {
     heightRange: string,
     spreadRange: string,
     lifeCycle: string
+}
+
+
+type IdentifyPlant = {
+    suggestions: PlantSuggestion[]
+}
+
+type DetectDisease = {
+    isHealthy: boolean,
+    isPlant: boolean,
+    suggestions: DiseaseSuggestion[]
+}
+
+type Suggestion = {
+    probability: number,
+    scientificName: string,
+    description: string,
+}
+
+type PlantSuggestion = Suggestion & {
+    commonNames: string[],
+    confirmed: boolean,
+    wikiUrl: string,
+    imageUrl: string,
+    taxonomy: Taxonomy
+}
+
+type Taxonomy = {
+    class: string,
+    genus: string,
+    order: string,
+    family: string,
+    phylum: string,
+    kingdom: string
+}
+
+type DiseaseSuggestion = Suggestion & {
+    name: string,
+    treatment: Treatment,
+}
+
+type Treatment = {
+    chemical: string[],
+    biological: string[],
+    prevention: string[]
+}
+
+type Favourite = {
+    plantId: number,
+    favouriteId: number
+}
+
+type TComment = DBItem & {
+    EntityType: 'plant' | 'disease' | 'pest',
+    CommentBody: string,
+    EntityId: number,
+    CreatedAt: string,
+    user: {
+        username: string,
+        imgUrl: string
+    }
 }

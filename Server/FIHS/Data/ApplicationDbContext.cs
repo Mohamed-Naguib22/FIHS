@@ -11,6 +11,7 @@ using FIHS.Models.PlantModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using FIHS.Models.CommentModels;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
@@ -36,7 +37,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<FavouritePlant>().HasKey(fp => new { fp.PlantId, fp.FavouriteId });
         modelBuilder.Entity<PlantsPests>().HasKey(pp => new { pp.PlantId, pp.PestId });
         modelBuilder.Entity<PestsPesticides>().HasKey(pp => new { pp.PesticideId, pp.PestId });
-        /*        properties for fertilizer & pestocide*/
+        // Define foreign key relationship for Comment entity
+
 
 
         modelBuilder.Entity<Pesticide>().HasIndex(n => n.Name).IsUnique();
@@ -56,4 +58,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Disease> Diseases { get; set; }
     public DbSet<Favourite> Favourites { get; set; }
     public DbSet<FavouritePlant> FavouritePlants { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 }

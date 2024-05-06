@@ -35,9 +35,7 @@ namespace FIHS.Services.UserServices
 
         public async Task<AuthModel> RegisterAysnc(RegisterModel model)
         {
-            var registeredUser = await _userManager.FindByEmailAsync(model.Email);
-
-            if (registeredUser != null)
+            if (await _userManager.FindByEmailAsync(model.Email) != null)
                 return new AuthModel { Succeeded = false, Message = "البريد الإلكتروني مستخدم بالفعل" };
 
             var user = _mapper.Map<ApplicationUser>(model);
@@ -56,7 +54,14 @@ namespace FIHS.Services.UserServices
 
             var verificationCode = GenerateRandomCode();
 
-            await _emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your verification code is {verificationCode}");
+            try
+            {
+                await _emailSender.SendEmailAsync(user.Email, "Verification Code", $"Your verification code is {verificationCode}");
+            }
+            catch
+            {
+                return new AuthModel { Succeeded = false, Message = "فشل إرسال رسالة التحقق بالبريد الإلكتروني. يرجى الاتصال بالدعم" };
+            }
 
             _cacheService.Set($"{user.Id}_VerificationCode", verificationCode, _codeExpiration);
 

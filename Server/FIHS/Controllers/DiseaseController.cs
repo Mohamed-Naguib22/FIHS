@@ -1,6 +1,5 @@
 ﻿using FIHS.Dtos.DiseaseDto;
 using FIHS.Interfaces.IDisease;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FIHS.Controllers
@@ -17,56 +16,41 @@ namespace FIHS.Controllers
         }
 
         [HttpGet("GetAllDiseases")]
-        public async Task<IActionResult> GetAllDiseasesAsync()
+        public IActionResult GetAllDiseases(int offset = 1, int limit = 10)
         {
-            var diseases =await _diseaseService.GetDiseasesAsync();
+            var diseases = _diseaseService.GetDiseases(offset,limit);
             return Ok(diseases);
         }
         [HttpGet("GetDiseaseById/{id}")]
         public async Task<IActionResult> GetDiseaseByIdAsync(int id)
         {
             var disease = await _diseaseService.GetDiseaseByIdAsync(id);
-            if (!string.IsNullOrEmpty(disease.Message))
-                return NotFound(disease.Message);
-            return Ok(disease);
+            return string.IsNullOrEmpty(disease.Message) ? Ok(disease) : NotFound(disease.Message);
         }
-        [HttpGet("GetDiseaseByName/{name}")]
-        public async Task<IActionResult> GetDiseaseByNameAsync(string name)
-        {
-            var disease = await _diseaseService.GetDiseaseByNameAsync(name);
-            if (!string.IsNullOrEmpty(disease.Message))
-                return NotFound(disease.Message);
-            return Ok(disease);
-        }
+      
         [HttpGet("SearchForDiseaseByName/{name}")]
-        public async Task<IActionResult> SearchForDiseaseByNameAsync(string name)
+        public IActionResult SearchForDiseaseByName(string name, int offset = 1, int limit = 10)
         {
-            var diseases = await _diseaseService.SearchForDiseaseByNameAsync(name); 
+            var diseases = _diseaseService.SearchForDiseaseByName(name,offset,limit); 
             return Ok(diseases);
         }
         [HttpPost("AddDisease")]
         public async Task<IActionResult> AddDiseaseAsync([FromForm] DiseaseDto diseaseDto)
         {
             var disease = await _diseaseService.AddDiseaseAsync(diseaseDto);
-            if(!string.IsNullOrEmpty(disease.Message))
-                return BadRequest(disease.Message);
             return Ok(disease);
         }
         [HttpPut("UpdateDisease/{id}")]
         public async Task<IActionResult> UpdateDiseaseAsync([FromForm] UpdateDiseaseDto diseaseDto,int id)
         {
             var disease=await _diseaseService.UpdateDiseaseAsync(diseaseDto,id);
-            if(!string.IsNullOrEmpty(disease.Message))
-                return NotFound(disease.Message);
-            return Ok(disease);
+            return string.IsNullOrEmpty(disease.Message) ? Ok(disease) : NotFound(disease.Message);
         }
         [HttpDelete("DeleteDisease/{id}")]
         public async Task<IActionResult> DeleteDiseaseAsync(int id)
         {
             var disease = await _diseaseService.DeleteDiseaseAsync(id);
-            if (!string.IsNullOrEmpty(disease.Message))
-                return NotFound(disease.Message);
-            return Ok(disease);
+            return string.IsNullOrEmpty(disease.Message) ? Ok(disease) : NotFound(disease.Message);
         }
     }
 }

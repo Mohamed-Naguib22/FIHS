@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { HStack, VStack, Text, View } from "@gluestack-ui/themed";
 import { Image } from "expo-image";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
@@ -13,10 +13,13 @@ type Props = {};
 
 const Disease = (props: Props) => {
   const { id } = useLocalSearchParams();
+  const navigate = useNavigation();
   const { data: disease, isLoading } = useDisease(id as string);
   if (isLoading && !disease) {
     return <Loading />;
   }
+  navigate.setOptions({ title: disease?.name });
+
   return (
     <TabsPageContainer>
       <Image

@@ -1,12 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import React, { Ref, useEffect, useRef, useState } from "react";
-import { Camera, CameraProps, CameraType, FlashMode } from "expo-camera";
+import React, { useEffect, useRef, useState } from "react";
+import { Camera, CameraType, FlashMode } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { Button, ButtonText, HStack, VStack, View } from "@gluestack-ui/themed";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { Text } from "@gluestack-ui/themed";
-export default function TakePhoto() {
+
+export default function TakePhoto({
+  action,
+}: {
+  action: (takenPic: any) => void;
+}) {
   const cameraRef = useRef<React.LegacyRef<Camera>>(null);
   const [hasCameraPermission, setHasCameraPermission] =
     useState<boolean>(false);
@@ -28,12 +33,14 @@ export default function TakePhoto() {
       quality: 1,
       base64: true,
       exif: false,
+      mimeType: "image/jpg",
     });
     setPhoto(takenPic);
+    action(takenPic);
   };
-  useEffect(() => {
-    console.log(photo);
-  }, [photo]);
+  // useEffect(() => {
+  // console.log(photo);
+  // }, [photo]);
   return (
     <Camera
       style={{ flex: 1 }}
@@ -114,11 +121,13 @@ export default function TakePhoto() {
             backgroundColor: "rgba(0 0 0 / 0.75)",
           }}
         >
-          <Button w={"$16"} h={"$16"} rounded={"$full"}>
-            <ButtonText onPress={takePic}>
-              <FontAwesome name='camera' size={20} />
-            </ButtonText>
-          </Button>
+          {!photo && (
+            <Button w={"$16"} h={"$16"} rounded={"$full"}>
+              <ButtonText onPress={takePic}>
+                <FontAwesome name='camera' size={20} />
+              </ButtonText>
+            </Button>
+          )}
         </BlurView>
       </View>
       <StatusBar style='light' />

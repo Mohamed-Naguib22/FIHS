@@ -17,19 +17,16 @@ export default function Diseases() {
     return <Loading />;
   }
   return (
-    <TabsPageContainer>
-      <View>
-        <Text fontWeight='700' fontSize={20} pt={9} pb={15} color='#000'>
-          {" "}
-          الأمراض
-        </Text>
-        <SmallCardContainer>
-          {diseases?.map((disease, i, arr) => {
-            return <Disease key={disease.id} disease={disease} />;
-          })}
-        </SmallCardContainer>
-      </View>
-    </TabsPageContainer>
+    <View py={"$6"} px={"$2"}>
+      <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
+        الأمراض
+      </Text>
+      <SmallCardContainer>
+        {diseases?.map((disease, i, arr) => {
+          return <Disease key={disease.id} disease={disease} />;
+        })}
+      </SmallCardContainer>
+    </View>
   );
 }
 

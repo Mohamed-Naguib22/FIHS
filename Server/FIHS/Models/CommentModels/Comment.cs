@@ -18,6 +18,7 @@ namespace FIHS.Models.CommentModels
         public int EntityId { get; set; }
         [Required, MinLength(2, ErrorMessage = "يجب ان يكوت التعليق اكثر من حرفين"), MaxLength(512, ErrorMessage = "لا يمكن ان يتعدي التعليق 512 حرف")]
         public string CommentBody { get; set; }
+        public DateTime CreatedAt { get; set; }
         public virtual ApplicationUser User { get; set; }
     }
 }

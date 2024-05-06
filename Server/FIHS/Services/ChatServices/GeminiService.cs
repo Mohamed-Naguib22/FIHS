@@ -1,64 +1,42 @@
 ﻿using FIHS.Interfaces.IChat;
 using FIHS.Models.ChatGPT;
+using FIHS.Models.GeminiModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace FIHS.Services.ChatServices
 {
     public class GeminiService : IChatbotService
     {
-        private readonly IConfiguration _configuration;
-        private const string API_UEL = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=";
+        private readonly string _apiUrl = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=";
+        private readonly string _apiKey;
         public GeminiService(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _apiKey = configuration["ApiKeys:Gemini"];
         }
         public async Task<AnswerModel> AskQuestionAsync(QuestionModel model)
         {
-            var apiKey = _configuration["ApiKeys:Gemini"];
+            var body = new{contents = new[]{new {parts = new[]{new {text = model.Question}}}}};
 
-            if (apiKey == null)
-                return new AnswerModel { StatusCode = 400, Message = "API key for Gemini is missing or invalid.", Succeeded = false };
+            var client = new RestClient(_apiUrl + _apiKey);
 
-            var body = new
-            {
-                contents = new[]
-                {
-                    new { parts = new[] { new { text = model.Question } } }
-                }
-            };
-
-            var client = new RestClient(API_UEL + apiKey);
             var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/json");
             request.AddJsonBody(body);
             
-            try
-            {
-                var response = await client.ExecuteAsync<Dictionary<string, object>>(request);
+            var response = await client.ExecuteAsync(request);
 
-                if (!response.IsSuccessful)
-                    return new AnswerModel { Succeeded = false, Answer = $"API Error: {response.StatusCode}", StatusCode = 503 };
+            if (!response.IsSuccessful)
+                return new AnswerModel { Succeeded = false, Message = "غير متوفرة الرجاء المحاولة لاحقا Gemini خدمة", StatusCode = 503 };
 
-                try
-                {
-                    dynamic responseObject = JsonConvert.DeserializeObject(response.Content);
+            var content = JsonConvert.DeserializeObject<JToken>(response.Content).ToObject<GeminiApiResponse>();
+            
+            if (content.Candidates[0].FinishReason != "STOP")
+                return new AnswerModel { Succeeded = false, Message = "الرجاء ادخال سؤال صالح", StatusCode = 400 };
 
-                    string answer = responseObject.candidates[0].content.parts[0].text;
+            string answer = content.Candidates[0].Content.Parts[0].Text;
 
-                    return new AnswerModel { Succeeded = true, Answer = answer };
-                }
-
-                catch
-                {
-                    return new AnswerModel { Succeeded = false, Answer = "Error parsing API response", StatusCode = 500 };
-                }
-            }
-
-            catch
-            {
-                return new AnswerModel { Succeeded = false, StatusCode = 503,  Message = "Gemini service is unavailable"};
-            }
+            return new AnswerModel { Succeeded = true, Answer = answer, StatusCode = 200 };
         }
     }
 }

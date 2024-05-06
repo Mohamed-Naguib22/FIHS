@@ -8,6 +8,8 @@ import storage from '../utils/storage'
 import { useRouter } from 'expo-router'
 import { useResetPassword } from './state/useResetPassword'
 import { ForgetPasswordResetSchema } from '@/models/ForgetPasswordReset'
+import { ImagePickerAsset } from 'expo-image-picker'
+import ConvertImg from '@/utils/ConvertImg'
 export const useProfile = () => useQuery<Session>({
     queryKey: ['profile'],
     queryFn: () => api.get<Session>(`User/profile`).then((res) => res.data)
@@ -88,11 +90,11 @@ export const PostProfileImg = () => {
         key: 'refreshToken'
     })
     return useMutation({
-        mutationFn: async ({ img }: { img: File }) => {
+        mutationFn: async ({ img }: { img: ImagePickerAsset }) => {
             let fd = new FormData()
-            fd.append('imgFile', img)
+            //@ts-ignore
+            fd.append('ImgFile', ConvertImg(img))
             await userApi(token, await localRt).post<Session>(`User/set-image`, fd, { headers: { 'Content-Type': 'multipart/form-data' } }).then((res) => {
-                console.log(res);
 
                 setSession(res.data)
                 let rt = res.headers['set-cookie']?.[0]

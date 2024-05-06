@@ -12,7 +12,7 @@ namespace FIHS.Dtos.PestDto
         [Required, StringLength(128)]
         public string ScientificName { get; set; }
         [Required]
-        public IFormFile Image { get; set; }
+        public  IFormFile Image { get; set; }
         [Required,StringLength(128)]
         public string DamageSymptoms { get; set; }
         [Required, StringLength(128)]

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FIHS.Dtos.PestDto;
+using FIHS.Extensions;
 using FIHS.Interfaces;
 using FIHS.Interfaces.IPest;
 using FIHS.Models.PestModels;
@@ -22,74 +23,58 @@ namespace FIHS.Services.PestService
 
         public async Task<ReturnPestDto> AddPestAsync(PestDto pestDto)
         {
-            if (await _context.Pests.AnyAsync(p => p.Name.ToLower().Trim() == pestDto.Name.ToLower().Trim()))
-                return new ReturnPestDto { Message = "This pest already exists" };
             var pest =_mapper.Map<Pest>(pestDto);
             pest.ImageUrl = _imageService.SetImage(pestDto.Image);
             await _context.Pests.AddAsync(pest);
             await _context.SaveChangesAsync();
-            var pestView = _mapper.Map<ReturnPestDto>(pest);
-            return pestView;
+            return _mapper.Map<ReturnPestDto>(pest);
         }
 
         public async Task<ReturnPestDto> DeletePestAsync(int id)
         {
-            var pest = await _context.Pests.Include(p=>p.Plants).ThenInclude(p=>p.Plant).Include(p=>p.Pesticides).ThenInclude(p=>p.Pesticide).SingleOrDefaultAsync(p=>p.Id==id);
+            var pest = await FindPestById(id);
             if (pest == null)
-                return new ReturnPestDto { Message = "No Pest is Found" };
+                return new ReturnPestDto { Message = "لم يتم العثور علي اي افه" };
             _imageService.DeleteImage(pest.ImageUrl);
             _context.Remove(pest);
-            await _context.SaveChangesAsync();
-            var pestView = _mapper.Map<ReturnPestDto>(pest);
-            return pestView;
-        }
-
-        public async Task<ReturnPestDto> GetPestByIdAsync(int id)
-        {
-            var pest = await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).SingleOrDefaultAsync(p => p.Id == id);
-            if (pest == null)
-                return new ReturnPestDto { Message = "No pest is found" };
-            var pestView = _mapper.Map<ReturnPestDto>(pest);
-            return pestView;
-        }
-
-        public async Task<ReturnPestDto> GetPestByNameAsync(string name)
-        {
-            var pest =await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).SingleOrDefaultAsync(p=>p.Name.ToLower().Trim()==name.ToLower().Trim());
-            if (pest == null)
-                return new ReturnPestDto { Message = "No Pest is Found" };
-            var pestView = _mapper.Map<ReturnPestDto>(pest);
-            return pestView;
-        }
-
-        public async Task<IEnumerable<ReturnPestDto>> GetPestsAsync()
-        {
-           return _mapper.Map<IEnumerable<ReturnPestDto>>(await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).ToListAsync());
-        }
-
-        public async Task<ReturnPestDto> UpdatePestAsync(UpdatePestDto pestDto, int id)
-        {
-            var pest = await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).SingleOrDefaultAsync(p=>p.Id==id);
-            if (pest == null)
-                return new ReturnPestDto { Message = "No Pest is Found" };
-            pest.Species = pestDto.Species ?? pest.Species;
-            pest.ControlMethods=pestDto.ControlMethods ?? pest.ControlMethods;
-            pest.DamageSymptoms=pestDto.DamageSymptoms ?? pest.DamageSymptoms;
-            pest.Description=pestDto.Description ?? pest.Description;
-            pest.GeographicDistribution=pestDto.GeographicDistribution ?? pest.GeographicDistribution;
-            pest.LifeCycle=pestDto.LifeCycle ?? pest.LifeCycle;
-            pest.Reproduction=pestDto.Reproduction??pest.Reproduction;
-            pest.Name=pestDto.Name ?? pest.Name;
-            pest.ScientificName=pestDto.ScientificName ?? pest.ScientificName;
-            pest.ImageUrl = pestDto.Image != null ? _imageService.SetImage(pestDto.Image, pest.ImageUrl) : pest.ImageUrl;
-            _context.Update(pest);
             await _context.SaveChangesAsync();
             return _mapper.Map<ReturnPestDto>(pest);
         }
 
-        public async Task<IEnumerable<ReturnPestDto>> SearchForPestByNameAsync(string name)
+        public async Task<ReturnPestDto> GetPestByIdAsync(int id)
         {
-            return _mapper.Map<IEnumerable<ReturnPestDto>>(await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).Where(p=>p.Name.ToLower().Trim().Contains(name.ToLower().Trim())).ToListAsync());
+            var pest = await FindPestById(id);
+            if (pest == null)
+                return new ReturnPestDto { Message = "لم يتم العثور علي اي افه" };
+            return _mapper.Map<ReturnPestDto>(pest);
         }
+
+
+        public PestsResultDto GetPests(int offset, int limit)
+        {
+            var paginatePests = _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).Paginate(offset, limit);
+            var pests = _mapper.Map<IEnumerable<ReturnPestDto>>(paginatePests.result);
+            return new PestsResultDto(pests, paginatePests.nextPage);
+        }
+
+        public async Task<ReturnPestDto> UpdatePestAsync(UpdatePestDto pestDto, int id)
+        {
+            var pest = await FindPestById(id);
+            if (pest == null)
+                return new ReturnPestDto { Message = "لم يتم العثور علي اي افه" };
+            _mapper.Map(pestDto, pest);
+            pest.ImageUrl = pestDto.Image != null ? _imageService.SetImage(pestDto.Image, pest.ImageUrl) : pest.ImageUrl;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ReturnPestDto>(pest);
+        }
+
+        public PestsResultDto SearchForPestByName(string name,int offset, int limit)
+        {
+            var paginatePests = _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).Where(p => p.Name.ToLower().Trim().Contains(name.ToLower().Trim())).Paginate(offset, limit);
+            var pests= _mapper.Map<IEnumerable<ReturnPestDto>>(paginatePests.result);
+            return new PestsResultDto(pests, paginatePests.nextPage);
+        }
+        public async Task<bool> IsPestExist(int pestId)=>await _context.Pests.AnyAsync(p=>p.Id== pestId);
+        private async Task<Pest> FindPestById(int pestId) => await _context.Pests.Include(p => p.Plants).ThenInclude(p => p.Plant).Include(p => p.Pesticides).ThenInclude(p => p.Pesticide).SingleOrDefaultAsync(p => p.Id == pestId); 
     }
 }

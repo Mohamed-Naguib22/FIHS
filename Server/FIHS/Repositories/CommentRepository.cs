@@ -13,7 +13,7 @@ namespace FIHS.Repositories
         {
             _context = context;
         }
-        private async Task<Comment> FindCommentById(int commentId) => await _context.Comments.FindAsync(commentId);
+        public async Task<Comment> FindCommentById(int commentId) => await _context.Comments.FindAsync(commentId);
         public async Task AddComment(Comment comment) 
         {
             await _context.Comments.AddAsync(comment);
@@ -26,14 +26,13 @@ namespace FIHS.Repositories
             _context.Update(comment);
             _context.SaveChanges();
         }
-        public async Task DeleteComment(int commentId)
+        public void DeleteComment(Comment comment)
         {
-            var comment = await FindCommentById(commentId);
-            if (comment != null)
-            {
-                _context.Comments.Remove(comment);
-                _context.SaveChanges();
-            }
+            _context.Comments.Remove(comment);
+            _context.SaveChanges();
         }
+        public async Task<bool> IsCommentExist(int commentId) =>await _context.Comments.AnyAsync(c=>c.Id == commentId);
+        public async Task<bool> HasReachedCommentsLimits(string userId,string entityType,int entityId) => await _context.Comments.CountAsync(c=>c.UserId == userId&&c.EntityType==entityType&&c.EntityId==entityId)>=5;
+
     }
 }

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { HStack, VStack, View, Text } from "@gluestack-ui/themed";
 import { Image } from "expo-image";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
@@ -13,10 +13,13 @@ type Props = {};
 
 const Pest = (props: Props) => {
   const { id } = useLocalSearchParams();
+  const navigate = useNavigation();
   const { data: pest, isLoading } = usePest(id as string);
   if (isLoading && !pest) {
     return <Loading />;
   }
+  navigate.setOptions({ title: pest?.name });
+
   return (
     <TabsPageContainer>
       <Image style={styles.articlePhotoId} source={{ uri: pest?.imageUrl }} />
