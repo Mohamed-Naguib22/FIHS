@@ -36,11 +36,12 @@ export default function TabOneScreen() {
           <ButtonText>تسجيل الخروج</ButtonText>
         </Button>
       )}
-      <Section name='المقالات' link='/(articles)'>
+      {/* <Section name='المقالات' link='/(articles)'>
         {arts?.slice(0, 6)?.map((art) => {
           return <ArticleCard key={art.id} {...art} />;
         })}
-      </Section>
+      </Section> */}
+      <ArticleCard/>
       <Section name='أنواع النباتات' link='/(plants)/types' swipe={false}>
         <PlantsTypes />
       </Section>
