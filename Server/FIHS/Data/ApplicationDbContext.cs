@@ -58,5 +58,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Disease> Diseases { get; set; }
     public DbSet<Favourite> Favourites { get; set; }
     public DbSet<FavouritePlant> FavouritePlants { get; set; }
+    public DbSet<Topic> Topics { get; set; }
     public DbSet<Comment> Comments { get; set; }
 }
