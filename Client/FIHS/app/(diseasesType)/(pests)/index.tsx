@@ -17,19 +17,16 @@ const Peats = (props: Props) => {
     return <Loading />;
   }
   return (
-    <TabsPageContainer>
-      <View>
-        <Text fontWeight='700' fontSize={20} pt={9} pb={15} color='#000'>
-          {" "}
-          الأفات
-        </Text>
-        <SmallCardContainer>
-          {pests?.map((pest, i, arr) => {
-            return <Pest key={pest.id} pest={pest} />;
-          })}
-        </SmallCardContainer>
-      </View>
-    </TabsPageContainer>
+    <View py={"$6"} px={"$2"}>
+      <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
+        الأفات
+      </Text>
+      <SmallCardContainer>
+        {pests?.map((pest, i, arr) => {
+          return <Pest key={pest.id} pest={pest} />;
+        })}
+      </SmallCardContainer>
+    </View>
   );
 };
 

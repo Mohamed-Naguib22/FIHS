@@ -20,6 +20,7 @@ const useSession = create<SessionState>((set) => (
         phoneNumber: '',
         token: '',
         email: '',
+        FavouriteId: 0,
         emailConfirmed: false,
         expiresOn: '',
         chatMessages: [],
@@ -79,6 +80,7 @@ const useSession = create<SessionState>((set) => (
                         isAuthenticated: session?.isAuthenticated || state.isAuthenticated,
                         refreshTokenExpiration: session?.refreshTokenExpiration || state.refreshTokenExpiration,
                         roles: session?.roles || state.roles,
+                        FavouriteId: session?.FavouriteId || state.FavouriteId
                     }
                 })
             } else {
@@ -96,6 +98,7 @@ const useSession = create<SessionState>((set) => (
                 isAuthenticated: session?.isAuthenticated || state.isAuthenticated,
                 refreshTokenExpiration: session?.refreshTokenExpiration || state.refreshTokenExpiration,
                 roles: session?.roles || state.roles,
+                FavouriteId: session?.FavouriteId || state.FavouriteId
             }
         }),
     }))
@@ -115,4 +118,5 @@ export const DEFAULT_SESSION = {
     isAuthenticated: false,
     refreshTokenExpiration: undefined,
     roles: [],
+    FavouriteId: 0,
 }

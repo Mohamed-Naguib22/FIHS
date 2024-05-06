@@ -1,10 +1,9 @@
 import React from "react";
-import { Text } from "@gluestack-ui/themed";
+import { Text, View } from "@gluestack-ui/themed";
 import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
-import TabsPageContainer from "@/components/layout/TabsPageContainer";
 import { usePlantTypes } from "@/hooks/usePlantType";
 import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
@@ -21,29 +20,25 @@ export default function AllPlantTypes() {
   if (isLoading && !types) {
     return <Loading />;
   }
+
   return (
     <AutoFetching
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
     >
-      <Text
-        textAlign='right'
-        mt={10}
-        mb={10}
-        mx={10}
-        fontWeight='900'
-        fontSize={"$lg"}
-      >
-        انواع النباتات
-      </Text>
-      <SmallCardContainer>
-        {types?.pages?.map((page) =>
-          page.plantTypes.map((type) => {
-            return <PlantType key={type.id} type={type} />;
-          })
-        )}
-      </SmallCardContainer>
+      <View py={"$6"} px={"$2"}>
+        <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
+          انواع النباتات
+        </Text>
+        <SmallCardContainer>
+          {types?.pages?.map((page) =>
+            page.plantTypes.map((type) => {
+              return <PlantType key={type.id} type={type} />;
+            })
+          )}
+        </SmallCardContainer>
+      </View>
     </AutoFetching>
   );
 }

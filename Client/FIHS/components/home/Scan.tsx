@@ -42,7 +42,7 @@ const Scan = (props: Props) => {
               w={175}
               h={175}
               onPress={() => {
-                router.push("/(scan)/scanDisease");
+                router.push("/(tabs)/(scan)/scanPlant");
                 setShowActionsheet(!showActionsheet);
               }}
             >
@@ -60,7 +60,7 @@ const Scan = (props: Props) => {
               w={175}
               h={175}
               onPress={() => {
-                router.push("/(scan)/scanDisease");
+                router.push("/(tabs)/(scan)/scanDisease");
                 setShowActionsheet(!showActionsheet);
               }}
             >

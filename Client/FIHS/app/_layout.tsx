@@ -120,7 +120,6 @@ function RootLayoutNav(props: { token: string }) {
                 name='(diseasesType)'
                 options={{ headerShown: false }}
               />
-              <Stack.Screen name='(scan)' options={{ headerShown: false }} />
               <Stack.Screen name='(admin)' options={{ headerShown: false }} />
               <Stack.Screen name='(plants)' options={{ headerShown: false }} />
               <Stack.Screen
