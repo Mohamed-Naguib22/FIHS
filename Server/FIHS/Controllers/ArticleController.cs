@@ -24,9 +24,11 @@ namespace FIHS.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> ArticlesApi([FromQuery] string topic)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SearchAsync([FromQuery] string topic)
         {
-            var result = await _articleService.ArticlesApi(topic);
+            var result = await _articleService.SearchAsync(topic);
             return result.Succeeded ? Ok(result.Articles) : StatusCode(500, result.Message);
         }
 

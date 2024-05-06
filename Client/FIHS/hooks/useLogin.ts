@@ -74,11 +74,13 @@ export const Logout = () => {
         }
     })
 }
+
 export const useRegister = () => {
     const { setSession, setLoading, setEmail } = useSession()
     const router = useRouter()
     return useMutation({
-        mutationFn: async ({ firstName, lastName, email, password, phoneNumber }: { firstName: string, lastName: string, email: string, password: string, phoneNumber: string }): Promise<any> => {
+        mutationFn: async ({ firstName, lastName, email, password, phoneNumber }: 
+            { firstName: string, lastName: string, email: string, password: string, phoneNumber: string }): Promise<any> => {
             setLoading(true)
             await api.post(`/Auth/register`, { firstName, lastName, email, password, phoneNumber }).then((res) => {
                 //@ts-ignore

@@ -10,7 +10,7 @@ namespace FIHS.Interfaces.IArticle
 {
     public interface IArticleService
     {
-        Task<GetArticlesDto> ArticlesApi(string topic);
+        Task<GetArticlesDto> SearchAsync(string topic);
         Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> GetAllArticlesAsync(int offest, int limit);
         Task<ReturnArticleDto> GetArticleAsync(int articleId, string? refreshToken);
         Task<BaseDto> LikeAsync(int articleId, string refreshToken);
