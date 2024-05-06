@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { HStack, VStack, View, Text, ScrollView } from "@gluestack-ui/themed";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,21 +8,28 @@ import { Fontisto, FontAwesome } from "@expo/vector-icons";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
 import { InboxIcon } from "lucide-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useRouter } from "expo-router";
 import usePlant from "@/hooks/usePlant";
 import Loading from "@/components/layout/Loading";
+import { NavigatorProps } from "expo-router/build/views/Navigator";
 type Props = {};
 
-const Plant = (props: Props) => {
+const Plant = () => {
   const { id } = useLocalSearchParams();
+  const navigate = useNavigation();
   const { data: pt, isLoading } = usePlant(id as string);
+
   if (isLoading && !pt) {
     return <Loading />;
   }
-
+  navigate.setOptions({ title: pt?.name });
   return (
     <ScrollView px={"$5"}>
-      <Image style={styles.articlePhotoId} source={{ uri: pt?.imageUrl }} />
+      <View>
+        <Image
+          style={styles.articlePhotoId}
+          source={require("@/assets/images/PlantType.jpg")}
+        />
+      </View>
       <VStack py={"$5"}>
         <ScrollView horizontal style={{ marginBottom: 30 }}>
           <HStack justifyContent='flex-end' gap={10} mt={10} mr={5} ml={5}>

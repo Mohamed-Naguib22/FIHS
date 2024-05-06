@@ -1,19 +1,19 @@
-import React from 'react'
-import { Stack } from 'expo-router';
+import React from "react";
+import { Stack } from "expo-router";
 
-type Props = {}
+type Props = {};
 
 const Pestslayout = (props: Props) => {
-    return (
-        <Stack screenOptions={{
-            headerShown:false,
-            headerTitle:"hssssscgghg",
-            animation:'slide_from_right',
-        }}>
-            <Stack.Screen name='index'/>
-            <Stack.Screen name='[id]/index'/>
-        </Stack>
-    )
-}
+  return (
+    <Stack
+      screenOptions={{
+        animation: "slide_from_right",
+      }}
+    >
+      <Stack.Screen name='index' options={{ headerShown: false }} />
+      <Stack.Screen name='[id]/index' />
+    </Stack>
+  );
+};
 
-export default Pestslayout
+export default Pestslayout;

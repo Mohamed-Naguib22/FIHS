@@ -40,7 +40,7 @@ export default function ProfileScreen() {
     });
     if (!result.canceled) {
       await postProfileImg.mutateAsync(
-        { img: result.assets[0] as unknown as File },
+        { img: result.assets[0] },
         {
           onSuccess(data, variables, context) {
             setShowActionsheet(!showActionsheet);

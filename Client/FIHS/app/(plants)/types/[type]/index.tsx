@@ -1,6 +1,6 @@
 import { Text, View } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
 import Loading from "@/components/layout/Loading";
 import { usePlants } from "@/hooks/usePlant";
@@ -12,6 +12,7 @@ type Props = {};
 
 const plantType = (props: Props) => {
   const { type } = useLocalSearchParams();
+  const navigate = useNavigation();
 
   const {
     data: pt,
@@ -25,16 +26,17 @@ const plantType = (props: Props) => {
     return <Loading />;
   }
 
+  navigate.setOptions({ title: type });
+
   return (
     <AutoFetching
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
     >
-      <View>
-        <Text fontWeight='700' fontSize={20} pt={9} pb={15} color='#000'>
-          {" "}
-          انواع النباتات
+      <View py={"$6"} px={"$2"}>
+        <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
+          النباتات
         </Text>
         <SmallCardContainer>
           {pt?.pages.map((page) =>
