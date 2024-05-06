@@ -60,7 +60,7 @@ export default function TabLayout() {
           tabBarItemStyle:{
             marginRight:25
           },
-          tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="" color={color} />,
         }}
         />
       <Tabs.Screen
@@ -71,7 +71,7 @@ export default function TabLayout() {
             position:'absolute',
             right:'50%',
             top:'-50%', 
-            transform:'translateX(-32.5px) translateY(-15px) ',
+            transform:'translateX(30px) translateY(-10px) ',
             zIndex:50,
             width:65,
             height:65,

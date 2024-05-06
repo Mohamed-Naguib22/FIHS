@@ -28,106 +28,116 @@ const ArticleCard = ({
     // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
   });
   return (
-    <GestureDetector gesture={tapGesture}>
-      <Mui
-        minHeight={"$72"}
-        maxHeight={"$96"}
-        w={"$64"}
-        h={"$80"}
-        m={"$1.5"}
-        bg='rgba(58, 171, 117,.3)'
-        rounded={20}
-      >
-        <VStack>
-          <View h={"$1/2"} position='relative'>
-            <Image
-              style={{
-                width: "100%",
-                height: 150,
-                borderTopRightRadius: 20,
-                borderTopLeftRadius: 20,
-              }}
-              source={imgUrl}
-              alt={title}
-            />
-            <View
-              position='absolute'
-              bg='rgba(58, 171, 117,.75)'
-              p={"$1.5"}
-              right={0}
-              top={0}
-              style={{ borderTopRightRadius: 20, borderBottomLeftRadius: 5 }}
-            >
-              <HStack alignItems='center' justifyContent='space-between'>
-                <Text
-                  pt={"$0.5"}
-                  px={"$1.5"}
-                  color='$white'
-                  fontWeight='$bold'
-                  size='xs'
-                >
-                  {numOfLikes}
-                </Text>
-                <Text color='$white' pt={"$0"}>
-                  <FontAwesome name='thumbs-up' size={12} />
-                </Text>
-              </HStack>
-            </View>
-          </View>
-          <HStack
-            alignItems='center'
-            justifyContent='space-between'
-            pt={"$1.5"}
-            px={"$1.5"}
-          >
-            <HStack alignItems='center' justifyContent='space-between'>
-              <Text color='$textDark600' pt={"$0"}>
-                <Fontisto name='person' size={12} />
-              </Text>
-              <Text
-                pt={"$0.5"}
-                px={"$1.5"}
-                color='$textDark600'
-                fontWeight='$bold'
-                size='xs'
-              >
-                {author}
-              </Text>
-            </HStack>
-          </HStack>
-          <HStack alignItems='center' justifyContent='space-between'>
-            <Text
-              pt={"$0.5"}
-              px={"$1.5"}
-              fontWeight='$extrabold'
-              size='lg'
-              color='$textDark900'
-            >
-              {title}
-            </Text>
-          </HStack>
-          <Text
-            px={"$1.5"}
-            color='$textDark600'
-            size={"xs"}
-            pt={"$0.5"}
-            numberOfLines={1}
-          >
-            {overview}
-          </Text>
-          <Button
-            w={"$32"}
-            variant='solid'
-            alignSelf='center'
-            mt={"auto"}
-            rounded={"$md"}
-            onPress={() => router.push(`/(articles)/${id}`)}
-          >
-            <ButtonText size='sm'>متابعة القراءة</ButtonText>
-          </Button>
-        </VStack>
-      </Mui>
-    </GestureDetector>
+    // <GestureDetector gesture={tapGesture}>
+    //   <Mui
+    //     minHeight={"$72"}
+    //     maxHeight={"$96"}
+    //     w={"$64"}
+    //     h={"$80"}
+    //     m={"$1.5"}
+    //     bg='rgba(58, 171, 117,.3)'
+    //     rounded={20}
+    //   >
+    //     <VStack>
+    //       <View h={"$1/2"} position='relative'>
+    //         <Image
+    //           style={{
+    //             width: "100%",
+    //             height: 150,
+    //             borderTopRightRadius: 20,
+    //             borderTopLeftRadius: 20,
+    //           }}
+    //           source={imgUrl}
+    //           alt={title}
+    //         />
+    //         <View
+    //           position='absolute'
+    //           bg='rgba(58, 171, 117,.75)'
+    //           p={"$1.5"}
+    //           right={0}
+    //           top={0}
+    //           style={{ borderTopRightRadius: 20, borderBottomLeftRadius: 5 }}
+    //         >
+    //           <HStack alignItems='center' justifyContent='space-between'>
+    //             <Text
+    //               pt={"$0.5"}
+    //               px={"$1.5"}
+    //               color='$white'
+    //               fontWeight='$bold'
+    //               size='xs'
+    //             >
+    //               {numOfLikes}
+    //             </Text>
+    //             <Text color='$white' pt={"$0"}>
+    //               <FontAwesome name='thumbs-up' size={12} />
+    //             </Text>
+    //           </HStack>
+    //         </View>
+    //       </View>
+    //       <HStack
+    //         alignItems='center'
+    //         justifyContent='space-between'
+    //         pt={"$1.5"}
+    //         px={"$1.5"}
+    //       >
+    //         <HStack alignItems='center' justifyContent='space-between'>
+    //           <Text color='$textDark600' pt={"$0"}>
+    //             <Fontisto name='person' size={12} />
+    //           </Text>
+    //           <Text
+    //             pt={"$0.5"}
+    //             px={"$1.5"}
+    //             color='$textDark600'
+    //             fontWeight='$bold'
+    //             size='xs'
+    //           >
+    //             {author}
+    //           </Text>
+    //         </HStack>
+    //       </HStack>
+    //       <HStack alignItems='center' justifyContent='space-between'>
+    //         <Text
+    //           pt={"$0.5"}
+    //           px={"$1.5"}
+    //           fontWeight='$extrabold'
+    //           size='lg'
+    //           color='$textDark900'
+    //         >
+    //           {title}
+    //         </Text>
+    //       </HStack>
+    //       <Text
+    //         px={"$1.5"}
+    //         color='$textDark600'
+    //         size={"xs"}
+    //         pt={"$0.5"}
+    //         numberOfLines={1}
+    //       >
+    //         {overview}
+    //       </Text>
+    //       <Button
+    //         w={"$32"}
+    //         variant='solid'
+    //         alignSelf='center'
+    //         mt={"auto"}
+    //         rounded={"$md"}
+    //         onPress={() => router.push(`/(articles)/${id}`)}
+    //       >
+    //         <ButtonText size='sm'>متابعة القراءة</ButtonText>
+    //       </Button>
+    //     </VStack>
+    //   </Mui>
+    // </GestureDetector>
+        <View 
+        style={{width:200, height:100, borderTopRightRadius:7, borderBottomRightRadius:7,marginLeft:-1,backgroundColor:"#09c"}}
+        >
+           <Image
+        source={require("@/assets/images/image.jpg")}
+        style={{width:200, height:100,
+          
+          borderTopRightRadius:7, borderBottomRightRadius:7,marginLeft:-1}}
+        />
+        </View>
   );
 };
 
