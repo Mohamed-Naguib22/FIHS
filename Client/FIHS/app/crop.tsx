@@ -5,7 +5,6 @@ import { TextInput } from "react-native-gesture-handler";
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { StyleSheet,Modal} from 'react-native';
-import { Colors } from '@/constants/Colors';
 
 
 const data = [

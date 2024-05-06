@@ -78,7 +78,7 @@ export default function TabLayout() {
             position: "absolute",
             right: "50%",
             top: "-50%",
-            transform: "translateX(-32.5px) translateY(-15px) ",
+            transform: "translateX(32.5px) translateY(-15px) ",
             zIndex: 50,
             width: 65,
             height: 65,
