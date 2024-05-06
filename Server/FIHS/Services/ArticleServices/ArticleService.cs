@@ -16,69 +16,53 @@ namespace FIHS.Services.ArticleService
     {
         private readonly IArticleRepository _articleRepository;
         private readonly IImageService _imageService;
+        private readonly string _apiKey;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        private readonly IConfiguration _configuration;
         private const string API_URL = "https://serpapi.com/search";
         public ArticleService(IArticleRepository articleRepository, IConfiguration configuration,
             IImageService imageService, IMapper mapper, ITokenService tokenService)
         {
-            _configuration = configuration;
+            _apiKey = configuration["ApiKeys:SerpApi"];
             _imageService = imageService;
             _articleRepository = articleRepository;
             _mapper = mapper;
             _tokenService = tokenService;
         }
 
-        public async Task<GetArticlesDto> ArticlesApi(string topic)
+        public async Task<GetArticlesDto> SearchAsync(string topic)
         {
-            var apiKey = _configuration["ApiKeys:SerpApi"];
-
-            if (apiKey == null)
-                return new GetArticlesDto { Message = "API key required", Succeeded = false };
-
             var client = new RestClient(API_URL);
             var request = new RestRequest(Method.GET);
 
             request.AddParameter("engine", "google_scholar");
             request.AddParameter("q", topic);
-            request.AddParameter("api_key", apiKey);
+            request.AddParameter("api_key", _apiKey);
             request.AddParameter("hl", "ar");
             request.AddParameter("num", 10);
 
-            try
-            {
-                var response = await client.ExecuteAsync(request);
+            var response = await client.ExecuteAsync(request);
 
-                if (!response.IsSuccessful)
-                    return new GetArticlesDto { Message = $"Error fetching articles: {response.StatusCode}", Succeeded = false };
+            if (!response.IsSuccessful)
+                return new GetArticlesDto { Message = $"Error fetching articles", Succeeded = false };
                 
-                var content = JsonConvert.DeserializeObject<JToken>(response.Content)?.ToObject<ArticlesResponseDto>();
+            var content = JsonConvert.DeserializeObject<JToken>(response.Content)?.ToObject<ArticlesResponseDto>();
 
-                if (content == null)
-                    return new GetArticlesDto { Message = "JSON Serialization Error", Succeeded = false };
+            if (content == null)
+                return new GetArticlesDto { Message = "JSON Serialization Error", Succeeded = false };
 
-                var articles = content.Organic_results?.Select(result => new ArticleApiModel
-                {
-                    Position = result.Position,
-                    Title = result.Title,
-                    Link = result.Link,
-                    Snippet = result.Snippet,
-                    ResourceLink = result.Resources?.FirstOrDefault()?.Link,
-                    Author = result.Publication_info?.Authors?.FirstOrDefault()?.Name,
-                    AuthorProfileLink = result.Publication_info?.Authors?.FirstOrDefault()?.Link
-                }).ToList();
-
-                return new GetArticlesDto { Articles = articles, Succeeded = true };
-            }
-            catch (HttpRequestException ex)
+            var articles = content.Organic_results?.Select(result => new ArticleApiModel
             {
-                return new GetArticlesDto { Message = $"Error fetching articles: {ex.Message}", Succeeded = false };
-            }
-            catch (JsonSerializationException ex)
-            {
-                return new GetArticlesDto { Message = $"JSON Serialization Error: {ex.Message}", Succeeded = false };
-            }
+                Position = result.Position,
+                Title = result.Title,
+                Link = result.Link,
+                Snippet = result.Snippet,
+                ResourceLink = result.Resources?.FirstOrDefault()?.Link,
+                Author = result.Publication_info?.Authors?.FirstOrDefault()?.Name,
+                AuthorProfileLink = result.Publication_info?.Authors?.FirstOrDefault()?.Link
+            }).ToList();
+
+             return new GetArticlesDto { Articles = articles, Succeeded = true };
         }
 
         public async Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> GetAllArticlesAsync(int offset, int limit)
