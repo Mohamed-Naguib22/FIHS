@@ -13,6 +13,8 @@ using Google.Apis.Oauth2.v2;
 using Microsoft.AspNetCore.Http;
 using FIHS.Dtos.UserDtos;
 using FIHS.Dtos.AuthModels;
+using FHIS.Services;
+using FIHS.Services;
 
 namespace FIHS.Tests.UserTests;
 public class UserServiceTests
@@ -102,7 +104,7 @@ public class UserServiceTests
     [Fact]
     public async Task DeleteAccountAsync_ValidToken_ReturnSuccessMessage()
     {
-        var refreshToken = "invalidToken";
+        var refreshToken = "validToken";
         var expectedUser = new ApplicationUser { ImgUrl = "URL" };
 
         A.CallTo(() => _fakeTokenService.GetUserByRefreshToken(refreshToken)).Returns(Task.FromResult(expectedUser));
@@ -112,5 +114,36 @@ public class UserServiceTests
         var result = await _userService.DeleteAccountAsync(refreshToken);
 
         Assert.True(result.Succeeded);
+        Assert.Equal(result.Message, "تم حذف الحساب بنجاح");
     }
+
+    [Fact]
+    public async Task DeleteAccountAsync_InValidToken_ReturnSuccessMessage()
+    {
+        var refreshToken = "invalidToken";
+
+        A.CallTo(() => _fakeTokenService.GetUserByRefreshToken(refreshToken)).Returns<ApplicationUser>(null);
+
+        var result = await _userService.DeleteAccountAsync(refreshToken);
+
+        Assert.False(result.Succeeded);
+        Assert.Equal(result.Message, "المستخدم غير موجود");
+    }
+    //public async Task<AuthModel> DeleteImageAsync(string refreshToken)
+    //{
+    //    var user = await _tokenService.GetUserByRefreshToken(refreshToken);
+
+    //    if (user == null)
+    //        return new AuthModel { Succeeded = false, Message = "المستخدم غير موجود" };
+
+    //    _imageService.DeleteImage(user.ImgUrl);
+
+    //    user.ImgUrl = DEFAUTLT_USER_IMG_PATH;
+    //    var result = await _userManager.UpdateAsync(user);
+
+    //    if (!result.Succeeded)
+    //        return new AuthModel { Succeeded = false, Message = "حدث خطأ ما" };
+
+    //    return await _tokenService.CreateAuthModel(user);
+    //}
 }

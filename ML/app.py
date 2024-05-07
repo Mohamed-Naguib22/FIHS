@@ -85,9 +85,10 @@ def predict():
 
         response = format_response(top3_crops)
         return jsonify({'recommended_crops': response})
-
+    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host='192.168.1.10', port=5000)
+    # app.run(port=5000)
