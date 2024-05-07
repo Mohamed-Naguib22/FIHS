@@ -22,6 +22,9 @@ namespace FIHS.Services.ChatServices
             var client = new RestClient(_apiUrl + _apiKey);
 
             var request = new RestRequest(Method.POST);
+
+            request.AddHeader("Content-Type", "application/json");
+
             request.AddJsonBody(body);
             
             var response = await client.ExecuteAsync(request);

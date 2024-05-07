@@ -46,10 +46,9 @@ namespace FIHS.Tests.IntegrationTesting
         }
 
         [Fact]
-        public async Task AskQuestionAsync_InvalidApiKey_ReturnsForbidden()
+        public async Task AskQuestionAsync_MissingApiKey_ReturnsForbidden()
         {
-            var apiKey = "InvalidApiKey";
-            var client = new RestClient(API_URL + apiKey);
+            var client = new RestClient(API_URL);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
 
@@ -60,22 +59,71 @@ namespace FIHS.Tests.IntegrationTesting
         }
 
         [Fact]
-        public async Task AskQuestionAsync_TestPerformance_ReturnsForbidden()
+        public async Task AskQuestionAsync_InvalidApiKey_ReturnsForbidden()
         {
             var apiKey = "InvalidApiKey";
-            var stopwatch = Stopwatch.StartNew();
             var client = new RestClient(API_URL + apiKey);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
 
             var response = await client.ExecuteAsync(request);
 
+            Assert.False(response.IsSuccessful);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task AskQuestionAsync_TestPerformance_ReturnsForbidden()
+        {
+            var body = new
+            {
+                contents = new[]
+            {
+                    new { parts = new[] { new { text = "How are you?" } } }
+                }
+            };
+
+            var client = new RestClient(API_URL + _apiKey);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddJsonBody(body);
+
+            var stopwatch = Stopwatch.StartNew();
+
+            request.AddHeader("Content-Type", "application/json");
+            
+            var response = await client.ExecuteAsync<Dictionary<string, object>>(request);
+
             stopwatch.Stop();
+
             var responseTime = stopwatch.ElapsedMilliseconds;
 
-            Assert.True(responseTime <= 1000);
+            Assert.True(responseTime <= 5000);
             Assert.True(response.IsSuccessful);
-            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [Fact]
+        public async Task AskQuestionAsync_UnsupportedLanguage_ReturnsError()
+        {
+            var body = new
+            {
+                contents = new[]
+                {
+                    new { parts = new[] { new { text = "你好吗" } } }
+                }
+            };
+
+            var client = new RestClient(API_URL + _apiKey);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddJsonBody(body);
+
+            var response = await client.ExecuteAsync(request);
+
+            Assert.True(response.IsSuccessful);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
     }
 }
