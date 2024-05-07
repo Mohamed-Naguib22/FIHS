@@ -5,7 +5,6 @@ namespace FIHS.Dtos.PesticideDto
     public class PesticideDto
     {
         public string? Name { get; set; }
-        public double?  Price { get; set; }
         public string? Description { get; set; }
         public string? Manufactuer { get; set; }
         public string? UsageInstructions { get; set; }

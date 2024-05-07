@@ -10,7 +10,6 @@ namespace FIHS.Models.PesticideModels
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public double? Price { get; set; }
         [MaxLength(500)]
         public string? Description { get; set; }
         public string? Manufactuer { get; set; }
