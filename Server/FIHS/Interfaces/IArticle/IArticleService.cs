@@ -10,22 +10,18 @@ namespace FIHS.Interfaces.IArticle
 {
     public interface IArticleService
     {
-        Task<GetArticlesDto> SearchAsync(string topic, int num);
-        Task<IEnumerable<Topic>> GetAllTopicsAsync();
-        Task<bool> AddTopicAsync(Topic topic);
-        Task<bool> DeleteTopicAsync(int Id);
-
-        //Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> GetAllArticlesAsync(int offest, int limit);
-        //Task<ReturnArticleDto> GetArticleAsync(int articleId, string? refreshToken);
-        //Task<BaseDto> LikeAsync(int articleId, string refreshToken);
-        //Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> SearchAsync(string query, int offset, int limit);
-        //Task<Article> AddArticleAsync(AddArticleDto articleDto);
-        //Task<ArticleTag> AddTagAsync(TagDto tagDto);
-        //Task<ArticleSection> AddSectionAsync(AddSectionDto sectionDto);
-        //Task<Article> UpdateArticleAsync(int articleId, UpdateArticleDto articleDto);
-        //Task<ArticleSection> UpdateSectionAsync(int sectionId, UpdateSectionDto sectionDto);
-        //Task<bool> DeleteArticleAsync(int articleId);
-        //Task<bool> DeleteTagAsync(int tagId);
-        //Task<bool> DeleteSectionAsync(int sectionId);
+        Task<GetArticlesDto> ArticlesApi(string topic);
+        Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> GetAllArticlesAsync(int offest, int limit);
+        Task<ReturnArticleDto> GetArticleAsync(int articleId, string? refreshToken);
+        Task<BaseDto> LikeAsync(int articleId, string refreshToken);
+        Task<(IEnumerable<ReturnArticlesDto>, int? nextPage)> SearchAsync(string query, int offset, int limit);
+        Task<Article> AddArticleAsync(AddArticleDto articleDto);
+        Task<ArticleTag> AddTagAsync(TagDto tagDto);
+        Task<ArticleSection> AddSectionAsync(AddSectionDto sectionDto);
+        Task<Article> UpdateArticleAsync(int articleId, UpdateArticleDto articleDto);
+        Task<ArticleSection> UpdateSectionAsync(int sectionId, UpdateSectionDto sectionDto);
+        Task<bool> DeleteArticleAsync(int articleId);
+        Task<bool> DeleteTagAsync(int tagId);
+        Task<bool> DeleteSectionAsync(int sectionId);
     }
 }

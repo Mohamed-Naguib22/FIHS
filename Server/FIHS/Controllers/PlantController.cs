@@ -8,8 +8,6 @@ using FIHS.Dtos;
 using FIHS.Interfaces.IPlant;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using FIHS.Interfaces;
-using FIHS.Extensions;
-using FIHS.Interfaces.IFavourite;
 
 namespace FIHS.Controllers
 {
@@ -21,23 +19,21 @@ namespace FIHS.Controllers
         private readonly IPlantRepository _plantRepository;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
-        private readonly IFavourite _favourite;
-        public PlantController(ApplicationDbContext context, IMapper mapper, IPlantRepository plantRepository, IImageService imageService, IFavourite favourite)
+        public PlantController(ApplicationDbContext context, IMapper mapper, IPlantRepository plantRepository, IImageService imageService)
         {
+
             _context = context;
             _mapper = mapper;
             _plantRepository = plantRepository;
             _imageService = imageService;
-            _favourite = favourite;
         }
         [HttpGet("GetAllPlants")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllPlants([FromQuery]GetAllPlantsParams patameters)
+        public async Task<IActionResult> GetAllPlants(int plantTypeId, int offset=1 , int limit=10)
         {
-            var plants = await _plantRepository.GetAllPlantsAsync(patameters.plantTypeId, patameters.offset, patameters.limit);
-            var plantsDto = _mapper.Map<List<PlantDto>>(plants).MarkFavPlants(await _favourite.GetFavouritePlants(patameters.FavId));
-            return Ok(new  {Plant = plantsDto.Take(patameters.offset).ToList(),NextPage = patameters.limit < plantsDto.Count ? patameters.offset + 1:0 });
+            var plantsDto = _mapper.Map<List<PlantDto>>(await _plantRepository.GetAllPlantsAsync(plantTypeId, offset,limit));
+            return Ok(new  {Plant = plantsDto.Take(limit).ToList(),NextPage = limit < plantsDto.Count ?offset+1:0 });
         }
         [HttpGet("GetPlantById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -84,6 +80,5 @@ namespace FIHS.Controllers
         {
             return Ok(await _plantRepository.GetAllSoils());
         }
-
     }
 }

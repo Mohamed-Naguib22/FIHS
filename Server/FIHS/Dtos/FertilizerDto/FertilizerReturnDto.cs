@@ -7,9 +7,7 @@ namespace FIHS.Dtos.FertilizerDto
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? ImageURL { get; set; }
-        public double? price { get; set; }
         public string? UsageInstructions { get; set; }
         public string? Manufactuer { get; set; }
-        public string? NutrientContent { get; set; }
     }
 }

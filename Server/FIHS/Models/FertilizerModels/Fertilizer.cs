@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FIHS.Models.FertilizerModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace FIHS.Models.Fertilizer
 {
@@ -8,10 +10,12 @@ namespace FIHS.Models.Fertilizer
         [Required]
         public string Name { get; set; }
         public string? ImageURL { get; set; }
-        public double price { get; set; }
+        public string Description { get; set; }
         [MaxLength(500)]
         public string? UsageInstructions { get; set; }
         public string? Manufactuer { get; set; }
-        public string? NutrientContent { get; set; }
+
+        [ValidateNever]
+        public IEnumerable<PlantFertilizer> PlantFertilizer { get; set; }
     }
 }

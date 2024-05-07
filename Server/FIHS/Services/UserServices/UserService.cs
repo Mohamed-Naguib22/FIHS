@@ -134,7 +134,7 @@ namespace FIHS.Services.UserServices
 
         public async Task<string> GetUserIdByToken(string token)
         {
-             var user = await _tokenService.GetUserByRefreshToken(token);
+             var user =await _tokenService.GetUserByRefreshToken(token);
              return user?.Id ?? "";
         }
     }

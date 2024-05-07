@@ -29,7 +29,6 @@ namespace FIHS.Dtos
         public string HarvistingSeason { get; set; }
         public string CulivationTips { get; set; }
         public string ImageUrl { get; set; }
-        public bool IsFav { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
             public string Message { get; set; } = string.Empty;
             public ICollection<PlantTypeDto> PlantTypes { get; set; }

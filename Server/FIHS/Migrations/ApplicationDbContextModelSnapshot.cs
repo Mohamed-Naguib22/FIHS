@@ -134,26 +134,6 @@ namespace FIHS.Migrations
                     b.ToTable("ArticleTags");
                 });
 
-            modelBuilder.Entity("FIHS.Models.ArticleModels.Topic", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AddedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Topics");
-                });
-
             modelBuilder.Entity("FIHS.Models.AuthModels.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -373,6 +353,10 @@ namespace FIHS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageURL")
                         .HasColumnType("nvarchar(max)");
 
@@ -383,15 +367,9 @@ namespace FIHS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("NutrientContent")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UsageInstructions")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<double>("price")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -399,6 +377,21 @@ namespace FIHS.Migrations
                         .IsUnique();
 
                     b.ToTable("Fertilizers");
+                });
+
+            modelBuilder.Entity("FIHS.Models.FertilizerModels.PlantFertilizer", b =>
+                {
+                    b.Property<int>("PlantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FertilizerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlantId", "FertilizerId");
+
+                    b.HasIndex("FertilizerId");
+
+                    b.ToTable("PlantFertilizers");
                 });
 
             modelBuilder.Entity("FIHS.Models.PestModels.Pest", b =>
@@ -514,9 +507,6 @@ namespace FIHS.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
 
                     b.Property<string>("Toxicity")
                         .HasColumnType("nvarchar(max)");
@@ -1016,6 +1006,25 @@ namespace FIHS.Migrations
                     b.Navigation("Plant");
                 });
 
+            modelBuilder.Entity("FIHS.Models.FertilizerModels.PlantFertilizer", b =>
+                {
+                    b.HasOne("FIHS.Models.Fertilizer.Fertilizer", "Fertilizer")
+                        .WithMany("PlantFertilizer")
+                        .HasForeignKey("FertilizerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FIHS.Models.PlantModels.Plant", "Plant")
+                        .WithMany("PlantFertilizer")
+                        .HasForeignKey("PlantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Fertilizer");
+
+                    b.Navigation("Plant");
+                });
+
             modelBuilder.Entity("FIHS.Models.PestModels.PestsPesticides", b =>
                 {
                     b.HasOne("FIHS.Models.PestModels.Pest", "Pest")
@@ -1189,6 +1198,11 @@ namespace FIHS.Migrations
                     b.Navigation("FavPlants");
                 });
 
+            modelBuilder.Entity("FIHS.Models.Fertilizer.Fertilizer", b =>
+                {
+                    b.Navigation("PlantFertilizer");
+                });
+
             modelBuilder.Entity("FIHS.Models.PestModels.Pest", b =>
                 {
                     b.Navigation("Pesticides");
@@ -1208,6 +1222,8 @@ namespace FIHS.Migrations
                     b.Navigation("FavouritePlants");
 
                     b.Navigation("Pests");
+
+                    b.Navigation("PlantFertilizer");
 
                     b.Navigation("PlantTypes");
 

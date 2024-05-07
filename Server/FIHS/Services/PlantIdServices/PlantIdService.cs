@@ -24,7 +24,7 @@ namespace FIHS.Services.PlantIdServices
             var content = await ExecuteRequestAsync<PlantIdentificationResponse>("identify", requestBody);
 
             if (content == null)
-                return new PlantIdentificationDto { Succeeded = false, Message = "Error Identifing the plant" };
+                return new PlantIdentificationDto { Succeeded = false, Message = $"Error Identifing the plant" };
 
             if (!content.Is_plant)
                 return new PlantIdentificationDto { Succeeded = false, Message = "الرجاء ادخال صورة نبات" };
@@ -42,7 +42,7 @@ namespace FIHS.Services.PlantIdServices
             var content = await ExecuteRequestAsync<HealthAssessmentResponse>("health_assessment", requestBody);
 
             if (content == null)
-                return new HealthAssessmentDto { Succeeded = false, Message = "Error detecting the disease" };
+                return new HealthAssessmentDto { Succeeded = false, Message = $"Error detecting the disease" };
 
             if (!content.Is_plant)
                 return new HealthAssessmentDto { Succeeded = false, Message = "الرجاء ادخال صورة نبات" };

@@ -78,10 +78,7 @@ namespace FIHS.Controllers
             return result.Succeeded ? Ok(result) : BadRequest(result.Message);
         }
 
-
         [HttpPost("login")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LoginAsync([FromBody] TokenrRequestModel model)
         {
             if (!ModelState.IsValid)

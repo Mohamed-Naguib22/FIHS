@@ -1,5 +1,6 @@
 ﻿using FIHS.Models.DiseaseModels;
 using FIHS.Models.FavouriteModels;
+using FIHS.Models.FertilizerModels;
 using FIHS.Models.PestModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
@@ -55,8 +56,10 @@ namespace FIHS.Models.PlantModels
         public virtual IEnumerable<PlantsPests> Pests { get; set; }
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public virtual IEnumerable<FavouritePlant> FavouritePlants { get; set; } = null;
-
-
+       
+        // Many To Many Plant Fertilzer Table
+        [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public IEnumerable<PlantFertilizer> PlantFertilizer { get; set; }
 
     }
 }

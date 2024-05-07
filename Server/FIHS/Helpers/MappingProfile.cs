@@ -87,8 +87,7 @@ namespace FIHS.Helpers
             // Favourite & Favourite Item
             CreateMap<FavouritePlant, FavouriteItemAddRequest>().ReverseMap();
             CreateMap<Favourite,GetAllFavPlantsDto>().ReverseMap();
-            CreateMap<FavouritePlant, FavoritePlantDto>();
-            CreateMap<Plant, PlantInFavDto>().ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => _baseUrl + src.ImageUrl));
+            CreateMap<Plant, FavoritePlantDto>().ForMember(p => p.ImageUrl, opt => opt.MapFrom(src => _baseUrl + src.ImageUrl));
             // Comment
             CreateMap<AddCommentsDto, Comment>();
             CreateMap<GetAllCommentsDto, Comment>().ReverseMap();

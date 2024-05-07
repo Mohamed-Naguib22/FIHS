@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Diagnostics;
 using System.Net;
 using Xunit;
 
@@ -46,35 +45,15 @@ namespace FIHS.Tests.IntegrationTesting
         }
 
         [Fact]
-        public async Task AskQuestionAsync_InvalidApiKey_ReturnsForbidden()
+        public async Task AskQuestionAsync_MissingApiKey_ReturnsForbidden()
         {
-            var apiKey = "InvalidApiKey";
-            var client = new RestClient(API_URL + apiKey);
+            var client = new RestClient(API_URL);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
 
             var response = await client.ExecuteAsync(request);
 
             Assert.False(response.IsSuccessful);
-            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task AskQuestionAsync_TestPerformance_ReturnsForbidden()
-        {
-            var apiKey = "InvalidApiKey";
-            var stopwatch = Stopwatch.StartNew();
-            var client = new RestClient(API_URL + apiKey);
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/json");
-
-            var response = await client.ExecuteAsync(request);
-
-            stopwatch.Stop();
-            var responseTime = stopwatch.ElapsedMilliseconds;
-
-            Assert.True(responseTime <= 1000);
-            Assert.True(response.IsSuccessful);
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }
     }

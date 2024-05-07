@@ -2,17 +2,41 @@ from flask import Flask, request, jsonify
 import joblib
 import requests
 import os
-from marshmallow import Schema, fields
-import json
-from flask import Response
+from jsonschema import validate, exceptions
 
-class CropRecommendationRequest(Schema):
-    N = fields.Integer(required=True, validate=lambda n: 0 <= n <= 300)
-    P = fields.Integer(required=True, validate=lambda p: 0 <= p <= 300)
-    K = fields.Integer(required=True, validate=lambda k: 0 <= k <= 300)
-    rainfall = fields.Integer(required=True)
-    ph = fields.Float(required=True, validate=lambda ph: 0.0 <= ph <= 14.0)
-    city = fields.Str(required=True)
+schema = {
+    "type": "object",
+    "properties": {
+        "N": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 300,
+        },
+        "P": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 300,
+        },
+        "K": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 300,
+        },
+        "rainfall": {
+            "type": "integer",
+            "minimum": 0,
+        },
+        "ph": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 14.0,
+        },
+        "city": {
+            "type": "string",
+        }
+    },
+    "required": ["N", "P", "K", "rainfall", "ph", "city"]
+}
 
 app = Flask(__name__)
 
@@ -41,40 +65,12 @@ def get_weather_data(city):
     except requests.exceptions.RequestException as e:
         return {'temperature': None, 'humidity': None}
 
-def predict_crops(features):
-    prediction_proba = model.predict_proba([features])[0]
-    sorted_crops = sorted(enumerate(prediction_proba), key=lambda x: x[1], reverse=True)
-    return sorted_crops[:3]
-
-def format_response(top3_crops_data):
-    crop_labels = {"rice": "أرز", "maize": "ذرة", "chickpea": "حمص", "kidneybeans": "فاصوليا", "pigeonpeas": "بازلاء", "mothbeans": "فول",
-        "mungbean":"لوبيا", "blackgram": "فاصوليا", "lentil": "عدس", "pomegranate": "رمان", "banana": "موز", "mango": "مانغو", "grapes": "عنب",
-        "watermelon": "بطيخ", "muskmelon": "شمام", "apple": "تفاح", "orange": "برتقان", "papaya": "بَابَايَا", "coconut": "جوز الهند", 
-        "cotton": "قطن", "jute": "جوت", "coffee": "قهوة" }
-    
-    response_data = []
-    for crop_index, probability in top3_crops_data:
-        crop_name = crop_labels[model.classes_[crop_index]]
-        response_data.append({'crop': crop_name, 'probability': round(probability, 2)})
-    
-    return response_data
-
 @app.route('/recommend', methods=['POST'])
 def predict():
     try:
         data = request.get_json(force=True)
 
-        schema = CropRecommendationRequest()
-        errors = schema.validate(data)
-
-        schema = CropRecommendationRequest()
-        errors = schema.validate(data)
-        
-        if errors:
-            error_messages = []
-            for field, error_msgs in errors.items():
-                error_messages.append(f"Invalid value for {field}: {', '.join(error_msgs)}")
-            return jsonify({'error': error_messages}), 400
+        validate(data, schema)
 
         weather_data = get_weather_data(data['city'])
 
@@ -83,15 +79,31 @@ def predict():
 
         features = [data['N'], data['P'], data['K'], weather_data['temperature'], weather_data['humidity'], data['ph'], data['rainfall']]
         
-        top3_crops = predict_crops(features)
+        print(weather_data['temperature'])
+        print(weather_data['humidity'])
+        
+        prediction_proba = model.predict_proba([features])[0]
+        sorted_crops = sorted(enumerate(prediction_proba), key=lambda x: x[1], reverse=True)
+       
+        top3_crops = sorted_crops[:3]
 
-        response = format_response(top3_crops)
-        response_json = json.dumps({'recommended_crops': response}, ensure_ascii=False)
-        return Response(response=response_json, status=200, content_type="application/json; charset=utf-8")
+        crop_labels = {"rice": "أرز", "maize": "ذرة", "chickpea": "حمص", "kidneybeans": "فاصوليا", "pigeonpeas": "بازلاء", "mothbeans": "فول",
+            "mungbean":"لوبيا", "blackgram": "فاصوليا", "lentil": "عدس", "pomegranate": "رمان", "banana": "موز", "mango": "مانغو", "grapes": "عنب",
+            "watermelon": "بطيخ", "muskmelon": "شمام", "apple": "تفاح", "orange": "برتقان", "papaya": "بَابَايَا", "coconut": "جوز الهند", 
+            "cotton": "قطن", "jute": "جوت", "coffee": "قهوة" }
+        
+        top3_crops_data = []
+        for crop_index, probability in top3_crops:
+            crop_name = crop_labels[model.classes_[crop_index]]
+            top3_crops_data.append({'crop': crop_name, 'probability': round(probability, 2)})
+        return jsonify({'recommended_crops': top3_crops_data})
+
+    except exceptions.ValidationError as e:
+        error_message = str(e.args[0])
+        return jsonify({'error': error_message}), 400
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.11', port=5000)
-    # app.run(port=5000)
+    app.run(port=5000)

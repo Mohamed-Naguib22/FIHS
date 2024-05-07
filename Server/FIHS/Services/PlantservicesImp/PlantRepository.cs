@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FIHS.Dtos;
 using FIHS.Interfaces;
-using FIHS.Interfaces.IFavourite;
 using FIHS.Interfaces.IPlant;
 using FIHS.Models.PlantModels;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +13,12 @@ namespace FIHS.Services.PlantservicesImp
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
-        private readonly IFavourite _favourite;
-        public PlantRepository(ApplicationDbContext context, IImageService imageService, IMapper mapper, IFavourite favourite)
-        {
+        public PlantRepository(ApplicationDbContext context, IImageService imageService,IMapper mapper)
+        { 
             _context = context;
             _imageService = imageService;
             _mapper = mapper;
-            _favourite = favourite;
+
         }
 
         public async Task AddPlant(Plant plant, PlantInDto plantInDto)

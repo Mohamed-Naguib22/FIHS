@@ -39,15 +39,15 @@ const LoginPage = (props: Props) => {
         position='absolute'
         top={45}
         left={"$1/2"}
-        transform={"translateX(-30px)"}
+        transform={"translateX(35px)"}
       >
         <Logo />
       </View>
       <View
         position='absolute'
-        top={115}
+        top={125}
         left={"$1/2"}
-        transform={"translateX(-120px)"}
+        transform={"translateX(125px)"}
         bg='rgba(41, 133, 120,0.6)'
         maxWidth={"$64"}
         p={"$5"}
@@ -199,7 +199,6 @@ const LoginPage = (props: Props) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                
                     {errors.password && (
                       <HStack gap={"$1"} my={"$1.5"} mx={"$3"}>
                         <Text size='xs' color='$textLight200'>
