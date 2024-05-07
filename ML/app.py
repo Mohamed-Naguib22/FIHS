@@ -3,6 +3,8 @@ import joblib
 import requests
 import os
 from marshmallow import Schema, fields
+import json
+from flask import Response
 
 class CropRecommendationRequest(Schema):
     N = fields.Integer(required=True, validate=lambda n: 0 <= n <= 300)
@@ -84,10 +86,12 @@ def predict():
         top3_crops = predict_crops(features)
 
         response = format_response(top3_crops)
-        return jsonify({'recommended_crops': response})
+        response_json = json.dumps({'recommended_crops': response}, ensure_ascii=False)
+        return Response(response=response_json, status=200, content_type="application/json; charset=utf-8")
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host='192.168.1.11', port=5000)
+    # app.run(port=5000)
