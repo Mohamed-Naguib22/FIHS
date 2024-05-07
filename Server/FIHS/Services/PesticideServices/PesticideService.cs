@@ -66,7 +66,6 @@ namespace FIHS.Services.PesticideService
             var pesticide = await GetByIdAsync(id);
             pesticide.Name = dto.Name ?? pesticide.Name;
             pesticide.Manufactuer = dto.Manufactuer ?? pesticide.Manufactuer;
-            pesticide.Price = dto.Price ?? pesticide.Price;
             pesticide.Description = dto.Description ?? pesticide.Description;
             pesticide.Type = dto.Type ?? pesticide.Type;
             pesticide.Toxicity = dto.Toxicity ?? pesticide.Toxicity;
