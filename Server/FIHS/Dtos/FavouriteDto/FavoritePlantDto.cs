@@ -1,9 +1,11 @@
-﻿namespace FIHS.Dtos.FavouriteDto
+﻿using FIHS.Models.PlantModels;
+
+namespace FIHS.Dtos.FavouriteDto
 {
     public class FavoritePlantDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public int PlantId { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public virtual PlantInFavDto Plant { get; set; }
     }
 }
