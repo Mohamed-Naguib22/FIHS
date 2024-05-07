@@ -81,7 +81,7 @@ namespace FIHS.Helpers
             CreateMap<Pesticide, PesticideReturnDto>();
             CreateMap<Fertilizer, FertilizerReturnDto>();
             CreateMap<PestsPesticides, PesticideReturnDto>().IncludeMembers(src => src.Pesticide);
-
+            CreateMap<Fertilizer, FertilizerPlantDto>().ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => _baseUrl + src.ImageURL));
             CreateMap<Fertilizer, IEnumerable<FertilizerReturnDto>>();
             CreateMap<Pesticide, IEnumerable<PesticideReturnDto>>();
             // Favourite & Favourite Item
@@ -89,6 +89,7 @@ namespace FIHS.Helpers
             CreateMap<Favourite,GetAllFavPlantsDto>().ReverseMap();
             CreateMap<FavouritePlant, FavoritePlantDto>();
             CreateMap<Plant, PlantInFavDto>().ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => _baseUrl + src.ImageUrl));
+
             // Comment
             CreateMap<AddCommentsDto, Comment>();
             CreateMap<GetAllCommentsDto, Comment>().ReverseMap();
