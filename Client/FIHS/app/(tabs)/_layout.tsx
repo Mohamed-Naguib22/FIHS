@@ -22,6 +22,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { imgUrl } = useSession();
   const segments = useSegments();
+  const noHeader = ["(scan)", "(profile)", "favourites", "diseases"];
   return (
     <Tabs
       initialRouteName='home/index'
@@ -43,10 +44,9 @@ export default function TabLayout() {
           position: "relative",
           display: "flex",
         },
-        header:
-          segments[1] === "(scan)"
-            ? () => <View />
-            : ({ layout, navigation, options, route }) => <TabsHeader />,
+        header: noHeader.includes(segments[1]!)
+          ? () => <View />
+          : ({ layout, navigation, options, route }) => <TabsHeader />,
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
@@ -108,7 +108,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='profile/index'
+        name='(profile)'
         options={{
           title: "",
           tabBarIcon: ({ color }) =>

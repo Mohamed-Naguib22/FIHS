@@ -1,8 +1,14 @@
 import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { HStack, VStack, View, Text, ScrollView } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
+import {
+  HStack,
+  VStack,
+  View,
+  Text,
+  ScrollView,
+  Image,
+} from "@gluestack-ui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { Fontisto, FontAwesome } from "@expo/vector-icons";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
@@ -11,24 +17,74 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import usePlant from "@/hooks/usePlant";
 import Loading from "@/components/layout/Loading";
 import { NavigatorProps } from "expo-router/build/views/Navigator";
+import { DeleteFavourite, PostFavourite } from "@/hooks/useFavourite";
+import useSession from "@/hooks/state/useSession";
+import useComments, { UpdateComment } from "@/hooks/useComment";
+import CommentCard from "@/components/comments/CommentCard";
+import CommentForm from "@/components/comments/CommentForm";
 type Props = {};
 
 const Plant = () => {
   const { id } = useLocalSearchParams();
   const navigate = useNavigation();
-  const { data: pt, isLoading } = usePlant(id as string);
-
+  const { favouriteId } = useSession();
+  const { data: pt, isLoading, refetch } = usePlant(id as string);
+  const { data: comments, refetch: refetchComments } = useComments(
+    +(id as string),
+    "plant"
+  );
+  const [toBeUpdated, setToBeUpdated] = useState<TComment | null>(null);
+  const RemoveFav = DeleteFavourite();
+  const addFav = PostFavourite();
   if (isLoading && !pt) {
     return <Loading />;
   }
+  const handleRemoveFav = () => {
+    RemoveFav.mutate(
+      {
+        vals: { favouriteId: favouriteId, plantId: pt?.id! },
+      },
+      {
+        onSuccess(data, variables, context) {
+          refetch();
+        },
+      }
+    );
+  };
+  const handleAddFav = () => {
+    addFav.mutate(
+      { favouriteId: favouriteId, plantId: pt?.id! },
+      {
+        onSuccess(data, variables, context) {
+          refetch();
+        },
+      }
+    );
+  };
   navigate.setOptions({ title: pt?.name });
   return (
     <ScrollView px={"$5"}>
-      <View>
+      <View position='relative'>
         <Image
           style={styles.articlePhotoId}
-          source={require("@/assets/images/PlantType.jpg")}
+          source={pt?.imageUrl}
+          alt={pt?.name}
         />
+        <Text
+          position='absolute'
+          left={"$5"}
+          top={"$5"}
+          bg='$backgroundDark100'
+          p={"$2"}
+          rounded={"$md"}
+          color='$red600'
+        >
+          <FontAwesome
+            size={22}
+            name={`heart${pt?.isFav ? "" : "-o"}`}
+            onPress={pt?.isFav ? handleRemoveFav : handleAddFav}
+          />
+        </Text>
       </View>
       <VStack py={"$5"}>
         <ScrollView horizontal style={{ marginBottom: 30 }}>
@@ -93,8 +149,8 @@ const Plant = () => {
               <Ionicons name='thermometer-outline' size={25} />
             </View>
 
-            <Text>الجراره</Text>
-            <Text size='xs'>18c</Text>
+            <Text>الحرارة</Text>
+            <Text size='xs'>{pt?.temperature}</Text>
           </VStack>
           <VStack justifyContent='center' alignItems='center'>
             <View
@@ -172,6 +228,39 @@ const Plant = () => {
             {pt?.commonUses}
           </Text>
         </VStack>
+      </VStack>
+      <VStack
+        gap={"$3"}
+        bg='$backgroundDark200'
+        py={"$6"}
+        px={"$3"}
+        rounded={"$md"}
+      >
+        <Text fontSize={18} fontWeight='900' color='#000'>
+          التعليقات
+        </Text>
+        <CommentForm
+          entityId={+(id as string)}
+          entityType='plant'
+          toBeUpdated={toBeUpdated}
+          setToBeUpdated={setToBeUpdated}
+        />
+        {comments && comments?.length > 0 ? (
+          comments?.map((comment) => {
+            return (
+              <CommentCard
+                key={comment.id}
+                comment={comment}
+                refetchComments={refetchComments}
+                setToBeUpdated={setToBeUpdated}
+              />
+            );
+          })
+        ) : (
+          <View>
+            <Text>لا توجد تعليقات</Text>
+          </View>
+        )}
       </VStack>
     </ScrollView>
   );

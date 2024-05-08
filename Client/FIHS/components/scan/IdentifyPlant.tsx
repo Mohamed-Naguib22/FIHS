@@ -61,7 +61,11 @@ const PlantSuggest = ({ sugg }: { sugg: PlantSuggestion }) => {
           <Text fontWeight='$bold' fontSize={"$lg"}>
             الأسماء المعروفة :
           </Text>{" "}
-          {sugg.commonNames.join("، ")}
+          {Array.isArray(sugg.commonNames)
+            ? sugg.commonNames.length > 1
+              ? sugg.commonNames.join("، ")
+              : sugg.commonNames[0]
+            : sugg.commonNames}
         </Text>
         <Text>
           <Text fontWeight='$bold' fontSize={"$lg"}>

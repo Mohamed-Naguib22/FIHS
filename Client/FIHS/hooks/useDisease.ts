@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import api from '@/utils/api'
 export const useDisease = (id: string) => useQuery<Disease>({
     queryKey: ['disease', id],
@@ -7,9 +7,11 @@ export const useDisease = (id: string) => useQuery<Disease>({
 })
 export default useDisease
 
-export const useDiseases = () => useQuery<Disease[]>({
+export const useDiseases = (amount: number = 10) => useInfiniteQuery<Paginate<Disease, 'diseases'>>({
     queryKey: ['disease'],
-    queryFn: () => api.get<Disease[]>("/Disease/GetAllDiseases").then((res) => res.data)
-
+    queryFn: ({ pageParam }) => api.get<Paginate<Disease, 'diseases'>>(`/Disease/GetAllDiseases?offset=${pageParam}&limit=${amount}`).then((res) => res.data),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.nextPage > 0 ? lastPage.nextPage : null
 })
+
 

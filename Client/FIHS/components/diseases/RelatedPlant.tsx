@@ -1,5 +1,4 @@
-import { Text } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
+import { Text, Image } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
@@ -20,7 +19,14 @@ export const RelatedPlant = ({ plant }: { plant: Plant }) => {
       }}
       onPress={() => router.push(`/(plants)/${plant.id}`)}
     >
-      <Image style={styles.similar} source={{ uri: plant.imageUrl }} />
+      <Image
+        style={styles.similar}
+        source={plant.imageUrl}
+        alt={plant.name}
+        rounded={"$sm"}
+        borderBottomLeftRadius={0}
+        borderBottomRightRadius={0}
+      />
       <Text
         textAlign='center'
         color='#000'

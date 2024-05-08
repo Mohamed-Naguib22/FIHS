@@ -17,16 +17,7 @@ import { Fontisto, FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useRouter } from "expo-router";
 
-type Props = Partial<Article>;
-
-const ArticleCard = ({
-  title,
-  overview,
-  author,
-  id,
-  imgUrl,
-  numOfLikes,
-}: Props) => {
+const ArticleCard = () => {
   // const Mui = motify(View)();
   // const tapGesture = Gesture.LongPress().onStart(() => {
   //   // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
@@ -134,18 +125,28 @@ const ArticleCard = ({
     //     </VStack>
     //   </Mui>
     // </GestureDetector>
-        <TouchableOpacity  activeOpacity={1}
-        onPress={() => router.push(`/(articles)/`)}
-
-        style={{width:"100%", height:100, borderRadius:10,marginLeft:-1 ,marginTop:20}}
-        >
-           <Image
+    <TouchableOpacity
+      activeOpacity={1}
+      onPress={() => router.push(`/(articles)/`)}
+      style={{
+        width: "100%",
+        height: 100,
+        borderRadius: 10,
+        marginLeft: -1,
+        marginTop: 20,
+      }}
+    >
+      <Image
         source={require("@/assets/images/article.png")}
-        style={{width:'99%', height:100,
-          
-         borderRadius:10,marginLeft:-1}}
-        />
-        </TouchableOpacity>
+        style={{
+          width: "99%",
+          height: 100,
+
+          borderRadius: 10,
+          marginLeft: -1,
+        }}
+      />
+    </TouchableOpacity>
   );
 };
 

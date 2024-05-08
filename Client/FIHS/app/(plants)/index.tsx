@@ -1,6 +1,5 @@
 import React from "react";
-import { View, HStack, VStack, Text } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
+import { View, HStack, VStack, Text, Image } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";

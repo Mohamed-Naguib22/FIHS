@@ -1,32 +1,44 @@
-import { HStack, Text, VStack, View } from "@gluestack-ui/themed";
+import { Text, VStack, View, Image } from "@gluestack-ui/themed";
 import React from "react";
-import TabsPageContainer from "@/components/layout/TabsPageContainer";
-import Section from "@/components/layout/Section";
-import { Image } from "expo-image";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { usePests } from "@/hooks/usePest";
 import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
+import AutoFetching from "@/components/layout/AutoFetching";
 
 type Props = {};
 
 const Peats = (props: Props) => {
-  const { data: pests, isLoading } = usePests();
+  const {
+    data: pests,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePests();
   if (isLoading && !pests) {
     return <Loading />;
   }
   return (
-    <View py={"$6"} px={"$2"}>
-      <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
-        الأفات
-      </Text>
-      <SmallCardContainer>
-        {pests?.map((pest, i, arr) => {
-          return <Pest key={pest.id} pest={pest} />;
-        })}
-      </SmallCardContainer>
-    </View>
+    <AutoFetching
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+    >
+      <View py={"$6"} px={"$2"}>
+        <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
+          الأفات
+        </Text>
+        <SmallCardContainer>
+          {pests?.pages.map((page) =>
+            page.pests.map((pest, i, arr) => {
+              return <Pest key={pest.id} pest={pest} />;
+            })
+          )}
+        </SmallCardContainer>
+      </View>
+    </AutoFetching>
   );
 };
 
@@ -59,7 +71,8 @@ const Pest = ({ pest }: { pest: Pest }) => {
     >
       <Image
         style={styles.plantDiseasesImage}
-        source={{ uri: pest.imageUrl }}
+        source={pest.imageUrl}
+        alt={pest.name}
       />
       <VStack justifyContent='center' alignItems='flex-end' pr={6}>
         <Text textAlign='center' color='#000' pt={6}>

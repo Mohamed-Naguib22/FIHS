@@ -8,7 +8,7 @@ type Props = {};
 const DeleteAccount = (props: Props) => {
   const deleteAccount = useDeleteAccount();
   return (
-    <FormControl px={"$5"} py={"$5"}>
+    <FormControl mx={"$7"} py={"$5"}>
       <Heading color='$textDark900' size='md' lineHeight='$md'>
         حذف الحساب
       </Heading>

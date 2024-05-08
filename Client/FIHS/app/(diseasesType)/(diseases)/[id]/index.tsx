@@ -1,13 +1,22 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { HStack, VStack, Text, View } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
+import {
+  HStack,
+  VStack,
+  Text,
+  View,
+  Image,
+  ScrollView,
+} from "@gluestack-ui/themed";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import useDisease from "@/hooks/useDisease";
 import Loading from "@/components/layout/Loading";
 import { RelatedPlant } from "@/components/diseases/RelatedPlant";
+import useComments from "@/hooks/useComment";
+import CommentForm from "@/components/comments/CommentForm";
+import CommentCard from "@/components/comments/CommentCard";
 
 type Props = {};
 
@@ -18,13 +27,18 @@ const Disease = (props: Props) => {
   if (isLoading && !disease) {
     return <Loading />;
   }
+  const { data: comments, refetch: refetchComments } = useComments(
+    +(id as string),
+    "disease"
+  );
   navigate.setOptions({ title: disease?.name });
 
   return (
-    <TabsPageContainer>
+    <ScrollView px={"$4"}>
       <Image
         style={styles.articlePhotoId}
-        source={{ uri: disease?.imageUrl }}
+        source={disease?.imageUrl}
+        alt={disease?.name}
       />
       <VStack>
         <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
@@ -135,7 +149,34 @@ const Disease = (props: Props) => {
           )}
         </ScrollView>
       </VStack>
-    </TabsPageContainer>
+      <VStack
+        gap={"$3"}
+        bg='$backgroundDark200'
+        py={"$6"}
+        px={"$3"}
+        rounded={"$md"}
+      >
+        <Text fontSize={18} fontWeight='900' color='#000'>
+          التعليقات
+        </Text>
+        <CommentForm entityId={+(id as string)} entityType='disease' />
+        {comments && comments?.length > 0 ? (
+          comments?.map((comment) => {
+            return (
+              <CommentCard
+                key={comment.id}
+                comment={comment}
+                refetchComments={refetchComments}
+              />
+            );
+          })
+        ) : (
+          <View>
+            <Text>لا توجد تعليقات</Text>
+          </View>
+        )}
+      </VStack>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

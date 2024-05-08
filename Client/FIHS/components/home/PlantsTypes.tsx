@@ -1,6 +1,5 @@
 import React from "react";
 import { HStack, VStack, Text } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -8,6 +7,7 @@ import { useRouter } from "expo-router";
 import { usePlantTypes, usePlantTypesStatic } from "@/hooks/usePlantType";
 import Loading from "../layout/Loading";
 import AutoFetching from "../layout/AutoFetching";
+import { Image } from "@gluestack-ui/themed";
 
 export default function PlantsTypes() {
   const { data: types, isLoading } = usePlantTypesStatic();
@@ -49,7 +49,10 @@ const PlantType = ({ type }: { type: PlantType }) => {
     >
       <Image
         style={styles.PlantsTypesImage}
-        source={require("@/assets/images/PlantType.jpg")}
+        source={type.imgURL}
+        rounded={"$md"}
+        borderBottomLeftRadius={0}
+        borderBottomRightRadius={0}
       />
       <Text
         textAlign='center'
