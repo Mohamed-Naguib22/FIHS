@@ -37,7 +37,7 @@ namespace FIHS.Controllers
         {
             var plants = await _plantRepository.GetAllPlantsAsync(patameters.plantTypeId, patameters.offset, patameters.limit);
             var plantsDto = _mapper.Map<List<PlantDto>>(plants).MarkFavPlants(await _favourite.GetFavouritePlants(patameters.FavId));
-            return Ok(new  {Plant = plantsDto.Take(patameters.offset).ToList(),NextPage = patameters.limit < plantsDto.Count ? patameters.offset + 1:0 });
+            return Ok(new  {Plant = plantsDto.Take(patameters.limit).ToList(),NextPage = patameters.limit < plantsDto.Count ? patameters.offset + 1:0 });
         }
         [HttpGet("GetPlantById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
