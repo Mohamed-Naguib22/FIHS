@@ -4,5 +4,6 @@
     {
         public string? Username { get; set; }
         public string? ImgUrl { get; set; }
+        public string Email { get; set; }
     }
 }
