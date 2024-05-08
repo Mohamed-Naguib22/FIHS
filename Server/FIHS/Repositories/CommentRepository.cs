@@ -1,7 +1,6 @@
 ﻿using FIHS.Interfaces.IComment;
 using FIHS.Models.CommentModels;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
 
 namespace FIHS.Repositories
 {
@@ -32,7 +31,7 @@ namespace FIHS.Repositories
             _context.SaveChanges();
         }
         public async Task<bool> IsCommentExist(int commentId) =>await _context.Comments.AnyAsync(c=>c.Id == commentId);
-        public async Task<bool> HasReachedCommentsLimits(string userId,string entityType,int entityId) => await _context.Comments.CountAsync(c=>c.UserId == userId&&c.EntityType==entityType&&c.EntityId==entityId)>=5;
+        public async Task<bool> HasReachedCommentsLimits(string userId,string entityType,int entityId) => await _context.Comments.CountAsync(c=>c.UserId == userId&&c.EntityType==entityType&&c.EntityId==entityId)==5;
 
     }
 }

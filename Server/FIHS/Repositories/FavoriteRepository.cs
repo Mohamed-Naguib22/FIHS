@@ -51,6 +51,7 @@ namespace FIHS.Repositories
             if (favourotePlant == null)
                 return false;
              _context.Remove(favourotePlant);
+             _context.SaveChanges();
             return true;
         }
     }

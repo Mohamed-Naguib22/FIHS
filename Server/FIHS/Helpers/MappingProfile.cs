@@ -93,7 +93,8 @@ namespace FIHS.Helpers
             // Comment
             CreateMap<AddCommentsDto, Comment>();
             CreateMap<GetAllCommentsDto, Comment>().ReverseMap();
-            CreateMap<ApplicationUser, CommentUserDto>().ForMember(dest=>dest.ImgUrl , opt=> opt.MapFrom(src => _baseUrl + src.ImgUrl));
+            CreateMap<ApplicationUser, CommentUserDto>().ForMember(dest=>dest.ImgUrl , opt=> opt.MapFrom(src => _baseUrl + src.ImgUrl)).
+                ForMember(des=>des.Username,opt=>opt.MapFrom(src=>src.FirstName+" "+src.LastName));
         }
     }
 }
