@@ -41,9 +41,11 @@ namespace FIHS.Controllers
         }
         [HttpGet("GetPlantById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPlantById(int id)
+        public async Task<IActionResult> GetPlantById(int id, int favId = 0)
         {
+            
             var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByIdAsync(id));
+            plantDto.IsFav =await _favourite.IsFavouriteItemExist(new Dtos.Favourite.FavouriteItemAddRequest() { FavouriteId = favId,PlantId=id});
             return plantDto == null ?   NotFound() : Ok(plantDto);
         }
 
