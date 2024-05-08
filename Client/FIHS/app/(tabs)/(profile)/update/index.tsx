@@ -27,9 +27,9 @@ import useSession from "@/hooks/state/useSession";
 import * as ImagePicker from "expo-image-picker";
 import { DeleteProfileImg, PostProfileImg } from "@/hooks/useProfile";
 
-export default function ProfileScreen() {
+export default function ProfileUpdateScreen() {
   const [showActionsheet, setShowActionsheet] = useState(false);
-  const { imgUrl } = useSession();
+  const { imgUrl, firstName, lastName } = useSession();
   const postProfileImg = PostProfileImg();
   const deleteProfileImg = DeleteProfileImg();
   const pickImage = async () => {
@@ -51,34 +51,33 @@ export default function ProfileScreen() {
   };
   return (
     <>
-      <TabsPageContainer>
-        <ScreenHeader name='صفحتي الشخصية'>
-          <VStack gap={"$1.5"} my={"$5"}>
-            <VStack alignItems='center' gap={"$0.5"}>
-              <TouchableOpacity onPress={() => setShowActionsheet(true)}>
-                <Avatar size='xl' alignSelf='center'>
-                  <AvatarFallbackText>يوسف محمد</AvatarFallbackText>
-                  <AvatarImage
-                    alt='يوسف محمد'
-                    source={imgUrl || require("@/assets/images/avatar.png")}
-                  />
-                </Avatar>
-              </TouchableOpacity>
-              <HStack gap={"$1"}>
-                <Text size='xs' fontWeight='$bold' color='$textDark500'>
-                  <FontAwesome name='info-circle' />
-                </Text>
-                <Text size='xs' fontWeight='$bold' color='$textDark500'>
-                  إضغط لتعديل او حذف الصورة
-                </Text>
-              </HStack>
-            </VStack>
-            <PersonalInfoForm />
-            <ResetPasswordForm />
-            <DeleteAccount />
+      <ScreenHeader name='صفحتي الشخصية'>
+        <VStack gap={"$1.5"} my={"$12"} mx={"$7"}>
+          <VStack alignItems='center' gap={"$0.5"}>
+            <TouchableOpacity onPress={() => setShowActionsheet(true)}>
+              <Avatar size='xl' alignSelf='center'>
+                <AvatarFallbackText>
+                  {firstName + " " + lastName}
+                </AvatarFallbackText>
+                <AvatarImage
+                  alt={firstName + " " + lastName}
+                  source={imgUrl || require("@/assets/images/avatar.png")}
+                />
+              </Avatar>
+            </TouchableOpacity>
+            <HStack gap={"$1"}>
+              <Text size='xs' fontWeight='$bold' color='$textDark500'>
+                <FontAwesome name='info-circle' />
+              </Text>
+              <Text size='xs' fontWeight='$bold' color='$textDark500'>
+                إضغط لتعديل او حذف الصورة
+              </Text>
+            </HStack>
           </VStack>
-        </ScreenHeader>
-      </TabsPageContainer>
+          <PersonalInfoForm />
+          <ResetPasswordForm />
+        </VStack>
+      </ScreenHeader>
       <Actionsheet
         isOpen={showActionsheet}
         onClose={() => setShowActionsheet(!showActionsheet)}

@@ -1,10 +1,16 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import api from '@/utils/api'
-export const usePlant = (id: string) => useQuery<FullPlant>({
-    queryKey: ['plants', id],
-    queryFn: () => api.get<FullPlant>(`/Plant/GetPlantById/${id}`).then((res) => res.data)
+import api, { userApi } from '@/utils/api'
+import useSession from './state/useSession';
+export const usePlant = (id: string) => {
+    const { favouriteId, token } = useSession();
+    return useQuery<FullPlant>({
+        queryKey: ['plants', id],
+        queryFn: () => userApi(token).get<FullPlant>(`/Plant/GetPlantById/${id}?favId=${favouriteId}`).then((res) => {
+            return res.data
+        })
 
-})
+    })
+}
 export default usePlant
 
 export const usePlants = (id: string, amount: number = 10) => useInfiniteQuery<Paginate<Plant, 'plant'>>({

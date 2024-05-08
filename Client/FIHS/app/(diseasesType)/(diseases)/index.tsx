@@ -1,32 +1,44 @@
-import { HStack, Text, VStack, View } from "@gluestack-ui/themed";
+import { HStack, Text, VStack, View, Image } from "@gluestack-ui/themed";
 import React from "react";
 import TabsPageContainer from "@/components/layout/TabsPageContainer";
 import Section from "@/components/layout/Section";
-
-import { Image } from "expo-image";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useDiseases } from "@/hooks/useDisease";
 import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
+import AutoFetching from "@/components/layout/AutoFetching";
 
 export default function Diseases() {
-  const router = useRouter();
-  const { data: diseases, isLoading } = useDiseases();
+  const {
+    data: diseases,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useDiseases();
   if (isLoading && !diseases) {
     return <Loading />;
   }
   return (
-    <View py={"$6"} px={"$2"}>
-      <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
-        الأمراض
-      </Text>
-      <SmallCardContainer>
-        {diseases?.map((disease, i, arr) => {
-          return <Disease key={disease.id} disease={disease} />;
-        })}
-      </SmallCardContainer>
-    </View>
+    <AutoFetching
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+    >
+      <View py={"$6"} px={"$2"}>
+        <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
+          الأمراض
+        </Text>
+        <SmallCardContainer>
+          {diseases?.pages.map((page) =>
+            page.diseases.map((disease, i, arr) => {
+              return <Disease key={disease.id} disease={disease} />;
+            })
+          )}
+        </SmallCardContainer>
+      </View>
+    </AutoFetching>
   );
 }
 
@@ -57,7 +69,8 @@ const Disease = ({ disease }: { disease: Disease }) => {
     >
       <Image
         style={styles.plantDiseasesImage}
-        source={{ uri: disease.imageUrl }}
+        source={disease.imageUrl}
+        alt={disease.name}
       />
       <VStack justifyContent='center' alignItems='flex-end' pr={6}>
         <Text textAlign='center' color='#000' pt={6}>

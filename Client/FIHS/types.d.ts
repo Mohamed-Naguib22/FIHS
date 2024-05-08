@@ -11,9 +11,6 @@ interface WithTitle extends DBItem {
 
 }
 
-interface ArticleItem extends HasImage, WithTitle {
-    author: string,
-}
 
 interface AgroCare extends HasImage {
     name: string,
@@ -22,17 +19,14 @@ interface AgroCare extends HasImage {
     manufactuer: string,
 }
 
-type Article = ArticleItem & {
-    overview: string,
-    numOfLikes: number,
-}
-
-type ArticleByID = Article & {
-    publicationDate: string,
-    liked: boolean,
-    articleSections: (WithTitle & { content: string, articleId: number })[],
-    articleTags: (DBItem & { tag: string, articleId: number })[],
-    similarArticles: Article[]
+type ArticleCard = {
+    position: number,
+    title: string,
+    link: string,
+    snippet: string,
+    resourceLink: string,
+    author: string,
+    authorProfileLink: string
 }
 
 type Fertilizer = AgroCare & {
@@ -71,7 +65,7 @@ type Session = {
     token: string,
     expiresOn: string,
     refreshTokenExpiration: string,
-    FavouriteId: number
+    favouriteId: number
 }
 
 type Paginate<T, N extends string> = Record<N, T[]> & { nextPage: number }
@@ -86,6 +80,7 @@ type Plant = HasImage & {
     sunlightReqs: string,
     irrigationReqs: number,
     plantingSeason: string,
+    temperature: string,
     harvistingSeason: string,
     culivationTips: string,
     imageUrl: string
@@ -93,6 +88,7 @@ type Plant = HasImage & {
 
 type FullPlant = Plant & {
     color: string,
+    isFav: boolean,
     plantTypes: PlantType[],
     soils: Soil[],
     diseases: Disease[],
@@ -142,7 +138,8 @@ type PlantType = DBItem & {
     name: string,
     heightRange: string,
     spreadRange: string,
-    lifeCycle: string
+    lifeCycle: string,
+    imgURL: string
 }
 
 
@@ -195,13 +192,53 @@ type Favourite = {
     favouriteId: number
 }
 
+type FavouriteResponse = {
+    createdAt: string,
+    favPlants: FavPlant[]
+}
+type FavPlant = {
+    plantId: number,
+    createdAt: string,
+    plant: {
+        id: string,
+        name: string,
+        imageUrl: string
+    }
+}
+
+
 type TComment = DBItem & {
-    EntityType: 'plant' | 'disease' | 'pest',
-    CommentBody: string,
-    EntityId: number,
-    CreatedAt: string,
+    entityType: 'plant' | 'disease' | 'pest',
+    userId: string,
+    commentBody: string,
+    entityId: number,
+    createdAt: string,
     user: {
         username: string,
+        email: string,
         imgUrl: string
     }
+}
+
+type CropsRecommendedInput = {
+    N: number,
+    P: number,
+    K: number,
+    rainfall: number,
+    ph: number,
+    city: string
+}
+
+type CropsRecommended = {
+    recommended_crops: Crop[]
+}
+
+type Crop = {
+    crop: string,
+    probability: number
+}
+
+type ArticleTopic = DBItem & {
+    name: string,
+    addedOn: string
 }

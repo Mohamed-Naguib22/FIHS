@@ -1,6 +1,5 @@
 import React from "react";
-import { Text, View } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
+import { Text, View, Image } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
@@ -47,8 +46,6 @@ const styles = StyleSheet.create({
   PlantsTypesImage: {
     width: "100%",
     height: 140,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
   },
 });
 
@@ -69,7 +66,11 @@ const PlantType = ({ type }: { type: PlantType }) => {
     >
       <Image
         style={styles.PlantsTypesImage}
-        source={require("@/assets/images/PlantType.jpg")}
+        source={type.imgURL}
+        alt={type.name}
+        rounded={"$md"}
+        borderBottomLeftRadius={0}
+        borderBottomRightRadius={0}
       />
       <Text
         textAlign='center'

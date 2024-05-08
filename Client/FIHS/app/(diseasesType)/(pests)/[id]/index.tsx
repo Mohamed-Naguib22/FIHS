@@ -1,10 +1,15 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { HStack, VStack, View, Text } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
-import TabsPageContainer from "@/components/layout/TabsPageContainer";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  HStack,
+  VStack,
+  View,
+  Text,
+  Image,
+  ScrollView,
+} from "@gluestack-ui/themed";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import usePest from "@/hooks/usePest";
 import Loading from "@/components/layout/Loading";
 import { RelatedPlant } from "@/components/diseases/RelatedPlant";
@@ -21,8 +26,12 @@ const Pest = (props: Props) => {
   navigate.setOptions({ title: pest?.name });
 
   return (
-    <TabsPageContainer>
-      <Image style={styles.articlePhotoId} source={{ uri: pest?.imageUrl }} />
+    <ScrollView px={"$4"}>
+      <Image
+        style={styles.articlePhotoId}
+        source={pest?.imageUrl}
+        alt={pest?.name}
+      />
       <VStack>
         <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
           {pest?.name}
@@ -154,7 +163,7 @@ const Pest = (props: Props) => {
           </View>
         )}
       </VStack>
-    </TabsPageContainer>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -174,7 +183,6 @@ const styles = StyleSheet.create({
 export default Pest;
 
 const RelatedPesticide = ({ pesticide }: { pesticide: Pesticide }) => {
-  const router = useRouter();
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -189,7 +197,11 @@ const RelatedPesticide = ({ pesticide }: { pesticide: Pesticide }) => {
         marginVertical: 10,
       }}
     >
-      <Image style={styles.similar} source={{ uri: pesticide.imageUrl }} />
+      <Image
+        style={styles.similar}
+        source={(pesticide as any).imageURL}
+        alt={pesticide.name}
+      />
       <Text
         textAlign='center'
         color='#000'
