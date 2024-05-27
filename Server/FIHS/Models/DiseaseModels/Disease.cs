@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using FIHS.Models.CommentModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -29,5 +30,7 @@ namespace FIHS.Models.DiseaseModels
         public string Message { get; set; }
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual IEnumerable<PlantsDiseases> Plants { get; set; }
+        [ValidateNever]
+        public virtual IEnumerable<Comment> Comments { get; set; }
     }
 }

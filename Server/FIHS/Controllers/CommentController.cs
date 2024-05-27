@@ -22,16 +22,14 @@ namespace FIHS.Controllers
             return string.IsNullOrEmpty(result) ? Ok("تمت اضافة التعليق بنجاح") : BadRequest(result);
         }
         [HttpGet("GetAllComments")]
-        public async Task<IActionResult> GetAllComments(int entityId, string entityType)
+        public IActionResult GetAllComments(int entityId, string entityType)
         {
-            var result = await _commentServices.GetAllEntityComments(entityId, entityType);
+            var result =_commentServices.GetAllEntityComments(entityId, entityType);
             return Ok(result);
         }
         [HttpPut("EditComment/{Id}")]
         public async Task<IActionResult> EditComment([FromBody]AddCommentsDto commentDto, int Id)
         {
-            commentDto.refreshToken = GetRefreshToken();
-            if (commentDto.refreshToken == null) return NotFound("لم يتم العثور علي اي مستخدم");
             var result =await _commentServices.EditCommentAsync(Id,commentDto);
             return string.IsNullOrEmpty(result) ? Ok("تم تعديل التعليق بنجاح"):BadRequest(result);
         }

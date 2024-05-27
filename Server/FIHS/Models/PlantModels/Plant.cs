@@ -1,4 +1,5 @@
-﻿using FIHS.Models.DiseaseModels;
+﻿using FIHS.Models.CommentModels;
+using FIHS.Models.DiseaseModels;
 using FIHS.Models.FavouriteModels;
 using FIHS.Models.FertilizerModels;
 using FIHS.Models.PestModels;
@@ -58,6 +59,8 @@ namespace FIHS.Models.PlantModels
         public virtual IEnumerable<FavouritePlant> FavouritePlants { get; set; } = null;
         [ValidateNever, JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public virtual ICollection<PlantFertilizer> PlantFertilizer { get; set; }
+        [ValidateNever]
+        public virtual ICollection<Comment> Comments { get; set; }
 
 
 

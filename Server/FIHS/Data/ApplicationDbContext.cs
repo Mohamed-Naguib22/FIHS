@@ -39,10 +39,27 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<PlantsPests>().HasKey(pp => new { pp.PlantId, pp.PestId });
         modelBuilder.Entity<PestsPesticides>().HasKey(pp => new { pp.PesticideId, pp.PestId });
         modelBuilder.Entity<PlantFertilizer>().HasKey(pp => new { pp.PlantId, pp.FertilizerId });
-        // Define foreign key relationship for Comment entity
 
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Plant)
+            .WithMany(p => p.Comments)
+            .HasForeignKey(c => c.PlantId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
 
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Pest)
+            .WithMany(u => u.Comments)
+            .HasForeignKey(c => c.PestId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
 
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Disease)
+            .WithMany(p => p.Comments)
+            .HasForeignKey(c => c.DiseaseId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
         modelBuilder.Entity<Pesticide>().HasIndex(n => n.Name).IsUnique();
         modelBuilder.Entity<Fertilizer>().HasIndex(n => n.Name).IsUnique();
     }
