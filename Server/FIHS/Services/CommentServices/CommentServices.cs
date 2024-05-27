@@ -30,6 +30,9 @@ namespace FIHS.Services.CommentServices
 
         public async Task<string> AddCommentAsync(AddCommentsDto addCommentsDto)
         {
+            int?[] ids=new int?[] {addCommentsDto.PlantId,addCommentsDto.DiseaseId,addCommentsDto.PestId};
+            if (ids.All(c=>c==null)||ids.Count(i => i != null) !=1)
+                return "EntityId is Required";
             var userId = await _userService.GetUserIdByToken(addCommentsDto.refreshToken);
             var result = await HandleDataForComment(userId, addCommentsDto);
             if (string.IsNullOrEmpty(result))
@@ -54,45 +57,67 @@ namespace FIHS.Services.CommentServices
         {
             if (id != addCommentsDto.Id)
                 return "Id sent in body doesn't match the Id sent in URL";
-            if (!await _commentRepository.IsCommentExist(addCommentsDto.Id))
+            if (!await _commentRepository.IsCommentExist(id))
                 return "لم يتم العثور علي اي تعليق";
-            var userId = _userService.GetUserIdByToken(addCommentsDto.refreshToken).Result;
-            if (userId == null)
-                return "لم يتم العثور علي اي مستخدم";
+            if (!await IsEntityExist(addCommentsDto))
+                return "No entity is found";
             var comment = _mapper.Map<Comment>(addCommentsDto);
-            comment.UserId = userId;
             _commentRepository.EditComment(comment);
             return string.Empty;
         }
 
-        public async Task<IEnumerable<GetAllCommentsDto>> GetAllEntityComments(int entityId, string entityType)
+        public IEnumerable<GetAllCommentsDto> GetAllEntityComments(int entityId, string entityType)
         {
-            return _mapper.Map<IEnumerable<GetAllCommentsDto>>(await _commentRepository.GetAllComments(entityId, entityType));
+            IEnumerable<Comment> comments=Enumerable.Empty<Comment>();
+            switch (entityType.ToLower())
+            {
+                case "plant":
+                    comments= _commentRepository.GetAllComments(c=>c.PlantId==entityId);
+                    break;
+                case "disease":
+                    comments= _commentRepository.GetAllComments(c=>c.DiseaseId==entityId);
+                    break;
+                case "pest":
+                    comments= _commentRepository.GetAllComments(c=>c.PestId==entityId);
+                    break;
+            }
+            return _mapper.Map<IEnumerable<GetAllCommentsDto>>(comments);
         } 
         private async Task<string> HandleDataForComment(string userId,AddCommentsDto commentsDto)
         {
             if (userId == null)
                 return "لم يتم العثور علي اي مستخدم";
-            if (await _commentRepository.HasReachedCommentsLimits(userId, commentsDto.EntityType, commentsDto.EntityId))
-                return "لقد تجاوزت الحد المسموح من التعليقات";
+            if (!await IsEntityExist(commentsDto))
+                return "No entity is found";
             switch (commentsDto.EntityType.ToLower())
             {
                 case "plant":
-                    if (!_plantRepository.IsPlantExist(commentsDto.EntityId))
-                        return "لم يتم العثور علي اي نبات";
+                    if (_commentRepository.HasReachedCommentsLimits(c => c.PlantId == commentsDto.PlantId && c.UserId == userId))
+                        return "لقد تجاوزت الحد المسموح من التعليقات";
                     break;
                 case "disease":
-                    if(!await _diseaseService.IsDiseaseExist(commentsDto.EntityId))
-                        return "لم يتم العثور علي اي مرض";
+                    if (_commentRepository.HasReachedCommentsLimits(c => c.DiseaseId == commentsDto.DiseaseId && c.UserId == userId))
+                        return "لقد تجاوزت الحد المسموح من التعليقات";
                     break;
                 case "pest":
-                    if(!await _pestService.IsPestExist(commentsDto.EntityId))
-                        return "لم يتم العثور علي اي افه";
+                    if (_commentRepository.HasReachedCommentsLimits(c => c.PestId == commentsDto.PestId && c.UserId == userId))
+                        return "لقد تجاوزت الحد المسموح من التعليقات";
                     break;
-                default:
-                       return "لم يتم العثور علي هذا الكيان";
             }
             return string.Empty;
+        }
+        private async Task<bool> IsEntityExist(AddCommentsDto commentsDto)
+        {
+            switch (commentsDto.EntityType.ToLower())
+            {
+                case "plant":
+                   return _plantRepository.IsPlantExist((int)commentsDto.PlantId);
+                case "disease":
+                     return await _diseaseService.IsDiseaseExist((int)commentsDto.DiseaseId);
+                case "pest":
+                    return await _pestService.IsPestExist((int)commentsDto.PestId);
+            }
+            return false;
         }
     }
 }

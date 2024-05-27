@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using FIHS.Models.CommentModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -33,6 +34,8 @@ namespace FIHS.Models.PestModels
         public virtual IEnumerable<PlantsPests> Plants { get; set; }
         [ValidateNever]
         public virtual IEnumerable<PestsPesticides> Pesticides { get; set; }
+        [ValidateNever]
+        public virtual IEnumerable<Comment> Comments { get; set; }
 
     }
 }
