@@ -2,9 +2,14 @@ import React from "react";
 import { Stack } from "expo-router";
 
 type Props = {};
-
+export const AdminPages: { link: string; name: string }[] = [
+  { link: "pests", name: "الافات" },
+  { link: "pesticides", name: "المبيدات" },
+  { link: "fertilizers", name: "الاسمدة" },
+  { link: "diseases", name: "الامراض" },
+  { link: "plants", name: "النبات" },
+];
 const AdminLayout = (props: Props) => {
-  const pages = ["plants", "diseases", "fertilizers", "pesticides", "pests"];
   return (
     <Stack
       screenOptions={{
@@ -12,15 +17,24 @@ const AdminLayout = (props: Props) => {
         animation: "slide_from_right",
       }}
     >
-      <Stack.Screen name='dashboard' />
-      {pages.map((page) => (
-        <>
-          <Stack.Screen name={`${page}/[id]/index`} /> {/*update*/}
-          <Stack.Screen name={`${page}/new`} />
-          {/*post*/}
-          <Stack.Screen name={`${page}/index`} />
-          {/*get*/}
-        </>
+      <Stack.Screen name='dashboard' options={{ title: "لوحة التحكم" }} />
+      {AdminPages.map((page) => (
+        <Stack.Screen
+          key={page.name + Math.random()}
+          name={`${page.link}/[id]/index`}
+        />
+      ))}
+      {AdminPages.map((page) => (
+        <Stack.Screen
+          key={page.name + Math.random()}
+          name={`${page.link}/new`}
+        />
+      ))}
+      {AdminPages.map((page) => (
+        <Stack.Screen
+          key={page.name + Math.random()}
+          name={`${page.link}/index`}
+        />
       ))}
     </Stack>
   );

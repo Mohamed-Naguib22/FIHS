@@ -1,5 +1,3 @@
-import TabsPageContainer from "@/components/layout/TabsPageContainer";
-import ScreenHeader from "@/components/layout/ScreenHeader";
 import {
   Avatar,
   AvatarFallbackText,
@@ -7,25 +5,10 @@ import {
   AvatarImage,
   VStack,
   HStack,
-  Input,
-  InputField,
-  Button,
-  ActionsheetContent,
-  ActionsheetDragIndicator,
-  ButtonText,
 } from "@gluestack-ui/themed";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
-import PersonalInfoForm from "@/components/profile/PersonalInfoForm";
-import ResetPasswordForm from "@/components/profile/ResetPasswordForm";
-import DeleteAccount from "@/components/profile/DeleteAccount";
 import { TouchableOpacity } from "react-native";
-import { useState } from "react";
-import { Actionsheet } from "@gluestack-ui/themed";
-import { ActionsheetBackdrop } from "@gluestack-ui/themed";
-import { ActionsheetDragIndicatorWrapper } from "@gluestack-ui/themed";
 import useSession from "@/hooks/state/useSession";
-import * as ImagePicker from "expo-image-picker";
-import { DeleteProfileImg, PostProfileImg } from "@/hooks/useProfile";
 import { useRouter } from "expo-router";
 import { Logout } from "@/hooks/useLogin";
 

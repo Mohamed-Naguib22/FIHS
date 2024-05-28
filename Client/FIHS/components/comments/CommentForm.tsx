@@ -33,17 +33,17 @@ const CommentForm = ({
   const postComment = PostComment();
   const updateComment = UpdateComment();
   // const { setFieldValue } = useFormikContext();
-  useEffect(() => {
-    // if (toBeUpdated) {
-    //   setFieldValue("commentBody", toBeUpdated.commentBody);
-    //   // setFieldValue("entityId", toBeUpdated.entityId);
-    //   // setFieldValue("entityType", toBeUpdated.entityType);
-    // } else {
-    //   setFieldValue("commentBody", undefined);
-    //   setFieldValue("entityId", undefined);
-    //   setFieldValue("entityType", undefined);
-    // }
-  }, [toBeUpdated]);
+  // useEffect(() => {
+  //   // if (toBeUpdated) {
+  //   //   setFieldValue("commentBody", toBeUpdated.commentBody);
+  //   //   // setFieldValue("entityId", toBeUpdated.entityId);
+  //   //   // setFieldValue("entityType", toBeUpdated.entityType);
+  //   // } else {
+  //   //   setFieldValue("commentBody", undefined);
+  //   //   setFieldValue("entityId", undefined);
+  //   //   setFieldValue("entityType", undefined);
+  //   // }
+  // }, [toBeUpdated]);
   return (
     <Formik<ICommentForm>
       initialValues={{
