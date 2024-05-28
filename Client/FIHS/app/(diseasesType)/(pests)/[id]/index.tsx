@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import {
   HStack,
@@ -13,26 +13,35 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import usePest from "@/hooks/usePest";
 import Loading from "@/components/layout/Loading";
 import { RelatedPlant } from "@/components/diseases/RelatedPlant";
+import useComments from "@/hooks/useComment";
+import CommentForm from "@/components/comments/CommentForm";
+import CommentCard from "@/components/comments/CommentCard";
 
 type Props = {};
 
 const Pest = (props: Props) => {
   const { id } = useLocalSearchParams();
   const navigate = useNavigation();
+  const [toBeUpdated, setToBeUpdated] = useState<TComment | null>(null);
+  const { data: comments, refetch: refetchComments } = useComments(
+    +(id as string),
+    "pest"
+  );
   const { data: pest, isLoading } = usePest(id as string);
   if (isLoading && !pest) {
     return <Loading />;
   }
+
   navigate.setOptions({ title: pest?.name });
 
   return (
     <ScrollView px={"$4"}>
       <Image
         style={styles.articlePhotoId}
-        source={pest?.imageUrl}
+        source={{ uri: pest?.imageUrl }}
         alt={pest?.name}
       />
-      <VStack>
+      <VStack mb={16}>
         <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
           {pest?.name}
         </Text>
@@ -160,6 +169,39 @@ const Pest = (props: Props) => {
                 <RelatedPesticide key={pesticide.id} pesticide={pesticide} />
               ))}
             </ScrollView>
+          </View>
+        )}
+      </VStack>
+      <VStack
+        gap={"$3"}
+        bg='$backgroundDark200'
+        py={"$6"}
+        px={"$3"}
+        rounded={"$md"}
+      >
+        <Text fontSize={18} fontWeight='900' color='#000'>
+          التعليقات
+        </Text>
+        <CommentForm
+          entityId={+(id as string)}
+          entityType='pest'
+          toBeUpdated={toBeUpdated}
+          setToBeUpdated={setToBeUpdated}
+        />
+        {comments && comments?.length > 0 ? (
+          comments?.map((comment) => {
+            return (
+              <CommentCard
+                key={comment.id}
+                comment={comment}
+                refetchComments={refetchComments}
+                setToBeUpdated={setToBeUpdated}
+              />
+            );
+          })
+        ) : (
+          <View display='flex' alignItems='center' p={"$10"}>
+            <Text>لا توجد تعليقات</Text>
           </View>
         )}
       </VStack>

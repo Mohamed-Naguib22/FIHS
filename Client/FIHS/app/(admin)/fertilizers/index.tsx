@@ -1,27 +1,30 @@
-import { Text, VStack, View, Image } from "@gluestack-ui/themed";
+import {
+  HStack,
+  Text,
+  VStack,
+  View,
+  Image,
+  Button,
+  ButtonText,
+} from "@gluestack-ui/themed";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { DeletePest, usePests } from "@/hooks/usePest";
 import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
 import AutoFetching from "@/components/layout/AutoFetching";
-import { HStack } from "@gluestack-ui/themed";
-import { Button } from "@gluestack-ui/themed";
-import { ButtonText } from "@gluestack-ui/themed";
 import { FontAwesome } from "@expo/vector-icons";
+import { DeleteFertilizer, useFertilizers } from "@/hooks/useFertilizer";
 
-type Props = {};
-
-const Peats = (props: Props) => {
+export default function AdminFertilizers() {
   const {
-    data: pests,
+    data: fertilizers,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = usePests();
-  if (isLoading && !pests) {
+  } = useFertilizers();
+  if (isLoading && !fertilizers) {
     return <Loading />;
   }
   return (
@@ -32,22 +35,28 @@ const Peats = (props: Props) => {
     >
       <View py={"$6"} px={"$2"}>
         <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
-          الأفات
+          الاسمدة
         </Text>
         <SmallCardContainer>
-          {pests?.pages.map((page) =>
-            page.pests.map((pest, i, arr) => {
-              return <Pest key={pest.id} pest={pest} admin={true} />;
+          {fertilizers?.pages.map((page) =>
+            page.fertilizers.map((fertilizer) => {
+              return (
+                <AdminFertilizer
+                  key={fertilizer.id}
+                  fertilizer={fertilizer}
+                  admin={true}
+                />
+              );
             })
           )}
         </SmallCardContainer>
       </View>
     </AutoFetching>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  plantDiseasesImage: {
+  plantFertilizersImage: {
     width: "100%",
     height: 110,
     borderTopEndRadius: 10,
@@ -55,11 +64,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Peats;
-
-const Pest = ({ pest, admin }: { pest: Pest; admin: boolean }) => {
+const AdminFertilizer = ({
+  fertilizer,
+  admin,
+}: {
+  fertilizer: Fertilizer;
+  admin: boolean;
+}) => {
   const router = useRouter();
-  const deletePest = DeletePest();
+  const deleteFertilizer = DeleteFertilizer();
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -72,19 +85,19 @@ const Pest = ({ pest, admin }: { pest: Pest; admin: boolean }) => {
         borderWidth: 1,
         marginVertical: 10,
       }}
-      onPress={() => router.push(`/(diseasesType)/(pests)/${pest.id}`)}
+      onPress={() => router.push(`/(diseasesType)/(diseases)/${fertilizer.id}`)}
     >
       <Image
-        style={styles.plantDiseasesImage}
-        source={pest.imageUrl}
-        alt={pest.name}
+        style={styles.plantFertilizersImage}
+        source={fertilizer.imageURL}
+        alt={fertilizer.name}
       />
       <VStack justifyContent='center' alignItems='flex-end' pr={6} py={"$1"}>
         <Text fontSize={"$xs"} textAlign='center' color='#000' pt={6}>
-          {pest.species}
+          {fertilizer.manufactuer}
         </Text>
         <Text fontSize={"$sm"} textAlign='center' color='#000' fontWeight='700'>
-          {pest.name}
+          {fertilizer.name}
         </Text>
       </VStack>
       {admin && (
@@ -95,7 +108,7 @@ const Pest = ({ pest, admin }: { pest: Pest; admin: boolean }) => {
             borderTopRightRadius={0}
             borderTopLeftRadius={0}
             borderBottomRightRadius={0}
-            onPress={() => router.push(`/(admin)/pests/${pest.id}`)}
+            onPress={() => router.push(`/(admin)/fertilizers/${fertilizer.id}`)}
           >
             <ButtonText>
               <FontAwesome name='pencil' size={16} />
@@ -108,7 +121,7 @@ const Pest = ({ pest, admin }: { pest: Pest; admin: boolean }) => {
             borderTopRightRadius={0}
             borderTopLeftRadius={0}
             borderBottomLeftRadius={0}
-            onPress={() => deletePest.mutate({ id: pest.id })}
+            onPress={() => deleteFertilizer.mutate({ id: fertilizer.id })}
           >
             <ButtonText>
               <FontAwesome name='trash' size={16} />
