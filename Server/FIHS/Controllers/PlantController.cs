@@ -17,35 +17,26 @@ namespace FIHS.Controllers
     [ApiController]
     public class PlantController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IPlantRepository _plantRepository;
-        private readonly IImageService _imageService;
-        private readonly IMapper _mapper;
-        private readonly IFavourite _favourite;
-        public PlantController(ApplicationDbContext context, IMapper mapper, IPlantRepository plantRepository, IImageService imageService, IFavourite favourite)
+
+        private readonly IPlantServices _plantServices;
+        public PlantController( IPlantServices plantServices)
         {
-            _context = context;
-            _mapper = mapper;
-            _plantRepository = plantRepository;
-            _imageService = imageService;
-            _favourite = favourite;
+
+            _plantServices = plantServices;
         }
         [HttpGet("GetAllPlants")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllPlants([FromQuery]GetAllPlantsParams patameters)
         {
-            var plants = await _plantRepository.GetAllPlantsAsync(patameters.plantTypeId, patameters.offset, patameters.limit);
-            var plantsDto = _mapper.Map<List<PlantDto>>(plants).MarkFavPlants(await _favourite.GetFavouritePlants(patameters.FavId));
-            return Ok(new  {Plant = plantsDto.Take(patameters.limit).ToList(),NextPage = patameters.limit < plantsDto.Count ? patameters.offset + 1:0 });
+            var plantsDto = await _plantServices.GetAllPlantsAsync(patameters);
+            return Ok(new  {Plant = plantsDto.Take(patameters.limit).ToList(),NextPage = patameters.limit < plantsDto.Count() ? patameters.offset + 1:0 });
         }
         [HttpGet("GetPlantById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPlantById(int id, int favId = 0)
         {
-            
-            var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByIdAsync(id));
-            plantDto.IsFav =await _favourite.IsFavouriteItemExist(new Dtos.Favourite.FavouriteItemAddRequest() { FavouriteId = favId,PlantId=id});
+            var plantDto = await _plantServices.GetPlantByIdAsync(id,favId);
             return plantDto == null ?   NotFound() : Ok(plantDto);
         }
 
@@ -56,19 +47,18 @@ namespace FIHS.Controllers
         {
            if (ModelState.IsValid)
             {
-                var plant = _mapper.Map<Plant>(plantInDto);
-                await _plantRepository.AddPlant(plant, plantInDto);
-                return Ok("تمت اضافة النبات بنجاح");
+               bool result = await _plantServices.AddPlant(plantInDto);
+                return result? Ok("تمت اضافة النبات بنجاح"):BadRequest("هذا النبات موجود مسبقا");
             }
-           return BadRequest();
+           return BadRequest(" حدث خطأ تأكد من ان البيانات المدخله صحيحه");
         }
         [HttpDelete("DeletePlant/{plantId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeletePlant(int plantId)
         {
-            var plant =  await _plantRepository.DeletePlantAsync(plantId);
-            return plant.Message is "" ? Ok(plant) : NotFound(plant.Message);
+            var result =  await _plantServices.DeletePlantAsync(plantId);
+            return result ? Ok("تم حذف النبات بنجاح") : NotFound("لا يوجد نبات بهذا الرقم");
         }
 
         [HttpGet("AllPlantTypes")]
@@ -76,7 +66,7 @@ namespace FIHS.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllPlanttypes()
         {
-            return Ok(await _plantRepository.GetAllPlantsTypeAsync());
+            return Ok(await _plantServices.GetAllPlantsTypeAsync());
         }
 
         [HttpGet("AllSoils")]
@@ -84,7 +74,7 @@ namespace FIHS.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllSoils()
         {
-            return Ok(await _plantRepository.GetAllSoils());
+            return Ok(await _plantServices.GetAllSoils());
         }
 
     }

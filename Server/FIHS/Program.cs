@@ -21,7 +21,6 @@ using FIHS.Services.FertilizerService;
 using FIHS.Services.PesticideService;
 using FIHS.Services.PestService;
 using FIHS.Services.PlantIdServices;
-using FIHS.Services.PlantservicesImp;
 using FIHS.Services.PlantTypeServices;
 using FIHS.Services.UserServices;
 using FIHS.Services.WeatherServices;
@@ -38,6 +37,7 @@ using FIHS.Services;
 using FIHS.Interfaces.IFavourite;
 using FIHS.Interfaces.IComment;
 using FIHS.Services.CommentServices;
+using FIHS.Services.PlantservicesImp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +66,7 @@ builder.Services.AddScoped<IChatbotService, GeminiService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IPlantIdService, PlantIdService>();
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+builder.Services.AddScoped<IPlantServices, PlantServices>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IPesticide, PesticideService>();
@@ -114,11 +115,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
-builder.Services.Configure<KestrelServerOptions>(options =>
-{
-    options.Listen(IPAddress.Loopback, 7184);
-    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
-});
+//builder.Services.Configure<KestrelServerOptions>(options =>
+//{
+//    options.Listen(IPAddress.Loopback, 7184);
+//    options.Listen(IPAddress.Parse(builder.Configuration["IPAddress"]), 7184);
+//});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
