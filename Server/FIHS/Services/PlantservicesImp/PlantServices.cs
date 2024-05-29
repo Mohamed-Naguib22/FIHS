@@ -63,6 +63,8 @@ namespace FIHS.Services.PlantservicesImp
 
         public async Task<PlantDto> GetPlantByIdAsync(int id ,int favId =0)
         {
+            if (!_plantRepository.IsPlantExist(id))
+                return (new PlantDto("لا يوجد نبات بهذا الرقم"));
             var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByIdAsync(id));
             plantDto.IsFav = await _favourite.IsFavouriteItemExist(new Dtos.Favourite.FavouriteItemAddRequest() { FavouriteId = favId, PlantId = id });
             return plantDto;
