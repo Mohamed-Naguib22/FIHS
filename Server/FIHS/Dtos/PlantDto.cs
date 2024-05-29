@@ -10,8 +10,8 @@ namespace FIHS.Dtos
 {
     public class PlantDto
     {
-        PlantDto() { }
-        PlantDto(string message)
+        public PlantDto() { }
+        public PlantDto(string message)
         {
             Message = message;
         }

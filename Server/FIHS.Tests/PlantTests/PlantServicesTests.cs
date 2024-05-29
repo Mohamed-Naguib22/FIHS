@@ -59,7 +59,7 @@ namespace FIHS.Tests.PlantTests
             Assert.True(result);
         }
         [Fact]
-        public async Task AddPlant_ShouldReturnFalseAndPlantShouldNotBeAdded_WhenPlantNameIsNotUnique()
+        public async Task AddPlant_WhenPlantNameIsNotUnique_ReturnFalseAndPlantShouldNotBeAdded()
         {
             //Arrange
 
@@ -79,6 +79,42 @@ namespace FIHS.Tests.PlantTests
 
             //Assert
             Assert.False(result);
+        }
+        [Fact]
+        public async Task GetPlantById_WhenPlantWithIdExist_ReturnPlant()
+        {
+            // Arrange
+            var SUT = _plantServices;
+            var fakePlant = new Plant() { Id = 1 , Name="test"};
+            var fakePlantDto = new PlantDto() { Id = 1 , Name="test"};
+            A.CallTo(() => _fakePlantRepository.IsPlantExist(A<int>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeMapper.Map<PlantDto>(fakePlant)).Returns(fakePlantDto);
+            A.CallTo(() => _fakePlantRepository.GetPlantByIdAsync(1)).Returns(Task.FromResult(fakePlant));
+
+            //A.CallTo(() => _fakePlantRepository.GetPlantByIdAsync(1)).Returns(Task.FromResult())
+            // Act
+            var result = await SUT.GetPlantByIdAsync(1);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, fakePlant.Id);
+            Assert.Equal("test", fakePlant.Name);
+            Assert.Empty(result.Message);
+        }
+        [Fact]
+        public async Task GetPlantById_WhenPlantWithIdNotExist_ReturnErrorMessage()
+        {
+            // Arrange
+            var SUT = _plantServices;
+            A.CallTo(() => _fakePlantRepository.IsPlantExist(A<int>.Ignored)).Returns(false);
+
+
+            //A.CallTo(() => _fakePlantRepository.GetPlantByIdAsync(1)).Returns(Task.FromResult())
+            // Act
+            var result = await SUT.GetPlantByIdAsync(1);
+
+            //Assert
+            Assert.NotEmpty(result.Message);
         }
     }
 }
