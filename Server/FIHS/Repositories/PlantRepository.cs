@@ -30,7 +30,7 @@ namespace FIHS.Repositories
             var plant = await _context.Plants.Skip((offset - 1) * limit).Take(offset * limit + 1)
                 .Include(p => p.PlantFertilizer).ThenInclude(pf => pf.Fertilizer)
                 .Include(pt => pt.PlantTypes.Where(pt => pt.PlantTypeId == plantTypeId)).ThenInclude(p => p.PlantType).Where(p => p.PlantTypes.Any(pt => pt.PlantTypeId == plantTypeId))
-                //.Include(p => p.Soils).ThenInclude(ps => ps.Soil)
+                .Include(p => p.Soils).ThenInclude(ps => ps.Soil)
                 //.Include(p => p.Diseases).ThenInclude(pd => pd.Disease)
                 //.Include(p => p.Pests).ThenInclude(pp => pp.Pest)
                 .ToListAsync();
@@ -67,8 +67,9 @@ namespace FIHS.Repositories
             return result;
         }
 
-
-
-
+        public async Task SaveChangesAsync()
+        {
+           await _context.SaveChangesAsync();
+        }
     }
 }
