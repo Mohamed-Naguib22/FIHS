@@ -12,5 +12,6 @@ namespace FIHS.Interfaces.IPlant
         public bool IsPlantExist(int plantId);
         public Task<IEnumerable<PlantTypeDto>> GetAllPlantsTypeAsync();
         public Task<IEnumerable<SoilDto>> GetAllSoils();
+        public Task<string> UpdateImage(int plantId, IFormFile imgFile);
     }
 }

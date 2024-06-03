@@ -7,6 +7,7 @@ using FIHS.Interfaces.IPlantId;
 using FIHS.Models.PlantModels;
 using System.Numerics;
 using FIHS.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FIHS.Services.PlantservicesImp
 {
@@ -68,6 +69,14 @@ namespace FIHS.Services.PlantservicesImp
             var plantDto = _mapper.Map<PlantDto>(await _plantRepository.GetPlantByIdAsync(id));
             plantDto.IsFav = await _favourite.IsFavouriteItemExist(new Dtos.Favourite.FavouriteItemAddRequest() { FavouriteId = favId, PlantId = id });
             return plantDto;
+        }
+        public async Task<string> UpdateImage(int plantId, IFormFile imgFile)
+        {
+            var plant = await _plantRepository.GetPlantByIdAsync(plantId);
+            if (plant == null) return string.Empty;
+            plant.ImageUrl = _imageService.SetImage(imgFile, plant.ImageUrl);
+            await _plantRepository.SaveChangesAsync();
+            return plant.ImageUrl;
         }
 
 

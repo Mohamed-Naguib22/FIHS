@@ -77,6 +77,7 @@ builder.Services.AddScoped<IPlantType, PlantTypeServices>();
 builder.Services.AddScoped<IFavourite,FavouriteRepository>();
 builder.Services.AddScoped<ICommentServices, CommentServices>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IRelationManager, RelationManager>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -131,11 +132,11 @@ builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 //app.UseHttpsRedirection();
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());

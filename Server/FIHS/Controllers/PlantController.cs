@@ -52,6 +52,12 @@ namespace FIHS.Controllers
             }
            return BadRequest(" حدث خطأ تأكد من ان البيانات المدخله صحيحه");
         }
+        [HttpPut("UpdatePlantImage/{plantId}")]
+        public async Task<IActionResult> UpdatePlantImage( int plantId ,  IFormFile imgFile)
+        {
+            var result =  await _plantServices.UpdateImage(plantId, imgFile);
+            return result != string.Empty ? Ok(result) : NotFound("لا يوجد نبات بهذا الرقم");
+        }
         [HttpDelete("DeletePlant/{plantId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
