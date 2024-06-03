@@ -22,6 +22,7 @@ using FIHS.Models.FavouriteModels;
 using FIHS.Dtos.FavouriteDto;
 using FIHS.Dtos.CommentDtos;
 using FIHS.Models.CommentModels;
+using FIHS.Dtos.PlantTypeDtos;
 
 namespace FIHS.Helpers
 {
@@ -68,6 +69,8 @@ namespace FIHS.Helpers
             CreateMap<PlantsDiseases, PlantInDto>().IncludeMembers(src => src.Plant).ReverseMap();
             CreateMap<PlantsPests, PlantDto>().IncludeMembers(src => src.Plant);
             CreateMap<PlantsPests, PlantInDto>().IncludeMembers(src => src.Plant);
+            CreateMap<AddPlantTypeDto, PlantType>();
+
             //Pest & Disease
             CreateMap<PlantsPests,ReturnPestDto>().IncludeMembers(src => src.Pest);
             CreateMap<PlantsDiseases, ReturnDiseaseDto>().IncludeMembers(src => src.Disease).ReverseMap();

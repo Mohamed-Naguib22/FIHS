@@ -1,5 +1,8 @@
-﻿using FIHS.Dtos;
+﻿using FHIS.Services;
+using FIHS.Dtos;
+using FIHS.Dtos.PlantTypeDtos;
 using FIHS.Models.PlantModels;
+using FIHS.Repositories;
 
 namespace FIHS.Interfaces.IPlant
 {
@@ -13,5 +16,7 @@ namespace FIHS.Interfaces.IPlant
         public Task<IEnumerable<PlantTypeDto>> GetAllPlantsTypeAsync();
         public Task<IEnumerable<SoilDto>> GetAllSoils();
         public Task<string> UpdateImage(int plantId, IFormFile imgFile);
+        Task AddPlantTyeAsync(AddPlantTypeDto plantTypeDto);
+        Task<bool> DeletePlantTyeAsync(int id);
     }
 }
