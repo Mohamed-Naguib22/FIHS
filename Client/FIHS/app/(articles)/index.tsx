@@ -36,17 +36,24 @@ const Articles = (props: Props) => {
   return (
     <View flex={1} px={"$2"} pt={"$6"} display='flex' alignItems='center'>
       <Text
-        textAlign='right'
+        // textAlign='left'
         color='#000'
         fontWeight='900'
         fontSize={20}
         p={6}
         mt={20}
         mb={10}
-        alignSelf='flex-start'
+        alignSelf='flex-end'
       >
         المقالات{" "}
       </Text>
+      {/* <HStack justifyContent="flex-end">
+      <Text p={5} fontWeight='bold' fontSize={"$md"}>
+        إقرأ عن :
+      </Text>
+      </HStack> */}
+      <ScrollView horizontal>
+
       <HStack justifyContent='flex-end' mb={"$2"} alignItems='flex-start'>
         <HStack gap={10} flexWrap='wrap'>
           {topics?.map((topic) => (
@@ -72,10 +79,8 @@ const Articles = (props: Props) => {
             </Text>
           ))}
         </HStack>
-        <Text p={5} fontWeight='bold' fontSize={"$md"}>
-          إقرأ عن :{" "}
-        </Text>
       </HStack>
+      </ScrollView>
       <ScrollView>
         <VStack my={"$3"} gap={10} alignSelf='flex-start'>
           {articles && articles?.length > 0 ? (
@@ -83,7 +88,8 @@ const Articles = (props: Props) => {
               return (
                 <HStack
                   bg='$backgroundDark200'
-                  p={"$2"}
+                  px={"$11"}
+                  py={"$3"}
                   w={375}
                   rounded={"$md"}
                   key={art.position}
@@ -109,7 +115,7 @@ const Articles = (props: Props) => {
             })
           ) : (
             <View>
-              <Text>إختار موضوع لعرض مقالاته</Text>
+              <Text fontWeight="$bold">إختار موضوع لعرض مقالاته</Text>
             </View>
           )}
         </VStack>
