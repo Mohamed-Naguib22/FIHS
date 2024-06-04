@@ -14,25 +14,6 @@ namespace FIHS.Models.PlantModels
         [Index(nameof(Name),IsUnique = true)]
     public class Plant
     {
-        //public Plant(string name, string scientificName, string description, string color, string? commonUses, string? nutritionalValue, double averageYield, string sunlightReqs, string irrigationReqs, string temperature, string plantingSeason, string harvistingSeason, string culivationTips, string imageUrl)
-        //{
-        //    Name = name;
-        //    ScientificName = scientificName;
-        //    Description = description;
-        //    Color = color;
-        //    CommonUses = commonUses;
-        //    NutritionalValue = nutritionalValue;
-        //    AverageYield = averageYield;
-        //    SunlightReqs = sunlightReqs;
-        //    IrrigationReqs = irrigationReqs;
-        //    Temperature = temperature;
-        //    PlantingSeason = plantingSeason;
-        //    HarvistingSeason = harvistingSeason;
-        //    CulivationTips = culivationTips;
-        //    ImageUrl = imageUrl;
-        //}
-
-        [JsonIgnore]
         public int? Id { get; set; }
         [Required,MaxLength(50),MinLength(2)]
         public string Name { get; set; }
