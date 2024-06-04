@@ -14,7 +14,9 @@ namespace FIHS.Interfaces.IPlant
         public Task<IEnumerable<PlantType>> GetAllPlantsTypeAsync();
         public Task<IEnumerable<Soil>> GetAllSoils();
         public bool IsPlantNameExist(Plant plant);
+        Task<PlantType> GetPlantTyeByIdAsync(int id);
+        Task AddPlantTyeAsync(PlantType plantType);
+        Task DeletePlantTyeAsync(PlantType plantType);
         public Task SaveChangesAsync();
-
     }
 }

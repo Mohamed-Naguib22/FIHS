@@ -8,6 +8,7 @@ using FIHS.Models.PlantModels;
 using System.Numerics;
 using FIHS.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using FIHS.Dtos.PlantTypeDtos;
 
 namespace FIHS.Services.PlantservicesImp
 {
@@ -79,6 +80,24 @@ namespace FIHS.Services.PlantservicesImp
             return plant.ImageUrl;
         }
 
+        public async Task AddPlantTyeAsync(AddPlantTypeDto plantTypeDto)
+        {
+            var plantType = _mapper.Map<PlantType>(plantTypeDto);
+            plantType.ImgURL = _imageService.SetImage(plantTypeDto.Image);
+            
+            await _plantRepository.AddPlantTyeAsync(plantType);
+        }
+
+        public async Task<bool> DeletePlantTyeAsync(int id)
+        {
+            var plantType = await _plantRepository.GetPlantTyeByIdAsync(id);
+
+            if (plantType == null) 
+                return false;
+
+            await _plantRepository.DeletePlantTyeAsync(plantType);
+            return true;
+        }
 
         public bool IsPlantExist(int plantId)
         {

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using FIHS.Interfaces;
 using FIHS.Extensions;
 using FIHS.Interfaces.IFavourite;
+using FIHS.Dtos.PlantTypeDtos;
 
 namespace FIHS.Controllers
 {
@@ -83,5 +84,25 @@ namespace FIHS.Controllers
             return Ok(await _plantServices.GetAllSoils());
         }
 
+        [HttpPost("AddPlantType")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AddPlantTypeAsync([FromForm] AddPlantTypeDto plantTypeDto)
+        {
+            await _plantServices.AddPlantTyeAsync(plantTypeDto);
+            return Created("Created", "تم الاضافة بنجاح");
+        }
+
+        [HttpDelete("DeletePlantType/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeletePlantTypeAsync(int id)
+        {
+            var result = await _plantServices.DeletePlantTyeAsync(id);
+
+            if (!result)
+                return NotFound("Entity not found");
+
+            return Ok("تم الحذف بنجاح");
+        }
     }
 }
