@@ -28,7 +28,7 @@ namespace FHIS.Services
         }
         public void DeleteImage(string? imgUrl)
         {
-            if (!string.IsNullOrEmpty(imgUrl) && !imgUrl.Contains(DEFAULT_USER_IMAGE)) 
+            if (!string.IsNullOrEmpty(imgUrl) && !imgUrl.Contains(DEFAULT_USER_IMAGE) && !imgUrl.Contains("No_Image.jpg")) 
             {
                 var imgOldPath = _webHostEnvironment.WebRootPath + imgUrl;
 
