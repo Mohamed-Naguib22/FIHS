@@ -10,8 +10,6 @@ namespace FIHS.Dtos.DiseaseDto
         public string Name { get; set; }
         [Required, StringLength(128)]
         public string ScientificName { get; set; }
-        [Required, StringLength(128)]
-        public string Causes { get; set; }
         [Required]
         public IFormFile Image { get; set; }
         [Required,StringLength(128)]
