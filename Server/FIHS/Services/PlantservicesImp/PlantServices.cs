@@ -35,6 +35,11 @@ namespace FIHS.Services.PlantservicesImp
             SetPlantImg(plant, plantInDto);
             return await _plantRepository.AddPlant(plant);
         }
+        public async Task<IEnumerable<PlantDto>> SearchPlantByName(string searchtext)
+        {
+            var plantsDto = _mapper.Map<IEnumerable<PlantDto>>(await _plantRepository.SearchPlants(searchtext));
+            return plantsDto;
+        }
 
         public async Task<bool> DeletePlantAsync(int plantId)
         {
