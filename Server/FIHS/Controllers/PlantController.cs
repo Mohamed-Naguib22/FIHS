@@ -40,7 +40,12 @@ namespace FIHS.Controllers
             var plantDto = await _plantServices.GetPlantByIdAsync(id,favId);
             return plantDto == null ?   NotFound() : Ok(plantDto);
         }
-
+        [HttpGet("SearchPlant")]
+        public async Task<IActionResult> SearchPlant(string searchText)
+        {
+            var plants = await _plantServices.SearchPlantByName(searchText);
+            return Ok(plants);
+        }
         [HttpPost("AddPlant")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
