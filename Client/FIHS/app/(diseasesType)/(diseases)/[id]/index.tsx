@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import {
   HStack,
@@ -23,16 +23,18 @@ type Props = {};
 const Disease = (props: Props) => {
   const { id } = useLocalSearchParams();
   const navigate = useNavigation();
+  const [toBeUpdated, setToBeUpdated] = useState<TComment | null>(null);
   const { data: disease, isLoading } = useDisease(id as string);
-  if (isLoading && !disease) {
-    return <Loading />;
-  }
+
+  navigate.setOptions({ title: disease?.name });
+
   const { data: comments, refetch: refetchComments } = useComments(
     +(id as string),
     "disease"
   );
-  navigate.setOptions({ title: disease?.name });
-
+  if (isLoading && !disease) {
+    return <Loading />;
+  }
   return (
     <ScrollView px={"$4"}>
       <Image
@@ -159,7 +161,12 @@ const Disease = (props: Props) => {
         <Text fontSize={18} fontWeight='900' color='#000'>
           التعليقات
         </Text>
-        <CommentForm entityId={+(id as string)} entityType='disease' />
+        <CommentForm
+          entityId={+(id as string)}
+          entityType='disease'
+          toBeUpdated={toBeUpdated}
+          setToBeUpdated={setToBeUpdated}
+        />
         {comments && comments?.length > 0 ? (
           comments?.map((comment) => {
             return (
@@ -167,11 +174,12 @@ const Disease = (props: Props) => {
                 key={comment.id}
                 comment={comment}
                 refetchComments={refetchComments}
+                setToBeUpdated={setToBeUpdated}
               />
             );
           })
         ) : (
-          <View>
+          <View display='flex' alignItems='center' p={"$10"}>
             <Text>لا توجد تعليقات</Text>
           </View>
         )}

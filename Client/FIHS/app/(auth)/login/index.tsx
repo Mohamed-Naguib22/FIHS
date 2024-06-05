@@ -39,7 +39,7 @@ const LoginPage = (props: Props) => {
         position='absolute'
         top={45}
         left={"$1/2"}
-        transform={"translateX(-30px)"}
+        transform={"translateX(-40px)"}
       >
         <Logo />
       </View>
@@ -129,7 +129,7 @@ const LoginPage = (props: Props) => {
                       <TextInput
                         style={{
                           width: "100%",
-                          textAlign: "left",
+                          textAlign: "right",
                           padding: 8,
                         }}
                         onBlur={handleBlur("email")}
@@ -178,7 +178,7 @@ const LoginPage = (props: Props) => {
                       <TextInput
                         style={{
                           width: "100%",
-                          textAlign: "left",
+                          textAlign: "right",
                           padding: 8,
                         }}
                         secureTextEntry={isPasswordShown}

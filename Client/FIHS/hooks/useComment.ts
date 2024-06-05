@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { userApi } from '@/utils/api'
+import api, { userApi } from '@/utils/api'
 import Toast from 'react-native-toast-message'
 import useSession from './state/useSession'
 import { ICommentForm } from '@/models/CommentForm'
@@ -7,12 +7,10 @@ import storage from '@/utils/storage'
 
 export const useComments = (entityId: TComment['entityId'], entityType: TComment['entityType']) => {
 
-    const { token } = useSession()
-
     return useQuery<TComment[]>({
         queryKey: ['comments', entityType, entityId],
         queryFn: async () => {
-            return userApi(token).get<TComment[]>(`/Comment/GetAllComments?entityId=${entityId}&entityType=${entityType}`).then((res) => res.data)
+            return api.get<TComment[]>(`/Comment/GetAllComments?entityId=${entityId}&entityType=${entityType}`).then((res) => res.data)
         }
     })
 }

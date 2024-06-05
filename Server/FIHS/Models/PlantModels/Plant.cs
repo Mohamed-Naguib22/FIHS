@@ -14,7 +14,6 @@ namespace FIHS.Models.PlantModels
         [Index(nameof(Name),IsUnique = true)]
     public class Plant
     {
-        [JsonIgnore]
         public int? Id { get; set; }
         [Required,MaxLength(50),MinLength(2)]
         public string Name { get; set; }

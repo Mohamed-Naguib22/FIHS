@@ -30,14 +30,15 @@ type ArticleCard = {
 }
 
 type Fertilizer = AgroCare & {
-    nutrientContent: string
+    nutrientContent: string,
+    imageURL: string
 }
 
 type Pesticide = AgroCare & {
     description: string,
     toxicity: string,
     type: string,
-    imageUrl: string
+    imageURL: string
 }
 
 type ChatResponse = {
