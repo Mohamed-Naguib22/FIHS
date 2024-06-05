@@ -6,6 +6,7 @@ namespace FIHS.Interfaces.IPlant
     public interface IPlantRepository
     {
         public Task<IEnumerable<Plant>> GetAllPlantsAsync(int plantTypeId, int offset = 1, int limit = 10);
+        Task<IEnumerable<Plant>> SearchPlants(string searchText);
         public Task<Plant> GetPlantByIdAsync(int id);
         public Task<Plant> GetPlantByNameAsync(string name);
         public Task<bool> AddPlant(Plant plant);

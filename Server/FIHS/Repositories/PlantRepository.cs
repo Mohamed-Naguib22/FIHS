@@ -55,7 +55,10 @@ namespace FIHS.Repositories
         }
         public async Task<IEnumerable<PlantType>> GetAllPlantsTypeAsync() =>
              await _context.PlantTypes.ToListAsync();
-
+        public async Task<IEnumerable<Plant>> SearchPlants(string searchText)
+        {
+           return await _context.Plants.Where(p => p.Name.Contains(searchText)).ToListAsync();
+        }
         public async Task<PlantType> GetPlantTyeByIdAsync(int id)
         {
             return await _context.PlantTypes.FindAsync(id);

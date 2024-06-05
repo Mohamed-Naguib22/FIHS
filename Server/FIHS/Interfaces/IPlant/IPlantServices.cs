@@ -10,6 +10,7 @@ namespace FIHS.Interfaces.IPlant
     {
         public Task<IEnumerable<PlantDto>> GetAllPlantsAsync(GetAllPlantsParams patameters);
         public Task<PlantDto> GetPlantByIdAsync(int id,int favId);
+        Task<IEnumerable<PlantDto>> SearchPlantByName(string searchtext);
         public Task<bool> AddPlant(PlantInDto plantInDto);
         public Task<bool> DeletePlantAsync(int plantId);
         public bool IsPlantExist(int plantId);
