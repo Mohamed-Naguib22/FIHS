@@ -21,6 +21,7 @@ namespace FIHS.Services.DiseaseService
             _mapper = mapper;
         }
 
+       
         public async Task<ReturnDiseaseDto> AddDiseaseAsync(DiseaseDto diseaseDto)
         {
             var disease=_mapper.Map<Disease>(diseaseDto);

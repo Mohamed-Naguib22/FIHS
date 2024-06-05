@@ -15,9 +15,7 @@ namespace FIHS.Models.DiseaseModels
         public string Name { get; set; }
         [MinLength(2), MaxLength(128)]
         public string ScientificName { get; set; }
-        [MinLength(2), MaxLength(128)]
-        public string Causes { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         [MinLength(2), MaxLength(128)]
         public string Description { get; set; }
         [MinLength(2), MaxLength(128)]
@@ -33,4 +31,6 @@ namespace FIHS.Models.DiseaseModels
         [ValidateNever]
         public virtual IEnumerable<Comment> Comments { get; set; }
     }
+
+
 }
