@@ -56,6 +56,23 @@ namespace FIHS.Repositories
         public async Task<IEnumerable<PlantType>> GetAllPlantsTypeAsync() =>
              await _context.PlantTypes.ToListAsync();
 
+        public async Task<PlantType> GetPlantTyeByIdAsync(int id)
+        {
+            return await _context.PlantTypes.FindAsync(id);
+        }
+
+        public async Task AddPlantTyeAsync(PlantType plantType)
+        {
+            await _context.PlantTypes.AddAsync(plantType);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePlantTyeAsync(PlantType plantType)
+        {
+            _context.PlantTypes.Remove(plantType);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Soil>> GetAllSoils() =>
             await _context.Soils.ToListAsync();
 

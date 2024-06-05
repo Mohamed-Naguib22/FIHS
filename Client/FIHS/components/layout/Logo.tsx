@@ -9,11 +9,11 @@ const Logo = (props: Props) => {
     return (
         <View>
             <HStack alignItems='center' flexDirection='row-reverse' gap='$1.5'>
+                <Text pt={'$1.5'} color='$textDark300' fontWeight='$bold' size='lg'>FIHS</Text>
                 <Image
                 style={{width:40, height:40}}
                 source={require('@/assets/images/miniLogo.png')}
                 />
-                <Text pt={'$1.5'} color='$textDark300' fontWeight='$bold' size='lg'>FIHS</Text>
             </HStack>
         </View>
     )
