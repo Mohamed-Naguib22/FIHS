@@ -27,10 +27,10 @@ namespace FIHS.Repositories
 
         public async Task<IEnumerable<Plant>> GetAllPlantsAsync(int plantTypeId, int offset = 1, int limit = 10)
         {
-            var plant = await _context.Plants.Skip((offset - 1) * limit).Take(offset * limit + 1)
+            var plant = await _context.Plants
                 .Include(p => p.PlantFertilizer).ThenInclude(pf => pf.Fertilizer)
                 .Include(pt => pt.PlantTypes.Where(pt => pt.PlantTypeId == plantTypeId)).ThenInclude(p => p.PlantType).Where(p => p.PlantTypes.Any(pt => pt.PlantTypeId == plantTypeId))
-                .Include(p => p.Soils).ThenInclude(ps => ps.Soil)
+                .Include(p => p.Soils).ThenInclude(ps => ps.Soil).Skip((offset - 1) * limit).Take(offset * limit + 1)
                 //.Include(p => p.Diseases).ThenInclude(pd => pd.Disease)
                 //.Include(p => p.Pests).ThenInclude(pp => pp.Pest)
                 .ToListAsync();
