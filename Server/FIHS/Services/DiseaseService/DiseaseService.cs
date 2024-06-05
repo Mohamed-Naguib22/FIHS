@@ -21,6 +21,15 @@ namespace FIHS.Services.DiseaseService
             _mapper = mapper;
         }
 
+        public async Task<bool> AddImageAsync(int id,IFormFile img)
+        {
+            var disease=await _context.Diseases.FirstOrDefaultAsync(d => d.Id == id);
+            if (disease == null) 
+                return false;
+            disease.ImageUrl = _imageService.SetImage(img);
+            await _context.SaveChangesAsync();
+            return true;
+        }
         public async Task<ReturnDiseaseDto> AddDiseaseAsync(DiseaseDto diseaseDto)
         {
             var disease=_mapper.Map<Disease>(diseaseDto);

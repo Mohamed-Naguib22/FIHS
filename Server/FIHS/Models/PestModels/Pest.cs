@@ -15,16 +15,16 @@ namespace FIHS.Models.PestModels
         public string Name { get; set; }
         [MinLength(2),MaxLength(128)]
         public string ScientificName { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         [MinLength(2), MaxLength(128)]
         public string DamageSymptoms { get; set; }
         [MinLength(2), MaxLength(128)]
         public string ControlMethods { get; set; }
         [MinLength(2), MaxLength(128)]
         public string Description { get; set; }
-        [MinLength(2), MaxLength(128)]
+        [MinLength(2)]
         public string LifeCycle { get; set; }
-        [MinLength(2), MaxLength(50)]
+        [MinLength(2)]
         public string GeographicDistribution { get; set; }
         [MinLength(2), MaxLength(128)]
         public string  Reproduction { get; set; }

@@ -1,4 +1,5 @@
-﻿using FIHS.Dtos.DiseaseDto;
+﻿using FIHS.Dtos;
+using FIHS.Dtos.DiseaseDto;
 using FIHS.Interfaces.IDisease;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,12 @@ namespace FIHS.Controllers
         {
             _diseaseService = diseaseService;
         }
-
+        [HttpPost("AddImg")]
+        public async Task<IActionResult> AddImage(int id, [FromForm] ImageDto imageFile)
+        {
+            var result=await _diseaseService.AddImageAsync(id, imageFile.ImgFile);
+            return result?Ok():NotFound();
+        }
         [HttpGet("GetAllDiseases")]
         public IActionResult GetAllDiseases(int offset = 1, int limit = 10)
         {

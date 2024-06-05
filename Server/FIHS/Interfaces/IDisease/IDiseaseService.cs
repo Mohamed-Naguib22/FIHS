@@ -12,5 +12,6 @@ namespace FIHS.Interfaces.IDisease
         DiseasesResultDto SearchForDiseaseByName(string name, int offset, int limit);
         Task<ReturnDiseaseDto> GetDiseaseByIdAsync(int id);
         Task<bool> IsDiseaseExist(int diseaseId);
+        Task<bool> AddImageAsync(int id, IFormFile img);
     }
 }
