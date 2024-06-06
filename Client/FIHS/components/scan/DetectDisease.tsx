@@ -5,6 +5,7 @@ import {
   HStack,
   ScrollView,
   VStack,
+  View,
 } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
 
@@ -16,16 +17,11 @@ type Props = {
 const DetectDisease = ({ disease, setDisease }: Props) => {
   if (!disease.isPlant) {
     return (
-      <Text
-        flex={1}
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        fontSize='$2xl'
-        fontWeight='bold'
-      >
-        الرجاء تصوير نبات حقيقي لتحديد نوع المرض
-      </Text>
+      <View flex={1} display='flex' justifyContent='center' alignItems='center'>
+        <Text fontSize='$2xl' fontWeight='bold'>
+          الرجاء تصوير نبات حقيقي لتحديد نوع المرض
+        </Text>
+      </View>
     );
   }
   return (
@@ -87,36 +83,42 @@ const DiseaseSuggest = ({ dis }: { dis: DiseaseSuggestion }) => {
         </Text>{" "}
         {dis.description}
       </Text>
-      <VStack>
-        <Text fontWeight='$bold' fontSize={"$lg"}>
-          طرق الوقاية :
-        </Text>
-        <VStack gap={"$2"} p={"$1"}>
-          {dis.treatment.prevention.map((prev) => (
-            <Text key={prev}>{prev}</Text>
-          ))}
+      {dis?.treatment?.prevention && dis?.treatment?.prevention.length > 0 && (
+        <VStack>
+          <Text fontWeight='$bold' fontSize={"$lg"}>
+            طرق الوقاية :
+          </Text>
+          <VStack gap={"$2"} p={"$1"}>
+            {dis.treatment.prevention.map((prev) => (
+              <Text key={prev}>{prev}</Text>
+            ))}
+          </VStack>
         </VStack>
-      </VStack>
-      <VStack justifyContent='flex-start'>
-        <Text fontWeight='$bold' fontSize={"$lg"}>
-          طرق العلاج البيولوجية :
-        </Text>
-        <VStack gap={"$2"} p={"$1"}>
-          {dis.treatment.biological.map((bio) => (
-            <Text key={bio}>{bio}</Text>
-          ))}
+      )}
+      {dis?.treatment?.biological && dis?.treatment?.biological.length > 0 && (
+        <VStack justifyContent='flex-start'>
+          <Text fontWeight='$bold' fontSize={"$lg"}>
+            طرق العلاج البيولوجية :
+          </Text>
+          <VStack gap={"$2"} p={"$1"}>
+            {dis.treatment.biological.map((bio) => (
+              <Text key={bio}>{bio}</Text>
+            ))}
+          </VStack>
         </VStack>
-      </VStack>
-      <VStack justifyContent='flex-start'>
-        <Text fontWeight='$bold' fontSize={"$lg"}>
-          طرق العلاج الكيميائية :
-        </Text>
-        <VStack gap={"$2"} p={"$1"}>
-          {dis.treatment.chemical.map((chem) => (
-            <Text key={chem}>{chem}</Text>
-          ))}
+      )}
+      {dis?.treatment?.chemical && dis?.treatment?.chemical.length > 0 && (
+        <VStack justifyContent='flex-start'>
+          <Text fontWeight='$bold' fontSize={"$lg"}>
+            طرق العلاج الكيميائية :
+          </Text>
+          <VStack gap={"$2"} p={"$1"}>
+            {dis.treatment.chemical.map((chem) => (
+              <Text key={chem}>{chem}</Text>
+            ))}
+          </VStack>
         </VStack>
-      </VStack>
+      )}
     </VStack>
   );
 };

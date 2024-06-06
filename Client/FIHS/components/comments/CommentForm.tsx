@@ -16,7 +16,8 @@ import {
 } from "@gluestack-ui/themed";
 import { FontAwesome } from "@expo/vector-icons";
 import { Textarea } from "@gluestack-ui/themed";
-import { PostComment, UpdateComment } from "@/hooks/useComment";
+import { FinalComment, PostComment, UpdateComment } from "@/hooks/useComment";
+import { ObjectSchema } from "yup";
 type Props = {
   entityId: TComment["entityId"];
   entityType: TComment["entityType"];
@@ -55,15 +56,23 @@ const CommentForm = ({
       onSubmit={(vals, { resetForm }) => {
         console.log(vals);
         resetForm();
+        const entityId: string = `${vals.entityType[0].toUpperCase()}${vals.entityType
+          .split("")
+          .slice(1)
+          .join("")}Id`;
         if (toBeUpdated) {
           updateComment.mutateAsync(
             {
               id: toBeUpdated.id,
-              vals: {
-                commentBody: toBeUpdated.commentBody,
-                entityId: toBeUpdated.entityId,
-                entityType: toBeUpdated.entityType,
-              },
+              vals: Object.assign(
+                {
+                  EntityType: vals.entityType,
+                  CommentBody: vals.commentBody,
+                },
+                {
+                  [entityId]: vals.entityId,
+                }
+              ) as FinalComment,
             },
             {
               onSuccess(data, variables, context) {
@@ -72,7 +81,17 @@ const CommentForm = ({
             }
           );
         } else {
-          postComment.mutateAsync(vals);
+          postComment.mutateAsync(
+            Object.assign(
+              {
+                EntityType: vals.entityType,
+                CommentBody: vals.commentBody,
+              },
+              {
+                [entityId]: vals.entityId,
+              }
+            ) as FinalComment
+          );
         }
       }}
       validationSchema={CommentFormSchema}

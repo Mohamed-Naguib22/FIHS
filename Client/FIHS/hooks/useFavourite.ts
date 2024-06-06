@@ -3,14 +3,20 @@ import api, { userApi } from '@/utils/api'
 import Toast from 'react-native-toast-message'
 import storage from '@/utils/storage'
 import useSession from './state/useSession'
+import { RefreshToken } from './useLogin'
 export const useFavourite = () => {
     const { token, favouriteId } = useSession()
+    const refresh = RefreshToken()
     return useQuery({
         queryKey: ['favourite', favouriteId],
         queryFn: () => userApi(token).get<FavouriteResponse[]>(`/Favourite/GetAllFavouritePlants/${favouriteId}`).then((res) => {
             console.log(res.data)
             return res.data
-        })
+        }).catch((err) => {
+            if (err.response?.status === 401) {
+                refresh.mutate()
+            }
+        }),
     })
 }
 export default useFavourite
@@ -21,6 +27,7 @@ export const PostFavourite = () => {
     let localRt = storage.load<string>({
         key: 'refreshToken'
     })
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (vals: Favourite) => {
             return userApi(token, await localRt).post(`/Favourite/AddFavouritePlant`, vals).then((res) => {
@@ -36,6 +43,9 @@ export const PostFavourite = () => {
                     text2: err.response.data.message,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -45,6 +55,7 @@ export const PostFavourite = () => {
 export const DeleteFavourite = () => {
     const queryClient = useQueryClient()
     const { token } = useSession()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ vals }: { vals: Favourite }) => userApi(token).delete(`/Favourite/DeleteItemFromFavourite?FavoriteId=${vals.favouriteId}&plantId=${vals.plantId}`).then((res) => {
             Toast.show({
@@ -59,6 +70,9 @@ export const DeleteFavourite = () => {
                 text2: err.response.data.message,
                 text1: "حدث خطأ ما"
             })
+            if (err.response?.status === 401) {
+                refresh.mutate()
+            }
         })
     })
 }

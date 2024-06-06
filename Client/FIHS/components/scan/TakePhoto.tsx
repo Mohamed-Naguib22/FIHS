@@ -106,9 +106,9 @@ export default function TakePhoto({
           </HStack>
         </BlurView>
         <VStack gap={"$1.5"} alignItems='center' justifyContent='center'>
-          <Text color='$white' size='sm' w={"$full"}>
+          {/* <Text color='$white' size='sm' w={"$full"}>
             من فضلك ضع النبات داخل الإطار ليتم التعرف عليه بسهولة
-          </Text>
+          </Text> */}
           <Ionicons name='scan' style={{ fontSize: 200 }} color={"#FFF"} />
         </VStack>
         <BlurView

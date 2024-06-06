@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message'
 import { Pesticide as PesticideForm } from '@/models/Pesticide'
 import ConvertImg from '@/utils/ConvertImg'
 import { ImagePickerAsset } from 'expo-image-picker'
+import { RefreshToken } from './useLogin'
 export const usePesticide = (name: string) => useQuery<Pesticide>({
     queryKey: ['pesticides', name],
     queryFn: () => api.get<Pesticide>(`/api/Pesticide/GetByName/${name}`).then((res) => res.data)
@@ -26,6 +27,7 @@ export const PostPesticide = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (data: PesticideForm) => {
             const fd = new FormData()
@@ -49,6 +51,9 @@ export const PostPesticide = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -60,6 +65,7 @@ export const UpdatePesticide = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id, data }: { id: Disease['id'], data: PesticideForm }) => {
             const fd = new FormData()
@@ -83,6 +89,9 @@ export const UpdatePesticide = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -94,6 +103,7 @@ export const DeletePesticide = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id }: { id: number }) => {
             return userApi(token, await localRt).delete(`/Pesticide/${id}`).then((res) => {
@@ -109,6 +119,9 @@ export const DeletePesticide = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })

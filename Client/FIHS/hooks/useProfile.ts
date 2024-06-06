@@ -10,6 +10,7 @@ import { useResetPassword } from './state/useResetPassword'
 import { ForgetPasswordResetSchema } from '@/models/ForgetPasswordReset'
 import { ImagePickerAsset } from 'expo-image-picker'
 import ConvertImg from '@/utils/ConvertImg'
+import { RefreshToken } from './useLogin'
 export const useProfile = () => useQuery<Session>({
     queryKey: ['profile'],
     queryFn: () => api.get<Session>(`User/profile`).then((res) => res.data)
@@ -24,6 +25,7 @@ export const UpdateProfile = () => {
     let localRt = storage.load<string>({
         key: 'refreshToken'
     })
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (vals: PersonalInfo) =>
             await userApi(token, await localRt).put<Session>(`User/update-profile`, { firstName: vals.firstName, lastName: vals.lastName, phoneNumber: vals.phoneNumber }).then((res) => {
@@ -44,8 +46,9 @@ export const UpdateProfile = () => {
                     text1: 'خطأ',
                     text2: err.response.data
                 })
-                console.log(err);
-
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
     })
 }
@@ -56,6 +59,7 @@ export const UpdatePassword = () => {
     let localRt = storage.load<string>({
         key: 'refreshToken'
     })
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (vals: ResetPassword) => {
             await userApi(token, await localRt).put<Session>(`Auth/change-password`, vals).then((res) => {
@@ -76,6 +80,9 @@ export const UpdatePassword = () => {
                     text1: 'خطأ',
                     text2: err.response.data
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
 
@@ -89,6 +96,7 @@ export const PostProfileImg = () => {
     let localRt = storage.load<string>({
         key: 'refreshToken'
     })
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ img }: { img: ImagePickerAsset }) => {
             let fd = new FormData()
@@ -113,8 +121,9 @@ export const PostProfileImg = () => {
                     text1: 'خطأ',
                     text2: err.response.data
                 })
-                console.log(err.response.data);
-
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -127,6 +136,7 @@ export const DeleteProfileImg = () => {
     let localRt = storage.load<string>({
         key: 'refreshToken'
     })
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async () => {
             await userApi(token, await localRt).delete<Session>(`User/delete-image`).then((res) => {
@@ -147,6 +157,9 @@ export const DeleteProfileImg = () => {
                     text1: 'خطأ',
                     text2: err.response.data
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -159,6 +172,7 @@ export const useDeleteAccount = () => {
     let localRt = storage.load<string>({
         key: 'refreshToken'
     })
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async () => {
             await userApi(token, await localRt).delete<Session>(`User/delete-account`).then((res) => {
@@ -179,6 +193,9 @@ export const useDeleteAccount = () => {
                     text1: 'خطأ',
                     text2: err.response.data
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -186,7 +203,7 @@ export const useDeleteAccount = () => {
 
 export const useForgetPassword = () => {
     const { setEmail, setToken } = useResetPassword()
-
+    const refresh = RefreshToken()
     const router = useRouter()
     return useMutation({
         mutationFn: async ({ email }: { email: string }) => {
@@ -205,6 +222,9 @@ export const useForgetPassword = () => {
                     text1: 'خطأ',
                     text2: err.response.data
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -214,6 +234,7 @@ export const useForgetPassword = () => {
 export const useForgetPasswordReset = () => {
     const router = useRouter()
     const { setSession } = useSession()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (vals: ForgetPasswordResetSchema) => {
             await api.post<Session>(`Auth/reset-password`, {
@@ -240,6 +261,9 @@ export const useForgetPasswordReset = () => {
                     text1: 'خطأ',
                     text2: err.response.data
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })

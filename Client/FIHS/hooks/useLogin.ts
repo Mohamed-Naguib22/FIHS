@@ -1,5 +1,5 @@
 import api, { userApi } from '@/utils/api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import useSession, { DEFAULT_SESSION } from './state/useSession';
 import { useRouter } from 'expo-router';
 import Toast from 'react-native-toast-message';
@@ -44,7 +44,7 @@ const useLogin = () => {
 export default useLogin
 
 export const Logout = () => {
-    const { setSession, setLoading, token, setChatMessages } = useSession()
+    const { setSession, setLoading, token } = useSession()
     const rf = storage.load({ key: 'refreshToken' })
     const router = useRouter()
     return useMutation({
@@ -54,7 +54,6 @@ export const Logout = () => {
                 storage.remove({ key: 'refreshToken' })
                 //@ts-ignore
                 setSession(DEFAULT_SESSION)
-                setChatMessages([])
                 setLoading(false)
                 Toast.show({
                     type: 'success',
@@ -79,7 +78,7 @@ export const useRegister = () => {
     const { setSession, setLoading, setEmail } = useSession()
     const router = useRouter()
     return useMutation({
-        mutationFn: async ({ firstName, lastName, email, password, phoneNumber }: 
+        mutationFn: async ({ firstName, lastName, email, password, phoneNumber }:
             { firstName: string, lastName: string, email: string, password: string, phoneNumber: string }): Promise<any> => {
             setLoading(true)
             await api.post(`/Auth/register`, { firstName, lastName, email, password, phoneNumber }).then((res) => {
@@ -164,6 +163,25 @@ export const useResendCode = () => {
                     text2: err.response.data
                 })
                 console.log(err.response);
+            })
+        }
+    })
+}
+
+export const RefreshToken = () => {
+    const { token, setSession } = useSession()
+    let localRt = storage.load<string>({
+        key: 'refreshToken'
+    })
+    return useMutation({
+        mutationFn: async () => {
+            return userApi(token, await localRt).get<Session>(`/Auth/refresh-token`).then((res) => {
+                setSession(res.data)
+                let rt = res.headers['set-cookie']?.[0]
+                storage.save({
+                    key: 'refreshToken',
+                    data: rt
+                })
             })
         }
     })

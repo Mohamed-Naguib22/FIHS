@@ -27,19 +27,27 @@ const CommentCard = ({ comment, refetchComments, setToBeUpdated }: Props) => {
       alignItems='center'
       bg='$backgroundDark0'
       p={"$2"}
+      pb={"$0"}
       rounded={"$md"}
       softShadow='1'
     >
       <Avatar style={{ borderRadius: 20, width: 40, height: 40 }}>
         <AvatarImage source={comment.user.imgUrl} alt={comment.user.username} />
       </Avatar>
-      <VStack gap={"$2"} flexBasis={"$5/6"} alignItems='flex-start'>
+      <VStack
+        gap={"$2"}
+        flexBasis={"$5/6"}
+        alignItems='flex-start'
+        justifyContent='center'
+      >
         <Text fontWeight='$bold'>{comment.user.username}</Text>
         <Text>{comment.commentBody}</Text>
 
         {email === comment.user.email && (
-          <HStack mr={"-$10"} alignSelf='center' gap={"$5"} pt={"$2"}>
-            <Button
+          <HStack alignSelf='flex-end'>
+            {
+              //TODO
+              /* <Button
               action='primary'
               bg='transparent'
               variant='link'
@@ -48,7 +56,8 @@ const CommentCard = ({ comment, refetchComments, setToBeUpdated }: Props) => {
               <ButtonText bg='transparent'>
                 <FontAwesome name='edit' size={24} />
               </ButtonText>
-            </Button>
+            </Button> */
+            }
             <Button
               onPress={() =>
                 deleteComment.mutate(
