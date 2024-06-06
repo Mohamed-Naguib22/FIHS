@@ -11,7 +11,6 @@ namespace FIHS.Dtos.DiseaseDto
         public string Species { get; set; }
         public string Name { get; set; }
         public string ScientificName { get; set; }
-        public string Causes { get; set; }
         public string ImageUrl { get; set; }
         public string Description { get; set; }
         public string Treatments { get; set; }

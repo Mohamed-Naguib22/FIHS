@@ -19,9 +19,9 @@ namespace FIHS.Dtos.PestDto
         public string ControlMethods { get; set; }
         [Required, StringLength(128)]
         public string Description { get; set; }
-        [Required, StringLength(128)]
+        [Required,MinLength(2)]
         public string LifeCycle { get; set; }
-        [Required, StringLength(50)]
+        [Required, MinLength(2)]
         public string GeographicDistribution { get; set; }
         [Required, StringLength(128)]
         public string Reproduction { get; set; }
