@@ -20,7 +20,6 @@ namespace FIHS.Services.PestService
             _mapper = mapper;
             _imageService = imageService;
         }
-
         public async Task<ReturnPestDto> AddPestAsync(PestDto pestDto)
         {
             var pest =_mapper.Map<Pest>(pestDto);

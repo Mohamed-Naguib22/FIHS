@@ -1,4 +1,5 @@
-﻿using FIHS.Dtos.PestDto;
+﻿using FIHS.Dtos;
+using FIHS.Dtos.PestDto;
 using FIHS.Interfaces.IPest;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace FIHS.Controllers
         {
             _pestService = pestService;
         }
+       
         [HttpGet("GetAllPests")]
         public IActionResult GetAllPests(int offset = 1, int limit = 10)
         {
