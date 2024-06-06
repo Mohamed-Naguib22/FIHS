@@ -1,13 +1,13 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true
 const api = axios.create({
-    baseURL: `http://192.168.1.10:7184/api`,
+    baseURL: `http://192.168.1.6:7184/api`,
     withCredentials: true
 })
 export default api
 
 export const userApi = (token: string, rt?: string) => axios.create({
-    baseURL: `http://192.168.1.10:7184/api`,
+    baseURL: `http://192.168.1.6:7184/api`,
     withCredentials: true,
     headers: {
         Authorization: `Bearer ${token}`,
@@ -16,6 +16,6 @@ export const userApi = (token: string, rt?: string) => axios.create({
 })
 
 export const mlApi = axios.create({
-    baseURL: `http://192.168.1.10:5000`,
+    baseURL: `http://farmerintelligenthelper.somee.com`,
     withCredentials: true
 })

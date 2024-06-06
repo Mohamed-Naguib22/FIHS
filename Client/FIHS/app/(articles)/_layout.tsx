@@ -12,7 +12,6 @@ const Articleslayout = (props: Props) => {
       }}
     >
       <Stack.Screen name='index' options={{ headerShown: false }} />
-      <Stack.Screen name='[id]/index' options={{ headerShown: false }} />
     </Stack>
   );
 };

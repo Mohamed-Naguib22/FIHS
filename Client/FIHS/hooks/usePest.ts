@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message'
 import { Pest as TPestForm } from '@/models/Pest'
 import ConvertImg from '@/utils/ConvertImg'
 import { ImagePickerAsset } from 'expo-image-picker'
+import { RefreshToken } from './useLogin'
 export const usePest = (id: string) => useQuery<Pest>({
     queryKey: ['pests', id],
     queryFn: () => api.get<Pest>(`/Pest/GetPestById/${id}`).then((res) => res.data)
@@ -26,6 +27,7 @@ export const PostPest = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (data: TPestForm) => {
             const fd = new FormData()
@@ -52,6 +54,9 @@ export const PostPest = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -63,6 +68,7 @@ export const UpdatePest = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id, data }: { id: Pest['id'], data: TPestForm }) => {
             const fd = new FormData()
@@ -89,6 +95,9 @@ export const UpdatePest = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -101,6 +110,7 @@ export const DeletePest = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id }: { id: number }) => {
             return userApi(token, await localRt).delete(`/Pest/DeletePest/${id}`).then((res) => {
@@ -116,6 +126,9 @@ export const DeletePest = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })

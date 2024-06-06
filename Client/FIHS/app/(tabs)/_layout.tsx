@@ -5,7 +5,6 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import TabsHeader from "@/components/layout/TabsHeader";
-import { RNCamera } from "react-native-camera";
 import Scan from "@/components/home/Scan";
 import { Avatar, AvatarFallbackText, AvatarImage } from "@gluestack-ui/themed";
 import useSession from "@/hooks/state/useSession";

@@ -6,6 +6,7 @@ import storage from '@/utils/storage'
 import { Disease as DiseaseForm } from '@/models/disease'
 import ConvertImg from '@/utils/ConvertImg'
 import { ImagePickerAsset } from 'expo-image-picker'
+import { RefreshToken } from './useLogin'
 export const useDisease = (id: string) => useQuery<Disease>({
     queryKey: ['disease', id],
     queryFn: () => api.get<Disease>(`/Disease/GetDiseaseById/${id}`).then((res) => res.data)
@@ -26,6 +27,7 @@ export const PostDisease = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (data: DiseaseForm) => {
             const fd = new FormData()
@@ -51,6 +53,9 @@ export const PostDisease = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -62,6 +67,7 @@ export const UpdateDisease = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id, data }: { id: Disease['id'], data: DiseaseForm }) => {
             const fd = new FormData()
@@ -87,6 +93,9 @@ export const UpdateDisease = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -98,6 +107,7 @@ export const DeleteDisease = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id }: { id: number }) => {
             return userApi(token, await localRt).delete(`/Disease/DeleteDisease/${id}`).then((res) => {
@@ -113,6 +123,9 @@ export const DeleteDisease = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })

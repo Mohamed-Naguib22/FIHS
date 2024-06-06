@@ -18,7 +18,6 @@ export default function ProfileScreen() {
   const { imgUrl, firstName, lastName } = useSession();
   const router = useRouter();
   const logout = Logout();
-
   const panels: Panel[] = [
     {
       name: "تعديل الصفحة الشخصية",

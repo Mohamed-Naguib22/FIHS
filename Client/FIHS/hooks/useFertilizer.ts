@@ -6,6 +6,7 @@ import { Fertilizer as FertilizerForm } from '@/models/Fertilizer'
 import Toast from 'react-native-toast-message'
 import ConvertImg from '@/utils/ConvertImg'
 import { ImagePickerAsset } from 'expo-image-picker'
+import { RefreshToken } from './useLogin'
 
 export const useFertilizer = (name: string) => useQuery<Fertilizer>({
     queryKey: ['fertilizer', name],
@@ -27,6 +28,7 @@ export const PostFertilizer = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async (data: FertilizerForm) => {
             const fd = new FormData()
@@ -47,6 +49,9 @@ export const PostFertilizer = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -58,6 +63,7 @@ export const UpdateFertilizer = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id, data }: { id: Disease['id'], data: FertilizerForm }) => {
             const fd = new FormData()
@@ -78,6 +84,9 @@ export const UpdateFertilizer = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })
@@ -90,6 +99,7 @@ export const DeleteFertilizer = () => {
         key: 'refreshToken'
     })
     const queryClient = useQueryClient()
+    const refresh = RefreshToken()
     return useMutation({
         mutationFn: async ({ id }: { id: number }) => {
             return userApi(token, await localRt).delete(`/Fertilizer/${id}`).then((res) => {
@@ -105,6 +115,9 @@ export const DeleteFertilizer = () => {
                     text2: err.response.data,
                     text1: "حدث خطأ ما"
                 })
+                if (err.response?.status === 401) {
+                    refresh.mutate()
+                }
             })
         }
     })

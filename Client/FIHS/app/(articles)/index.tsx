@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from "react";
-import TabsPageContainer from "@/components/layout/TabsPageContainer";
+import React, { useState } from "react";
 import {
   View,
   HStack,
   VStack,
   Text,
-  Button,
-  ButtonText,
   ScrollView,
   Link,
   LinkText,
 } from "@gluestack-ui/themed";
-import { Image } from "expo-image";
-import { StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useRouter } from "expo-router";
 import Loading from "@/components/layout/Loading";
-import AutoFetching from "@/components/layout/AutoFetching";
 import useArticles, { useTopics } from "@/hooks/useArticles";
 
 type Props = {};
@@ -123,13 +114,3 @@ const Articles = (props: Props) => {
     </View>
   );
 };
-
-export default Articles;
-const styles = StyleSheet.create({
-  articlePhoto: {
-    width: "100%",
-    height: 160,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
-  },
-});

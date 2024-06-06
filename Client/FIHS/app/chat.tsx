@@ -1,4 +1,3 @@
-import Loading from "@/components/layout/Loading";
 import useSession from "@/hooks/state/useSession";
 import useGemini from "@/hooks/useChat";
 import storage from "@/utils/storage";
@@ -12,6 +11,8 @@ import {
   VStack,
   HStack,
   SafeAreaView,
+  Avatar,
+  AvatarImage,
 } from "@gluestack-ui/themed";
 import React, { useCallback, useEffect, useState } from "react";
 import { TextInput } from "react-native";
@@ -21,36 +22,15 @@ import Toast from "react-native-toast-message";
 type Props = {};
 
 const ChatScreen = (props: Props) => {
-  const {
-    imgUrl,
-    token,
-    firstName,
-    chatMessages,
-    setChatMessages,
-    isLoading,
-    setLoading,
-  } = useSession();
-  useEffect(() => {
-    storage
-      .load<IMessage[]>({ key: "chat" })
-      .then((data) => {
-        setChatMessages(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  const [messages, setMessages] = useState<IMessage[]>(chatMessages);
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
+  const { imgUrl, token, firstName } = useSession();
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [message, setMessage] = useState("");
   const ask = useGemini();
+
   const onSend = useCallback(async (messages: IMessage[] = []) => {
     setMessage("");
-    setMessages((prevMsgs) => GiftedChat.prepend(prevMsgs, messages));
-    setChatMessages([...chatMessages, ...messages]);
+    setMessages((prevMsgs) => GiftedChat.append(prevMsgs, messages));
     setIsTyping(true);
 
     ask.mutate(
@@ -58,35 +38,25 @@ const ChatScreen = (props: Props) => {
       {
         onSuccess(data, variables, context) {
           setIsTyping(false);
-          setMessages((prevMsgs) =>
-            GiftedChat.append(prevMsgs, [
-              {
-                _id: Math.random(),
-                createdAt: new Date(),
-                text: data.answer,
-                user: {
-                  _id: 0,
-                  name: "مساعد الفلاح الذكي",
-                  avatar: require("../assets/images/FIHS_ROBOT.jpg"),
-                },
-                received: true,
-              },
-            ])
-          );
-          setChatMessages([
-            ...chatMessages,
-            {
-              _id: Math.random(),
-              createdAt: new Date(),
-              text: data.answer,
-              user: {
-                _id: 0,
-                name: "مساعد الفلاح الذكي",
-                avatar: require("../assets/images/FIHS_ROBOT.jpg"),
-              },
-              received: true,
+          const ansM: IMessage = {
+            _id: `AI/${data.answer}`,
+            createdAt: new Date(),
+            text: data.answer,
+            user: {
+              _id: 0,
+              name: "مساعد الفلاح الذكي",
+              avatar: () => (
+                <Avatar>
+                  <AvatarImage
+                    source={require("../assets/images/FIHS_ROBOT.jpg")}
+                    alt={`AI`}
+                  />
+                </Avatar>
+              ),
             },
-          ]);
+            received: true,
+          };
+          setMessages((prevMsgs) => GiftedChat.append(prevMsgs, [ansM]));
         },
         onError(error, variables, context) {
           setIsTyping(false);
@@ -105,15 +75,29 @@ const ChatScreen = (props: Props) => {
         messages={messages}
         user={{
           _id: token,
-          avatar: imgUrl || require("../assets/images/avatar.png"),
+          avatar: () => (
+            <Avatar>
+              <AvatarImage
+                source={{
+                  uri: imgUrl || require("../assets/images/avatar.png"),
+                }}
+                alt={`${firstName}`}
+              />
+            </Avatar>
+          ),
           name: firstName,
         }}
         onSend={(messages) => onSend(messages)}
         isTyping={isTyping}
+        messageIdGenerator={(message) =>
+          `${message?.user.name}/${message?.text}`
+        }
         renderBubble={(e) => (
           <View
-            bg={e.currentMessage?.received ? "$light100" : "$primary400"}
-            borderColor='$primary400'
+            bg={e.currentMessage?.received ? "$light200" : "$primary400"}
+            borderColor={
+              e.currentMessage?.received ? "$textDark700" : "$primary400"
+            }
             borderWidth={"$1"}
             p={"$2.5"}
             my={"$1"}
@@ -127,7 +111,7 @@ const ChatScreen = (props: Props) => {
           >
             <VStack gap={"$0.5"}>
               <Text
-                color={e.currentMessage?.received ? "$primary400" : "$white"}
+                color={e.currentMessage?.received ? "$textDark700" : "$white"}
                 size='md'
               >
                 {e.currentMessage?.text}
@@ -155,14 +139,24 @@ const ChatScreen = (props: Props) => {
                 onPress={() => {
                   onSend([
                     {
-                      _id: Math.random(),
+                      _id: `${firstName}/${message}`,
                       createdAt: new Date(),
                       text: message,
                       user: {
                         _id: token,
                         name: firstName,
-                        avatar:
-                          imgUrl || require("../assets/images/avatar.png"),
+                        avatar: () => (
+                          <Avatar>
+                            <AvatarImage
+                              source={{
+                                uri:
+                                  imgUrl ||
+                                  require("../assets/images/avatar.png"),
+                              }}
+                              alt={`${firstName}`}
+                            />
+                          </Avatar>
+                        ),
                       },
                     },
                   ]);
@@ -179,8 +173,7 @@ const ChatScreen = (props: Props) => {
             </HStack>
           </View>
         )}
-        renderAvatarOnTop={true}
-        inverted={false}
+        inverted={true}
       />
     </SafeAreaView>
   );
