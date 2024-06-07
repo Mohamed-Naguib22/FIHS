@@ -114,3 +114,4 @@ const Articles = (props: Props) => {
     </View>
   );
 };
+export default Articles;

@@ -49,19 +49,6 @@ const PersonalInfoForm = (props: Props) => {
         </HStack>
         <HStack gap={"$5"} pt={"$2"} pb={'$1.5'}>
         <View flex={1}>
-            <Text fontWeight='bold' size='sm' py={"$1.5"}>الاسم الاول : </Text>
-            <CustomInput name='firstName' onChangeText={setFieldValue.bind(null, 'firstName') as any} onBlur={handleBlur} value={values.firstName}/>
-            {
-                  errors.firstName&& 
-                  <HStack gap={'$1'} my={'$1.5'} mx={'$3'}>
-                    <Text size='xs' color='$red500'>
-                      <FontAwesome name='exclamation-circle'/>
-                    </Text>
-                    <Text size='xs' color='$red500'>{errors.firstName}</Text>
-                  </HStack>
-            }
-        </View>
-        <View flex={1}>
             <Text fontWeight='bold' size='sm' py={"$1.5"}>الاسم الاخير : </Text>
             <CustomInput name='lastName' onChangeText={setFieldValue.bind(null, 'lastName') as any} onBlur={handleBlur} value={values.lastName}/>
             {
@@ -74,6 +61,20 @@ const PersonalInfoForm = (props: Props) => {
                   </HStack>
             }
         </View>
+        <View flex={1}>
+            <Text fontWeight='bold' size='sm' py={"$1.5"}>الاسم الاول : </Text>
+            <CustomInput name='firstName' onChangeText={setFieldValue.bind(null, 'firstName') as any} onBlur={handleBlur} value={values.firstName}/>
+            {
+                  errors.firstName&& 
+                  <HStack gap={'$1'} my={'$1.5'} mx={'$3'}>
+                    <Text size='xs' color='$red500'>
+                      <FontAwesome name='exclamation-circle'/>
+                    </Text>
+                    <Text size='xs' color='$red500'>{errors.firstName}</Text>
+                  </HStack>
+            }
+        </View>
+     
         </HStack>
         <HStack gap={"$5"} py={'$1.5'}>
         <View flex={1}>
