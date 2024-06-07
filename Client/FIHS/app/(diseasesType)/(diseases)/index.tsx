@@ -74,10 +74,10 @@ const Disease = ({ disease }: { disease: Disease }) => {
         alt={disease.name}
       />
       <VStack justifyContent='center' alignItems='flex-end' pr={6}>
-        <Text textAlign='center' color='#000' pt={6}>
+        <Text textAlign='center' fontSize={"$xs"}  color='#000' pt={6} >
           {disease.species}
         </Text>
-        <Text textAlign='center' color='#000' fontWeight='700'>
+        <Text textAlign='center' fontSize={"$sm"} color='#000' fontWeight='700'>
           {disease.name}
         </Text>
       </VStack>
