@@ -122,8 +122,8 @@ export default function TakePhoto({
           }}
         >
           {!photo && (
-            <Button w={"$16"} h={"$16"} rounded={"$full"}>
-              <ButtonText onPress={takePic}>
+            <Button w={"$16"} h={"$16"} rounded={"$full"} onPress={takePic}>
+              <ButtonText>
                 <FontAwesome name='camera' size={20} />
               </ButtonText>
             </Button>

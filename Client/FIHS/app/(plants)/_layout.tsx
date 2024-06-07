@@ -9,8 +9,8 @@ const PlantsLayout = (props: Props) => {
       screenOptions={{
         animation: "slide_from_right",
       }}
+      initialRouteName='types/index'
     >
-      <Stack.Screen name='index' />
       <Stack.Screen name='[id]/index' />
       <Stack.Screen name='types/index' options={{ headerShown: false }} />
       <Stack.Screen

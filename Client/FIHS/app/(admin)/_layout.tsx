@@ -7,7 +7,7 @@ export const AdminPages: { link: string; name: string }[] = [
   { link: "pesticides", name: "المبيدات" },
   { link: "fertilizers", name: "الاسمدة" },
   { link: "diseases", name: "الامراض" },
-  { link: "plants", name: "النبات" },
+  // { link: "plants", name: "النبات" },
 ];
 const AdminLayout = (props: Props) => {
   return (
@@ -36,6 +36,8 @@ const AdminLayout = (props: Props) => {
           name={`${page.link}/index`}
         />
       ))}
+      <Stack.Screen name='articles/index' />
+      <Stack.Screen name='articles/new' />
     </Stack>
   );
 };

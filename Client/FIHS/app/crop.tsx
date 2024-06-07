@@ -63,7 +63,7 @@ const data1 = [
   { label: "سبتمبر", value: "9" },
   { label: "اكتوبر", value: "10" },
   { label: " نوفمبر", value: "11" },
-  { label: "ديسمبر", value: "12" }
+  { label: "ديسمبر", value: "12" },
 ];
 export default function crop() {
   const [isFocus, setIsFocus] = useState(false);
@@ -118,7 +118,13 @@ export default function crop() {
         errors,
       }) => (
         <FormControl>
-          <Text mt={60} mx={20} fontWeight='$extrabold' textAlign='center' size='md'>
+          <Text
+            mt={60}
+            mx={20}
+            fontWeight='$extrabold'
+            textAlign='center'
+            size='md'
+          >
             اقتراح المحاصيل{" "}
           </Text>
           <VStack mt={50} mx={20} gap={40}>

@@ -9,14 +9,15 @@ import Loading from "../layout/Loading";
 type Props = {};
 
 const HandlePlantScan = (props: Props) => {
-  const [plant, setPlant] = useState<IdentifyPlant | null>(null);
+  const [plant, setPlant] = useState<IdentifyPlant | undefined>(undefined);
+  const [err, setErr] = useState<string | undefined>(undefined);
   const identifyPlant = useIdentifyPlant();
   const [isLoading, setIsLoading] = useState(false);
   const handlePicture = async (takenPic: any) => {
     try {
       setIsLoading(true);
       const data = await identifyPlant.mutateAsync({ img: takenPic });
-      setPlant(data);
+      typeof data === "string" ? setErr(data) : setPlant(data!);
       setIsLoading(false);
     } catch (error) {
       console.error("Error identifying plant:", error);
@@ -26,10 +27,10 @@ const HandlePlantScan = (props: Props) => {
 
   return isLoading ? (
     <Loading />
-  ) : !plant ? (
+  ) : !plant && !err ? (
     <TakePhoto action={handlePicture} />
   ) : (
-    <IdentifyPlant plant={plant} setPlant={setPlant} />
+    <IdentifyPlant plant={plant} setPlant={setPlant} err={err} />
   );
 };
 

@@ -3,25 +3,17 @@ import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
-  useRoute,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, useRouter } from "expo-router";
+import { Redirect, Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { useColorScheme } from "@/components/useColorScheme";
-import { ActivityIndicator, StatusBar, StyleSheet } from "react-native";
-import {
-  GluestackUIProvider,
-  Button,
-  View,
-  ImageBackground,
-} from "@gluestack-ui/themed";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { config } from "@/config/gluestack-ui.config";
-import { Image } from "expo-image";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import useSession, { DEFAULT_SESSION } from "@/hooks/state/useSession";
+import useSession from "@/hooks/state/useSession";
 import Loading from "@/components/layout/Loading";
 import Toast from "react-native-toast-message";
 import storage from "@/utils/storage";
@@ -96,6 +88,9 @@ function RootLayoutNav(props: { token: string }) {
   const colorScheme = useColorScheme();
   const queryClient = new QueryClient();
   const { isLoading } = useSession();
+  const segments = useSegments();
+  console.log(segments);
+
   if (isLoading) {
     return <Loading />;
   }
@@ -107,28 +102,12 @@ function RootLayoutNav(props: { token: string }) {
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
             <Stack
-              initialRouteName={props.token ? "(tabs)" : "(auth)"}
               screenOptions={{ headerShown: false }}
+              initialRouteName='(tabs)'
             >
               <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-              <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-              <Stack.Screen
-                name='(articles)'
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name='(diseasesType)'
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name='(admin)' options={{ headerShown: false }} />
+              <Stack.Screen name='articles' options={{ headerShown: false }} />
               <Stack.Screen name='(plants)' options={{ headerShown: false }} />
-              <Stack.Screen
-                name='chat'
-                options={{
-                  title: "مساعد الفلاح الذكي",
-                  headerShown: true,
-                }}
-              />
             </Stack>
             <Toast />
           </ThemeProvider>

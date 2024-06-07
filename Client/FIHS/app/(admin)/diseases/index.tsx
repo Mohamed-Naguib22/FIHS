@@ -81,7 +81,7 @@ const AdminDisease = ({
         borderWidth: 1,
         marginVertical: 10,
       }}
-      onPress={() => router.push(`/(diseasesType)/(diseases)/${disease.id}`)}
+      onPress={() => router.push(`/(diseasesType)/diseases/${disease.id}`)}
     >
       <Image
         style={styles.plantDiseasesImage}

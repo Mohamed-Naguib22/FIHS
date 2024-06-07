@@ -58,7 +58,7 @@ const PlantType = ({ type }: { type: PlantType }) => {
       activeOpacity={1}
       style={{
         backgroundColor: "rgba(fff, fff,fff,0.9)",
-        borderRadius:10,
+        borderRadius: 10,
         minHeight: 180,
         width: 150,
         borderColor: "rgba(41, 133, 120,0.4)",

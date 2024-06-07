@@ -22,12 +22,12 @@ export default function ProfileScreen() {
     {
       name: "تعديل الصفحة الشخصية",
       icon: <FontAwesome name='pencil' size={18} />,
-      action: () => router.push("/(tabs)/(profile)/update"),
+      action: () => router.push("/profile/update/"),
     },
     {
       name: "إعدادات الحساب",
       icon: <FontAwesome name='gear' size={18} />,
-      action: () => router.push("/(tabs)/(profile)/settings"),
+      action: () => router.push("/profile/settings/"),
     },
     {
       name: "لوحة التحكم",
@@ -58,7 +58,7 @@ export default function ProfileScreen() {
         </Text>
         <VStack w={"$full"}  gap={"$3"} px={"$6"}>
           {panels.map((panel) => (
-            <Panel panel={panel} />
+            <Panel key={panel.name} panel={panel} />
           ))}
         </VStack>
       </VStack>

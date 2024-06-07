@@ -10,7 +10,7 @@ import AutoFetching from "@/components/layout/AutoFetching";
 
 type Props = {};
 
-const plantType = (props: Props) => {
+export default function PlantTypeAllPlants(props: Props) {
   const { type } = useLocalSearchParams();
   const navigate = useNavigation();
 
@@ -52,15 +52,4 @@ const plantType = (props: Props) => {
       </View>
     </AutoFetching>
   );
-};
-
-const styles = StyleSheet.create({
-  PlantsTypesImage: {
-    width: "100%",
-    height: 140,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
-  },
-});
-
-export default plantType;
+}
