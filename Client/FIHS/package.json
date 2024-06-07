@@ -55,6 +55,8 @@
     "react-native-svg": "^13.4.0",
     "react-native-toast-message": "^2.2.0",
     "react-native-web": "~0.19.6",
+    "react-simple-typewriter": "^5.0.1",
+    "typewriter-effect": "^2.21.0",
     "yup": "^1.3.3",
     "zustand": "^4.5.0"
   },

@@ -9,8 +9,8 @@ type Props = {
 const ScreenHeader = ({ name, children }: Props) => {
   return (
     <View my={"$5"}>
-      <HStack justifyContent='space-between' alignItems='center' my={"$3"}>
-        <Text fontWeight='$bold' size='2xl' px={"$3"}>
+      <HStack justifyContent='flex-end' alignItems='center' my={"$3"}>
+        <Text fontWeight='$bold' size='2xl' px={"$0"}>
           {" "}
           {name}
         </Text>

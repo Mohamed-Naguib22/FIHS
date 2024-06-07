@@ -37,7 +37,7 @@ const LoginPage = (props: Props) => {
       <StatusBar style='light' />
       <View
         position='absolute'
-        top={45}
+        top={40}
         left={"$1/2"}
         transform={"translateX(-40px)"}
       >
@@ -45,7 +45,7 @@ const LoginPage = (props: Props) => {
       </View>
       <View
         position='absolute'
-        top={115}
+        top={140}
         left={"$1/2"}
         transform={"translateX(-120px)"}
         bg='rgba(41, 133, 120,0.6)'
@@ -67,7 +67,7 @@ const LoginPage = (props: Props) => {
           left: 0,
           right: 0,
           position: "absolute",
-          height: 560,
+          height: 500,
           borderTopEndRadius: 50,
           borderTopStartRadius: 50,
         }}
@@ -252,7 +252,7 @@ const LoginPage = (props: Props) => {
                       }}
                     />
                   </View>
-                  <HStack justifyContent='center' gap={20} pt={25}>
+                  {/* <HStack justifyContent='center' gap={20} pt={25}>
                     <View
                       bgColor='#fff'
                       borderRadius={15}
@@ -278,7 +278,7 @@ const LoginPage = (props: Props) => {
                         size={40}
                       />
                     </View>
-                  </HStack>
+                  </HStack> */}
                   <Text
                     textAlign='center'
                     color='#e5e5e5'

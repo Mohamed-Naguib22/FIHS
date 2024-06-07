@@ -51,6 +51,20 @@ const data = [
   { label: "الوادي الجديد", value: "27" },
   { label: "أسيوط", value: "28" },
 ];
+const data1 = [
+  { label: "يناير", value: "1" },
+  { label: "فبراير", value: "2" },
+  { label: "مارس", value: "3" },
+  { label: "ابريل", value: "4" },
+  { label: "مايو", value: "5" },
+  { label: "يونيو", value: "6" },
+  { label: "يوليو", value: "7" },
+  { label: "اغسطس", value: "8" },
+  { label: "سبتمبر", value: "9" },
+  { label: "اكتوبر", value: "10" },
+  { label: " نوفمبر", value: "11" },
+  { label: "ديسمبر", value: "12" }
+];
 export default function crop() {
   const [isFocus, setIsFocus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -104,7 +118,7 @@ export default function crop() {
         errors,
       }) => (
         <FormControl>
-          <Text mt={60} mx={20} fontWeight='$bold' textAlign='center' size='md'>
+          <Text mt={60} mx={20} fontWeight='$extrabold' textAlign='center' size='md'>
             اقتراح المحاصيل{" "}
           </Text>
           <VStack mt={50} mx={20} gap={40}>
@@ -253,8 +267,8 @@ export default function crop() {
               </View>
             </HStack>
             <HStack justifyContent='space-between' width='100%'>
-              <View width='45%'>
-                <Text>عمق المياه داخل التربه</Text>
+              {/* <View width='45%'>
+                <Text>   الشهر </Text>
                 <View
                   style={{
                     marginRight: 12,
@@ -288,6 +302,38 @@ export default function crop() {
                     value={`${values.rainfall}`}
                   />
                 </View>
+              </View> */}
+              <View width='45%'>
+                <Text>الشهر</Text>
+                <Dropdown
+                  style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={data1}
+                  search
+                  maxHeight={300}
+                  labelField='label'
+                  valueField='value'
+                  placeholder={!isFocus ? "اختار الشهر " : "..."}
+                  searchPlaceholder='بحث...'
+                  value={data.find((e) => e.label === values.city)}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={(item) => {
+                    setFieldValue("city", item.label);
+                    setIsFocus(false);
+                  }}
+                  renderLeftIcon={() => (
+                    <AntDesign
+                      style={styles.icon}
+                      color={isFocus ? "#298578" : "black"}
+                      name='calendar'
+                      size={20}
+                    />
+                  )}
+                />
               </View>
               <View width='45%'>
                 <Text>المدينه</Text>

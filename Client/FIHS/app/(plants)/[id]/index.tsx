@@ -63,7 +63,7 @@ const Plant = () => {
   };
   navigate.setOptions({ title: pt?.name });
   return (
-    <ScrollView px={"$5"}>
+    <ScrollView px={"$4"}>
       <View position='relative'>
         <Image
           style={styles.articlePhotoId}
@@ -88,15 +88,16 @@ const Plant = () => {
       </View>
       <VStack py={"$5"}>
         <ScrollView horizontal style={{ marginBottom: 30 }}>
-          <HStack justifyContent='flex-end' gap={10} mt={10} mr={5} ml={5}>
+          <HStack justifyContent='flex-end' gap={10} mt={10} mr={3} ml={5}>
             {pt?.plantTypes.map((type) => (
               <Text
                 key={type.id}
                 bg='rgba(41, 133, 120,.3)'
                 p={8}
                 borderRadius={5}
-                textAlign='center'
+                // textAlign='center'
                 fontSize={16}
+                
                 fontWeight='600'
               >
                 {type.name}
@@ -104,23 +105,32 @@ const Plant = () => {
             ))}
           </HStack>
         </ScrollView>
-        <Text fontSize={20} fontWeight='900' color='#000' mr={9}>
+        <Text fontSize={20} fontWeight='900' color='#000' mr={3}>
           {pt?.name}
         </Text>
         <VStack>
-          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={9}>
+          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
             وصف النبات
           </Text>
-          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.description}
           </Text>
         </VStack>
+          <Text fontSize={18} fontWeight='900' color='#000' mt={10} mr={3}>
+            خصائص النبات 
+          </Text>
+
         <HStack
           justifyContent='space-evenly'
           alignItems='center'
           gap={9}
           mt={8}
           pr={5}
+          borderColor="rgba(41, 133, 120,.3)"
+          borderWidth={1}
+          bg="#fff"
+          rounded={"$md"}
+          p={10}
         >
           <VStack justifyContent='center' alignItems='center'>
             <View
@@ -184,47 +194,47 @@ const Plant = () => {
           </VStack>
         </HStack>
         <VStack>
-          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={9}>
-            {" "}
+          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
             مواسم الزراعه والحصاد
+            {" "}
           </Text>
-          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.plantingSeason} - {pt?.harvistingSeason}
           </Text>
         </VStack>
         <VStack>
-          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={9}>
-            {" "}
+          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
             الاسمده
+            {" "}
           </Text>
-          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             سماد عضوي
           </Text>
         </VStack>
         <VStack>
-          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={9}>
-            {" "}
+          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
             نوع التربه{" "}
+            {" "}
           </Text>
-          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.soils.map((soil) => soil.texture).join("، ")}
           </Text>
         </VStack>
         <VStack>
-          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={9}>
-            {" "}
+          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
             القيمه الغذائيه
+            {" "}
           </Text>
-          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.nutritionalValue}
           </Text>
         </VStack>
         <VStack>
-          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={9}>
-            {" "}
+          <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
             الاستخدامات
+            {" "}
           </Text>
-          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+          <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.commonUses}
           </Text>
         </VStack>
@@ -258,7 +268,7 @@ const Plant = () => {
           })
         ) : (
           <View>
-            <Text>لا توجد تعليقات</Text>
+            <Text textAlign="center">لا توجد تعليقات</Text>
           </View>
         )}
       </VStack>
@@ -269,6 +279,7 @@ const styles = StyleSheet.create({
   articlePhotoId: {
     width: "100%",
     height: 200,
+    marginTop:8,
     // borderTopEndRadius:10,
     // borderTopStartRadius:10,
     borderRadius: 10,

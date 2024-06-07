@@ -46,13 +46,14 @@ const Disease = (props: Props) => {
         <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
           {disease?.name}
         </Text>
+        <Text fontWeight='800' mr={8} mt={5}>الاسم العلمي للمرض</Text>
         <HStack
           justifyContent='flex-end'
           alignItems='center'
           gap={9}
           mt={8}
           pr={5}
-        >
+          >
           {disease?.scientificName && (
             <Text
               bg='rgba(41, 133, 120,.3)'
@@ -67,6 +68,7 @@ const Disease = (props: Props) => {
             </Text>
           )}
 
+
           {disease?.species && (
             <Text
               bg='rgba(41, 133, 120,.3)'
@@ -80,8 +82,6 @@ const Disease = (props: Props) => {
               {disease?.species}
             </Text>
           )}
-
-          <Text fontWeight='800'>الاسم العلمي للمرض</Text>
         </HStack>
         {disease?.description && (
           <>
@@ -99,7 +99,7 @@ const Disease = (props: Props) => {
             <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
               الاعراض
             </Text>
-            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
               {disease.symptoms}
             </Text>
           </>
@@ -130,7 +130,7 @@ const Disease = (props: Props) => {
             <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
               طرق العلاج{" "}
             </Text>
-            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
               {disease.treatments}
             </Text>
           </>
@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     borderRadius: 10,
+    marginTop:4
   },
   similar: {
     width: "100%",

@@ -52,23 +52,26 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}
     >
-      <Tabs.Screen
-        name='home/index'
+   
+        <Tabs.Screen
+        name='(profile)'
         options={{
           title: "",
-          tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
+          tabBarIcon: ({ color }) =>
+            imgUrl && (
+              <Avatar
+                borderColor={color}
+                borderWidth={"$2"}
+                size='sm'
+                alignSelf='center'
+              >
+                <AvatarFallbackText></AvatarFallbackText>
+                <AvatarImage alt='يوسف محمد' source={imgUrl} />
+              </Avatar>
+            ),
         }}
       />
-      <Tabs.Screen
-        name='diseases/index'
-        options={{
-          title: "",
-          tabBarItemStyle: {
-            marginRight: 25,
-          },
-          tabBarIcon: ({ color }) => <TabBarIcon name='leaf' color={color} />,
-        }}
-      />
+    
       <Tabs.Screen
         name='(scan)'
         options={{
@@ -88,6 +91,7 @@ export default function TabLayout() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            
           },
           tabBarIconStyle: {
             width: "100%",
@@ -96,34 +100,37 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Scan />,
         }}
       />
-      <Tabs.Screen
+       <Tabs.Screen
         name='favourites/index'
         options={{
           title: "",
           tabBarItemStyle: {
-            marginLeft: 40,
+            marginLeft: 0,
           },
           tabBarIcon: ({ color }) => <TabBarIcon name='heart' color={color} />,
         }}
       />
-      <Tabs.Screen
-        name='(profile)'
+        <Tabs.Screen
+        name='diseases/index'
         options={{
           title: "",
-          tabBarIcon: ({ color }) =>
-            imgUrl && (
-              <Avatar
-                borderColor={color}
-                borderWidth={"$2"}
-                size='sm'
-                alignSelf='center'
-              >
-                <AvatarFallbackText></AvatarFallbackText>
-                <AvatarImage alt='يوسف محمد' source={imgUrl} />
-              </Avatar>
-            ),
+          tabBarItemStyle: {
+            marginRight: 5,
+            marginLeft: 50,
+          },
+          tabBarIcon: ({ color }) => <TabBarIcon name='leaf' color={color} />,
         }}
       />
+     
+
+    <Tabs.Screen
+            name='home/index'
+            options={{
+              title: "",
+              tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
+            }}
+          />
+    
     </Tabs>
   );
 }

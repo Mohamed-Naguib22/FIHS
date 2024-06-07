@@ -15,7 +15,7 @@ export default function PlantsTypes() {
     return <Loading />;
   }
   return (
-    <HStack flexWrap='wrap' justifyContent='space-between' px={"$3"} gap={15}>
+    <HStack flexWrap='wrap' justifyContent='space-between' px={"$2"} gap={12}>
       {types?.plantTypes?.map((type) => (
         <PlantType key={type.id} type={type} />
       ))}
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
   PlantsTypesImage: {
     width: "100%",
     height: 140,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
 });
 
@@ -41,7 +41,7 @@ const PlantType = ({ type }: { type: PlantType }) => {
         backgroundColor: "rgba(fff, fff,fff,0.9)",
         borderRadius: 10,
         minHeight: 180,
-        width: 150,
+        width: 148,
         borderColor: "rgba(41, 133, 120,0.4)",
         borderWidth: 1,
       }}

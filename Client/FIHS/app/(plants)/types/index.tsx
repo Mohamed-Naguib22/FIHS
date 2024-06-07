@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
   PlantsTypesImage: {
     width: "100%",
     height: 140,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
 });
 
@@ -56,7 +58,7 @@ const PlantType = ({ type }: { type: PlantType }) => {
       activeOpacity={1}
       style={{
         backgroundColor: "rgba(fff, fff,fff,0.9)",
-        borderRadius: 10,
+        borderRadius:10,
         minHeight: 180,
         width: 150,
         borderColor: "rgba(41, 133, 120,0.4)",
@@ -68,9 +70,9 @@ const PlantType = ({ type }: { type: PlantType }) => {
         style={styles.PlantsTypesImage}
         source={type.imgURL}
         alt={type.name}
-        rounded={"$md"}
-        borderBottomLeftRadius={0}
-        borderBottomRightRadius={0}
+        // rounded={"$md"}
+        borderTopLeftRadius={10}
+        borderTopRightRadius={10}
       />
       <Text
         textAlign='center'
