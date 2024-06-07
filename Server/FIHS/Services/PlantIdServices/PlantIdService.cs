@@ -21,19 +21,26 @@ namespace FIHS.Services.PlantIdServices
             var imgBased64 = ConvertToBase64Image(imageFile);
             var requestBody = new PlantIdentificationRequest(imgBased64);
 
-            var content = await ExecuteRequestAsync<PlantIdentificationResponse>("identify", requestBody);
+            try
+            {
+                var content = await ExecuteRequestAsync<PlantIdentificationResponse>("identify", requestBody);
 
-            if (content == null)
-                return new PlantIdentificationDto { Succeeded = false, Message = "Error Identifing the plant" };
+                if (content == null)
+                    return new PlantIdentificationDto { Succeeded = false, Message = "Request not sent successfully", StatusCode = 500 };
 
-            if (!content.Is_plant)
-                return new PlantIdentificationDto { Succeeded = false, Message = "الرجاء ادخال صورة نبات" };
+                if (!content.Is_plant)
+                    return new PlantIdentificationDto { Succeeded = false, Message = "الرجاء ادخال صورة نبات", StatusCode = 400 };
 
-            var suggestions = MapPlantSuggestionsToDto(content);
+                var suggestions = MapPlantSuggestionsToDto(content);
 
-            return new PlantIdentificationDto { Succeeded = true, Suggestions = suggestions };
+                return new PlantIdentificationDto { Succeeded = true, Suggestions = suggestions, StatusCode = 200 };
+            }
+            catch
+            {
+                return new PlantIdentificationDto { Succeeded = false, Message = "Error Identifing the plant", StatusCode = 500 };
+            }
+
         }
-
         public async Task<HealthAssessmentDto> DetectDiseaseAsync(IFormFile imageFile)
         {
             var imgBased64 = ConvertToBase64Image(imageFile);
@@ -75,10 +82,30 @@ namespace FIHS.Services.PlantIdServices
             request.AddHeader("Api-Key", _apiKey);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
             var response = await client.ExecuteAsync(request);
-            var content = JsonConvert.DeserializeObject<JToken>(response.Content).ToObject<T>();
+
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Request failed with status code {response.StatusCode}: {response.ErrorMessage}");
+            }
+
+            if (string.IsNullOrEmpty(response.Content))
+            {
+                throw new Exception("Response content is null or empty");
+            }
+
+            var jToken = JsonConvert.DeserializeObject<JToken>(response.Content);
+
+            if (jToken == null)
+            {
+                throw new Exception("Failed to deserialize response content to JToken");
+            }
+
+            var content = jToken.ToObject<T>();
 
             if (content == null)
-                return default;
+            {
+                throw new Exception("Failed to convert JToken to the desired type");
+            }
 
             return content;
         }
