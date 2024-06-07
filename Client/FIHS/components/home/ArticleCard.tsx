@@ -58,9 +58,7 @@ const ArticleCard = () => {
       </Text>
       <TouchableOpacity
       activeOpacity={.5}
-
           onPress={() => router.push(`/(articles)/`)}
-     
        >
         <Text p={5}
         bottom={190}

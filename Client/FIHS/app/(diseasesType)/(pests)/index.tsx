@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
   plantDiseasesImage: {
     width: "100%",
     height: 120,
-    borderTopEndRadius: 20,
-    borderTopStartRadius: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
 });
 
@@ -75,10 +75,10 @@ const Pest = ({ pest }: { pest: Pest }) => {
         alt={pest.name}
       />
       <VStack justifyContent='center' alignItems='flex-end' pr={6}>
-        <Text textAlign='center' color='#000' pt={6}>
+        <Text textAlign='center' fontSize={"$xs"} color='#000' pt={6}>
           {pest.species}
         </Text>
-        <Text textAlign='center' color='#000' fontWeight='700'>
+        <Text textAlign='center'fontSize={"$sm"} color='#000' fontWeight='700'>
           {pest.name}
         </Text>
       </VStack>

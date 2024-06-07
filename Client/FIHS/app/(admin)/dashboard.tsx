@@ -19,31 +19,34 @@ const Dashboard = (props: Props) => {
             </Text>
             <VStack gap={"$1"}>
               <Button
+              bg="#fff"
+
                 onPress={() => router.push(`/(admin)/${page.link}` as any)}
-                justifyContent='flex-start'
+                justifyContent='flex-end'
                 size='sm'
               >
                 <ButtonText>
                   <HStack gap={"$2.5"}>
-                    <Text color='$white' fontWeight='$bold'>
+                    <Text color='#298578' fontWeight='$bold'>
                       {" "}
                       كل {page.name}
                     </Text>
-                    <Ionicons name='grid' size={18} color={"#FFF"} />
+                    <Ionicons name='grid' size={18} color={"#298578"} />
                   </HStack>
                 </ButtonText>
               </Button>
               <Button
+              bg="#fff"
                 onPress={() => router.push(`/(admin)/${page.link}/new` as any)}
-                justifyContent='flex-start'
+                justifyContent='flex-end'
                 size='sm'
               >
                 <ButtonText>
                   <HStack gap={"$2.5"} alignItems='center'>
-                    <Text color='$white' fontWeight='$bold'>
+                    <Text color='#298578' fontWeight='$bold'>
                       إضافة جديد
                     </Text>
-                    <Ionicons name='add-circle' size={18} color={"#FFF"} />
+                    <Ionicons name='add-circle' size={18} color={"#298578"} />
                   </HStack>
                 </ButtonText>
                 <ButtonText></ButtonText>
