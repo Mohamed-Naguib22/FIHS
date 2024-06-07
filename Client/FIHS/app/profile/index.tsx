@@ -53,10 +53,10 @@ export default function ProfileScreen() {
         <Text fontWeight='$bold' py={"$2"}>
           {firstName + " " + lastName}
         </Text>
-        <Text alignSelf='flex-start' fontWeight='$bold' px={"$6"} py={"$5"}>
+        <Text alignSelf='flex-end' fontWeight='$bold' px={"$6"} py={"$5"}>
           الخيارات
         </Text>
-        <VStack w={"$full"} gap={"$3"} px={"$6"}>
+        <VStack w={"$full"}  gap={"$3"} px={"$6"}>
           {panels.map((panel) => (
             <Panel key={panel.name} panel={panel} />
           ))}
@@ -72,12 +72,13 @@ const Panel = ({ panel }: { panel: Panel }) => {
       <HStack
         p={"$2"}
         alignItems='center'
+        justifyContent="flex-end"
         gap={"$3"}
         rounded={"$md"}
         bg='$backgroundDark200'
       >
-        <Text mx={"$2"}>{panel.icon}</Text>
         <Text fontWeight='bold'>{panel.name}</Text>
+        <Text mx={"$2"}>{panel.icon}</Text>
       </HStack>
     </TouchableOpacity>
   );

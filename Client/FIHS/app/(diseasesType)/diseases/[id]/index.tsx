@@ -43,7 +43,7 @@ const Disease = (props: Props) => {
         alt={disease?.name}
       />
       <VStack>
-        <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
+        <Text fontSize={20} fontWeight='900' color='#000' mr={3} mt={20}>
           {disease?.name}
         </Text>
         <Text fontWeight='800' mr={8} mt={5}>
@@ -86,7 +86,7 @@ const Disease = (props: Props) => {
         </HStack>
         {disease?.description && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} color='#000' mt={20} mr={3}>
               وصف المرض
             </Text>
             <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
@@ -97,7 +97,13 @@ const Disease = (props: Props) => {
 
         {disease?.symptoms && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text
+              fontSize={18}
+              fontWeight='$semibold'
+              color='#000'
+              mt={20}
+              mr={3}
+            >
               الاعراض
             </Text>
             <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
@@ -107,7 +113,13 @@ const Disease = (props: Props) => {
         )}
         {disease?.causes && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text
+              fontSize={18}
+              fontWeight='$semibold'
+              color='#000'
+              mt={20}
+              mr={3}
+            >
               {" "}
               الاسباب المسببه للمرض
             </Text>
@@ -118,7 +130,7 @@ const Disease = (props: Props) => {
         )}
         {disease?.preventionMethods && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} color='#000' mt={20} mr={3}>
               طرق الوقايه من المرض
             </Text>
             <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
@@ -128,7 +140,7 @@ const Disease = (props: Props) => {
         )}
         {disease?.treatments && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} color='#000' mt={20} mr={3}>
               طرق العلاج{" "}
             </Text>
             <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>

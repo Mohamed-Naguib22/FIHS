@@ -42,10 +42,10 @@ const Pest = (props: Props) => {
         alt={pest?.name}
       />
       <VStack mb={16}>
-        <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
+        <Text fontSize={20} fontWeight='900' color='#000' mr={3} mt={20}>
           {pest?.name}
         </Text>
-        <Text fontWeight='800' mr={8} mt={5}>الاسم العلمي للافه</Text>
+        <Text fontWeight='800' mr={3} mt={5}>الاسم العلمي للافه</Text>
         <HStack
           justifyContent='flex-end'
           alignItems='center'
@@ -84,7 +84,7 @@ const Pest = (props: Props) => {
         </HStack>
         {pest?.description && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} fontWeight='$semibold' color='#000' mt={20} mr={3}>
               وصف الافه
             </Text>
             <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
@@ -94,7 +94,7 @@ const Pest = (props: Props) => {
         )}
         {pest?.lifeCycle && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} fontWeight='$semibold' color='#000' mt={20} mr={3}>
               {" "}
               دوره الحياة
             </Text>
@@ -105,7 +105,7 @@ const Pest = (props: Props) => {
         )}
         {pest?.damageSymptoms && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} fontWeight='$semibold' color='#000' mt={20} mr={3}>
               اعراض الافه
             </Text>
             <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
@@ -115,10 +115,10 @@ const Pest = (props: Props) => {
         )}
         {pest?.controlMethods && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} fontWeight='$semibold' color='#000' mt={20} mr={3}>
               طرق الوقايه من الافه
             </Text>
-            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
               {pest.controlMethods}
             </Text>
           </>
@@ -126,10 +126,10 @@ const Pest = (props: Props) => {
 
         {pest?.reproduction && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} fontWeight='$semibold' color='#000' mt={20} mr={3}>
               طرق التكاثر
             </Text>
-            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
               {pest.reproduction}
             </Text>
           </>
@@ -137,10 +137,10 @@ const Pest = (props: Props) => {
 
         {pest?.geographicDistribution && (
           <>
-            <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
+            <Text fontSize={18} fontWeight='$semibold' color='#000' mt={20} mr={3}>
               اماكن الإنتشار
             </Text>
-            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={9}>
+            <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
               {pest.geographicDistribution}
             </Text>
           </>

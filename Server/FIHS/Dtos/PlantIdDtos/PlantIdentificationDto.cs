@@ -12,5 +12,7 @@ namespace FIHS.Dtos.IdentificationDtos
         public string? Message { get; set; }
         [ValidateNever, JsonIgnore]
         public bool Succeeded { get; set; }
+        [ValidateNever, JsonIgnore]
+        public int StatusCode { get; set; }
     }
 }
