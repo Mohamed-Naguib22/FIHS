@@ -12,10 +12,10 @@ export const RelatedPlant = ({ plant }: { plant: Plant }) => {
         borderColor: "rgba(41, 133, 120,0.6)",
         borderWidth: 1,
         borderRadius: 5,
-        height: 150,
-        width: 150,
-        marginRight: 10,
-        marginVertical: 10,
+        height: 180,
+        width: 148,
+        marginRight: 5,
+        marginVertical: 1,
       }}
       onPress={() => router.push(`/(plants)/${plant.id}`)}
     >
@@ -23,13 +23,13 @@ export const RelatedPlant = ({ plant }: { plant: Plant }) => {
         style={styles.similar}
         source={plant.imageUrl}
         alt={plant.name}
-        rounded={"$sm"}
-        borderBottomLeftRadius={0}
-        borderBottomRightRadius={0}
+        // rounded={"$sm"}
+        // borderTopLeftRadius={10}
+        // borderTopRightRadius={10}
       />
       <Text
         textAlign='center'
-        color='#000'
+        color='#298578'
         marginRight={5}
         fontWeight='700'
         pt={6}
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
   },
   similar: {
     width: "100%",
-    height: 110,
-    borderTopEndRadius: 5,
-    borderTopStartRadius: 5,
+    height: 140,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
 });

@@ -45,9 +45,9 @@ const Peats = (props: Props) => {
 const styles = StyleSheet.create({
   plantDiseasesImage: {
     width: "100%",
-    height: 110,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
+    height: 120,
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
   },
 });
 
@@ -61,11 +61,11 @@ const Pest = ({ pest }: { pest: Pest }) => {
       style={{
         backgroundColor: "rgba(fff, fff,fff,0.9)",
         borderRadius: 10,
-        height: 165,
+        height: 180,
         width: 150,
         borderColor: "rgba(41, 133, 120,0.4)",
         borderWidth: 1,
-        marginVertical: 10,
+        marginVertical: 1,
       }}
       onPress={() => router.push(`/(diseasesType)/(pests)/${pest.id}`)}
     >

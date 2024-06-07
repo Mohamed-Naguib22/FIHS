@@ -16,10 +16,6 @@ const Section = ({ name, children, link, swipe = true }: Props) => {
   return (
     <View>
       <HStack justifyContent='space-between' alignItems='center' my={"$5"}>
-        <Text fontWeight='$bold' size='md'>
-          {" "}
-          {name}
-        </Text>
         <Link
           $active={{ opacity: 0.75 }}
           onPress={() => router.push(link as any)}
@@ -37,6 +33,10 @@ const Section = ({ name, children, link, swipe = true }: Props) => {
             المزيد
           </LinkText>
         </Link>
+        <Text fontWeight='$bold' size='md'>
+          {" "}
+          {name}
+        </Text>
       </HStack>
       {swipe ? (
         <ScrollView

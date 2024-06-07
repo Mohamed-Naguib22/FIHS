@@ -34,8 +34,8 @@ const plantType = (props: Props) => {
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
     >
-      <View py={"$6"} px={"$2"}>
-        <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
+      <View py={"$6"} px={"$1"}>
+        <Text mt={10} mb={10} mx={12} fontWeight='900' fontSize={"$lg"}>
           النباتات
         </Text>
         <SmallCardContainer>

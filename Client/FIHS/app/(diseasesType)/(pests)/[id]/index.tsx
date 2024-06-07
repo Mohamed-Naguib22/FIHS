@@ -45,6 +45,7 @@ const Pest = (props: Props) => {
         <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
           {pest?.name}
         </Text>
+        <Text fontWeight='800' mr={8} mt={5}>الاسم العلمي للافه</Text>
         <HStack
           justifyContent='flex-end'
           alignItems='center'
@@ -52,6 +53,7 @@ const Pest = (props: Props) => {
           mt={8}
           pr={5}
         >
+
           {pest?.scientificName && (
             <Text
               bg='rgba(41, 133, 120,.3)'
@@ -79,8 +81,6 @@ const Pest = (props: Props) => {
               {pest.species}
             </Text>
           )}
-
-          <Text fontWeight='800'>الاسم العلمي للافه</Text>
         </HStack>
         {pest?.description && (
           <>
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   similar: {
     width: "100%",
-    height: 110,
+    height: 140,
     borderTopEndRadius: 5,
     borderTopStartRadius: 5,
   },

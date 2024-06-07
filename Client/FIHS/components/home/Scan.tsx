@@ -31,34 +31,17 @@ const Scan = (props: Props) => {
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
           <HStack
-            gap={"$5"}
+            gap={"$3"}
             h={"$full"}
             alignItems='center'
             justifyContent='center'
           >
+     
             <Button
               variant='outline'
               rounded={"$2xl"}
-              w={175}
-              h={175}
-              onPress={() => {
-                router.push("/(tabs)/(scan)/scanPlant");
-                setShowActionsheet(!showActionsheet);
-              }}
-            >
-              <VStack gap={"$0.5"} alignItems='center'>
-                <Image
-                  style={{ width: 125, height: 125, objectFit: "cover" }}
-                  source={require("@/assets/images/identify-plant.png")}
-                />
-                <ButtonText>التعرف علي النبات</ButtonText>
-              </VStack>
-            </Button>
-            <Button
-              variant='outline'
-              rounded={"$2xl"}
-              w={175}
-              h={175}
+              w={160}
+              h={170}
               onPress={() => {
                 router.push("/(tabs)/(scan)/scanDisease");
                 setShowActionsheet(!showActionsheet);
@@ -70,6 +53,24 @@ const Scan = (props: Props) => {
                   source={require("@/assets/images/idnetify-disease.png")}
                 />
                 <ButtonText>تحديد مرض النبات</ButtonText>
+              </VStack>
+            </Button>
+            <Button
+              variant='outline'
+              rounded={"$2xl"}
+              w={160}
+              h={170}
+              onPress={() => {
+                router.push("/(tabs)/(scan)/scanPlant");
+                setShowActionsheet(!showActionsheet);
+              }}
+            >
+              <VStack gap={"$0.5"} alignItems='center'>
+                <Image
+                  style={{ width: 125, height: 125, objectFit: "cover" }}
+                  source={require("@/assets/images/identify-plant.png")}
+                />
+                <ButtonText>التعرف علي النبات</ButtonText>
               </VStack>
             </Button>
           </HStack>

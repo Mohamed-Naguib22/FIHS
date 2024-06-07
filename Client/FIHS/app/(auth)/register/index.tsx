@@ -19,6 +19,8 @@ import { Formik } from "formik";
 import { RegisterForm } from "@/models/Register";
 import { RegisterSchema } from "@/models/Register";
 import { useRegister } from "@/hooks/useLogin";
+import Logo from "@/components/layout/Logo";
+
 
 type Props = {};
 
@@ -35,6 +37,31 @@ const Register = (props: Props) => {
       }}
       source={require("@/assets/images/LoginBG.png")}
     >
+       <View
+        position='absolute'
+        top={40}
+        left={"$1/2"}
+        transform={"translateX(-40px)"}
+      >
+        <Logo />
+      </View>
+      <View
+        position='absolute'
+        top={100}
+        left={"$1/2"}
+        transform={"translateX(-120px)"}
+        bg='rgba(41, 133, 120,0.6)'
+        maxWidth={"$64"}
+        p={"$5"}
+        rounded={"$md"}
+      >
+        <Text textAlign='center' color='$textDark100' pb={"$2.5"}>
+          اهلا بك في FIHS !
+        </Text>
+        <Text textAlign='center' color='$textDark300' size='sm'>
+          انشئ حساب  الان في FIHS لتتمتع بكامل المزايا المتوفرة في التطبيق!
+        </Text>
+      </View>
       <SafeAreaView
         style={{
           backgroundColor: "rgba(41, 133, 120,0.9)",
@@ -42,7 +69,7 @@ const Register = (props: Props) => {
           left: 0,
           right: 0,
           position: "absolute",
-          height: 625,
+          height: 560,
           borderTopEndRadius: 50,
           borderTopStartRadius: 50,
         }}
@@ -345,7 +372,7 @@ const Register = (props: Props) => {
               }}
             />
           </View>
-          <HStack justifyContent='center' gap={20} pt={25}>
+          {/* <HStack justifyContent='center' gap={20} pt={25}>
             <View
               bgColor='#fff'
               borderRadius={15}
@@ -367,7 +394,7 @@ const Register = (props: Props) => {
             >
               <Ionicons name='logo-facebook' color='#0866FF' size={40} />
             </View>
-          </HStack>
+          </HStack> */}
           <Text
             color='$white'
             fontSize={14}

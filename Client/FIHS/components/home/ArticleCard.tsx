@@ -16,15 +16,67 @@ import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import { Fontisto, FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useRouter } from "expo-router";
-
+import { useTypewriter } from 'react-simple-typewriter'
 const ArticleCard = () => {
   // const Mui = motify(View)();
   // const tapGesture = Gesture.LongPress().onStart(() => {
-  //   // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-  // });
-  const router = useRouter();
-
+    //   // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    // });
+    const router = useRouter();
+ 
   return (
+   
+
+    
+    <VStack
+    style={{
+      width: "100%",
+        height: 210,
+        borderColor:'#298578',
+        borderWidth:1,
+        backgroundColor:"#fff",
+        borderRadius: 10,
+        // marginLeft: 2,
+        marginTop: 20,
+      }}
+    >
+      <Image
+        source={require("@/assets/images/FIHS.article.jpg")}
+        style={{
+        
+          width: "100%",
+          height: 150,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+          // marginLeft: -1,
+        }}
+      />
+      <Text mr={5} px={8} color="#298578" fontWeight='700' mt={3}> 
+        يمكنك الاطلاع علي مقالات عن النباتات والامراض وكل ما يخص النباتات  
+        
+        
+      </Text>
+      <TouchableOpacity
+      activeOpacity={.5}
+
+          onPress={() => router.push(`/(articles)/`)}
+     
+       >
+        <Text p={5}
+        bottom={190}
+        left={5}
+        
+w={80}
+color="#fff"
+rounded={"$md"} 
+bg='rgba(41, 133, 120,0.9)'
+fontWeight='700'
+
+        >
+          اضغط هنا  
+        </Text>
+      </TouchableOpacity>
+    </VStack>
     // <GestureDetector gesture={tapGesture}>
     //   <Mui
     //     minHeight={"$72"}
@@ -125,28 +177,7 @@ const ArticleCard = () => {
     //     </VStack>
     //   </Mui>
     // </GestureDetector>
-    <TouchableOpacity
-      activeOpacity={1}
-      onPress={() => router.push(`/(articles)/`)}
-      style={{
-        width: "100%",
-        height: 100,
-        borderRadius: 10,
-        marginLeft: -1,
-        marginTop: 20,
-      }}
-    >
-      <Image
-        source={require("@/assets/images/article.png")}
-        style={{
-          width: "99%",
-          height: 100,
-
-          borderRadius: 10,
-          marginLeft: -1,
-        }}
-      />
-    </TouchableOpacity>
+    //
   );
 };
 

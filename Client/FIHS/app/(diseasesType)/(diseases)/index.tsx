@@ -44,10 +44,10 @@ export default function Diseases() {
 
 const styles = StyleSheet.create({
   plantDiseasesImage: {
+    borderTopRightRadius: 10,
     width: "100%",
     height: 110,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
+    borderTopLeftRadius: 10,
   },
 });
 
@@ -68,6 +68,7 @@ const Disease = ({ disease }: { disease: Disease }) => {
       onPress={() => router.push(`/(diseasesType)/(diseases)/${disease.id}`)}
     >
       <Image
+      
         style={styles.plantDiseasesImage}
         source={disease.imageUrl}
         alt={disease.name}
