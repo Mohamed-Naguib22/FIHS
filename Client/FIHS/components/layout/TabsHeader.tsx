@@ -1,33 +1,18 @@
 import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import Animated, {
-  useDerivedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
-import { useSharedValue } from "react-native-reanimated";
-import {
-  Button,
-  ButtonText,
-  Fab,
-  HStack,
-  InputField,
-  VStack,
-  Text,
-} from "@gluestack-ui/themed";
+import { HStack, InputField, VStack, Text, Image } from "@gluestack-ui/themed";
 import { Input } from "@gluestack-ui/themed";
 import { InputSlot } from "@gluestack-ui/themed";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import { Image } from "expo-image";
 import { useTabHeaderHeight } from "../../hooks/state/useTabHeaderHeight";
-import { useNavigation } from "expo-router";
-import { Animated as An } from "react-native";
+import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useAnimationState, MotiView } from "moti";
-import Fontisto from "@expo/vector-icons/Fontisto";
 import useTabsHeaderName from "@/hooks/state/useTabsHeaderName";
+import useSearch from "@/hooks/useSearch";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const TabsHeader = () => {
   const animationState = useAnimationState({
     top: {
@@ -44,6 +29,8 @@ const TabsHeader = () => {
       : animationState.transitionTo("top");
   }, [isTop]);
   const { name } = useTabsHeaderName();
+  const search = useSearch();
+  const [resaults, setResaults] = useState<FullPlant[]>([]);
   return (
     <MotiView
       transition={{ type: "spring", damping: 50, delay: isTop ? 150 : 200 }}
@@ -67,7 +54,7 @@ const TabsHeader = () => {
             style={styles.logo}
             source={require("@/assets/images/Logofinal.png")}
             alt='logo'
-            contentFit='cover'
+            objectFit='cover'
           />
         </HStack>
       </VStack>
@@ -106,6 +93,19 @@ const TabsHeader = () => {
                   borderColor='$primary500'
                   direction='rtl'
                   placeholder='بحث'
+                  onChangeText={(e) =>
+                    search.mutate(
+                      { term: e },
+                      {
+                        onSuccess(data, variables, context) {
+                          setResaults(data);
+                        },
+                        onError(error, variables, context) {
+                          setResaults([]);
+                        },
+                      }
+                    )
+                  }
                 />
                 <InputSlot backgroundColor='$white'>
                   <Feather
@@ -129,6 +129,38 @@ const TabsHeader = () => {
           }}
         />
       </VStack>
+      {resaults.length > 0 && isTop && (
+        <VStack bg='$backgroundDark0' gap={"$5"} p={"$5"}>
+          {resaults.map((plant) => {
+            return (
+              <TouchableOpacity
+                key={plant.id}
+                onPress={() => router.push(`/(plants)/${plant.id}`)}
+              >
+                <HStack
+                  bg='$backgroundDark200'
+                  p={"$3"}
+                  gap={"$1.5"}
+                  rounded={"$sm"}
+                >
+                  <Image
+                    source={{ uri: plant.imageUrl }}
+                    style={{ width: 75, height: 75 }}
+                    alt={plant.name}
+                    rounded={"$sm"}
+                  />
+                  <VStack gap={"$1"} alignItems='flex-start' w={"$3/4"}>
+                    <Text fontSize={"$lg"} fontWeight='$bold'>
+                      {plant.name}
+                    </Text>
+                    <Text fontSize={"$sm"}>{plant.commonUses}</Text>
+                  </VStack>
+                </HStack>
+              </TouchableOpacity>
+            );
+          })}
+        </VStack>
+      )}
     </MotiView>
   );
 };

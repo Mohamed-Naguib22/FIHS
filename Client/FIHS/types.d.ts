@@ -225,7 +225,7 @@ type CropsRecommendedInput = {
     N: number,
     P: number,
     K: number,
-    rainfall: number,
+    month: string,
     ph: number,
     city: string
 }

@@ -7,7 +7,7 @@ import {
   VStack,
   View,
 } from "@gluestack-ui/themed";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -17,61 +17,43 @@ import {
   CropRecommendation,
   CropRecommendationSchema,
 } from "@/models/CropRecommendation";
-import { useRecommendCrops } from "@/hooks/useRecommendCrops";
+import {
+  useCities,
+  useMonths,
+  useRecommendCrops,
+} from "@/hooks/useRecommendCrops";
 import Loading from "@/components/layout/Loading";
 import Toast from "react-native-toast-message";
-import { err } from "react-native-svg/lib/typescript/xml";
 
-const data = [
-  { label: "القاهرة", value: "1" },
-  { label: "الجيزة", value: "2" },
-  { label: "البحيرة", value: "3" },
-  { label: "القليوبية", value: "4" },
-  { label: "الإسكندرية", value: "5" },
-  { label: "اسوان", value: "6" },
-  { label: "الدقهلية", value: "7" },
-  { label: "الأقصر", value: "8" },
-  { label: "المنوفية", value: "9" },
-  { label: "الإسماعيلية", value: "10" },
-  { label: "البحر الاحمر", value: "11" },
-  { label: "البحيرة", value: "12" },
-  { label: "بني سويف", value: "13" },
-  { label: "بورسعيد", value: "14" },
-  { label: "جنوب سيناء", value: "15" },
-  { label: "دمياط", value: "16" },
-  { label: "سوهاج", value: "17" },
-  { label: "السويس", value: "18" },
-  { label: "الشرقية", value: "19" },
-  { label: "شمال سيناء", value: "20" },
-  { label: "الغربية", value: "21" },
-  { label: "قنا", value: "23" },
-  { label: "كفر الشيخ", value: "24" },
-  { label: "مطروح", value: "25" },
-  { label: "المنيا", value: "26" },
-  { label: "الوادي الجديد", value: "27" },
-  { label: "أسيوط", value: "28" },
-];
-const data1 = [
-  { label: "يناير", value: "1" },
-  { label: "فبراير", value: "2" },
-  { label: "مارس", value: "3" },
-  { label: "ابريل", value: "4" },
-  { label: "مايو", value: "5" },
-  { label: "يونيو", value: "6" },
-  { label: "يوليو", value: "7" },
-  { label: "اغسطس", value: "8" },
-  { label: "سبتمبر", value: "9" },
-  { label: "اكتوبر", value: "10" },
-  { label: " نوفمبر", value: "11" },
-  { label: "ديسمبر", value: "12" },
-];
 export default function crop() {
-  const [isFocus, setIsFocus] = useState(false);
+  const [isMFocus, setIsMFocus] = useState(false);
+  const [isCFocus, setIsCFocus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [allCities, setAllCities] = useState<
+    { label: string; value: string }[]
+  >([]);
+  const [allMonths, setAllMonths] = useState<
+    { label: string; value: string }[]
+  >([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [crops, setCrops] = useState<Crop[]>([]);
   const recommend = useRecommendCrops();
-  return isLoading ? (
+  const { data: cities, isLoading: isCitiesLoading } = useCities();
+  const { data: months, isLoading: isMonthsLoading } = useMonths();
+  const addedCities = cities?.map((city, val) => {
+    return { label: city, value: city };
+  });
+  const addedMonths = months?.map((month, val) => {
+    return { label: month, value: month };
+  });
+  useEffect(() => {
+    setAllCities(addedCities || []);
+  }, [isCitiesLoading]);
+  useEffect(() => {
+    setAllMonths(addedMonths || []);
+  }, [isMonthsLoading]);
+
+  return isLoading || isCitiesLoading || isMonthsLoading ? (
     <Loading />
   ) : !crops.length ? (
     <Formik<CropRecommendation>
@@ -84,8 +66,7 @@ export default function crop() {
         K: "",
         //@ts-ignore
         ph: "",
-        //@ts-ignore
-        rainfall: "",
+        month: "",
         city: "",
       }}
       onSubmit={(vals) => {
@@ -273,68 +254,32 @@ export default function crop() {
               </View>
             </HStack>
             <HStack justifyContent='space-between' width='100%'>
-              {/* <View width='45%'>
-                <Text>   الشهر </Text>
-                <View
-                  style={{
-                    marginRight: 12,
-                    marginLeft: 12,
-                    marginTop: 5,
-                    width: "90%",
-                    height: 48,
-                    borderColor: "#298578",
-                    borderStartWidth: 1,
-                    borderBottomWidth: 1,
-                    borderTopEndRadius: 10,
-                    borderBottomStartRadius: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingLeft: 22,
-                    backgroundColor: "#fff",
-                  }}
-                >
-                  <TextInput
-                    keyboardType='number-pad'
-                    placeholder='تقاس بالمليميتر'
-                    style={{
-                      width: "100%",
-                      textAlign: "right",
-                      padding: 8,
-                    }}
-                    onChangeText={(e) => {
-                      setFieldValue("rainfall", +e);
-                    }}
-                    onBlur={handleBlur("rainfall")}
-                    value={`${values.rainfall}`}
-                  />
-                </View>
-              </View> */}
               <View width='45%'>
                 <Text>الشهر</Text>
                 <Dropdown
-                  style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                  style={[styles.dropdown, isMFocus && { borderColor: "blue" }]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  data={data1}
+                  data={allMonths}
                   search
                   maxHeight={300}
-                  labelField='label'
-                  valueField='value'
-                  placeholder={!isFocus ? "اختار الشهر " : "..."}
+                  labelField={"label"}
+                  valueField={"value"}
+                  placeholder={!isMFocus ? "اختار الشهر " : "..."}
                   searchPlaceholder='بحث...'
-                  value={data.find((e) => e.label === values.city)}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
+                  value={allMonths?.find((e) => e.label === values.month)}
+                  onFocus={() => setIsMFocus(true)}
+                  onBlur={() => setIsMFocus(false)}
                   onChange={(item) => {
-                    setFieldValue("city", item.label);
-                    setIsFocus(false);
+                    setFieldValue("month", item.label);
+                    setIsMFocus(false);
                   }}
                   renderLeftIcon={() => (
                     <AntDesign
                       style={styles.icon}
-                      color={isFocus ? "#298578" : "black"}
+                      color={isMFocus ? "#298578" : "black"}
                       name='calendar'
                       size={20}
                     />
@@ -344,29 +289,29 @@ export default function crop() {
               <View width='45%'>
                 <Text>المدينه</Text>
                 <Dropdown
-                  style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                  style={[styles.dropdown, isCFocus && { borderColor: "blue" }]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  data={data}
+                  data={allCities}
                   search
                   maxHeight={300}
-                  labelField='label'
-                  valueField='value'
-                  placeholder={!isFocus ? "اختار مدينه " : "..."}
+                  labelField={"label"}
+                  valueField={"value"}
+                  placeholder={!isCFocus ? "اختار مدينه " : "..."}
                   searchPlaceholder='بحث...'
-                  value={data.find((e) => e.label === values.city)}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
+                  value={allCities?.find((e) => e.label === values.city)}
+                  onFocus={() => setIsCFocus(true)}
+                  onBlur={() => setIsCFocus(false)}
                   onChange={(item) => {
                     setFieldValue("city", item.label);
-                    setIsFocus(false);
+                    setIsCFocus(false);
                   }}
                   renderLeftIcon={() => (
                     <AntDesign
                       style={styles.icon}
-                      color={isFocus ? "#298578" : "black"}
+                      color={isCFocus ? "#298578" : "black"}
                       name='home'
                       size={20}
                     />
@@ -428,11 +373,11 @@ export default function crop() {
             </Text>
           </HStack>
           <VStack gap={20}>
-            {crops.map((crop) => {
+            {crops.map(({ crop, probability }, i) => {
               return (
-                <View key={crop.crop}>
-                  <Text color='$white'>المحصول المقترح :{crop.crop}</Text>
-                  <Text color='$white'>نسبه التوقع :{crop.probability}%</Text>
+                <View key={crop}>
+                  <Text color='$white'>المحصول المقترح :{crop}</Text>
+                  <Text color='$white'>نسبه التوقع :{probability}%</Text>
                 </View>
               );
             })}
