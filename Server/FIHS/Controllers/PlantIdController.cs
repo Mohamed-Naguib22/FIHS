@@ -28,7 +28,7 @@ namespace FIHS.Controllers
 
             var result = await _plantIdService.IdentifyPlantAsync(imgDto.ImgFile);
 
-            return result.Succeeded ? Ok(result) : BadRequest(result.Message);
+            return result.Succeeded ? Ok(result) : StatusCode(result.StatusCode, result.Message);
         }
 
         [HttpPost("detect-disease")]
