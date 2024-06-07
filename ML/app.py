@@ -69,9 +69,8 @@ def get_coordinates(city_name):
 def get_month_dates(month_name):
     if month_name in month_dates:
         start_date, end_date = month_dates[month_name]
-        start_date = f"2023-04-01"
-        end_date = f"2023-09-30"
-        return start_date, end_date
+        return f"2023-{start_date}", f"2023-{end_date}"
+
     else:
         return None, None
 
