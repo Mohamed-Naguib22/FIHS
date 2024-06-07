@@ -10,16 +10,17 @@ import {
 import { Text } from "@gluestack-ui/themed";
 
 type Props = {
-  disease: DetectDisease;
-  setDisease: (val: DetectDisease | null) => void;
+  disease?: DetectDisease;
+  err?: string;
+  setDisease: (val?: DetectDisease) => void;
 };
 
-const DetectDisease = ({ disease, setDisease }: Props) => {
-  if (!disease.isPlant) {
+const DetectDisease = ({ disease, setDisease, err }: Props) => {
+  if (err) {
     return (
       <View flex={1} display='flex' justifyContent='center' alignItems='center'>
         <Text fontSize='$2xl' fontWeight='bold'>
-          الرجاء تصوير نبات حقيقي لتحديد نوع المرض
+          {err || "الرجاء تصوير نبات حقيقي لتحديد نوع المرض"}
         </Text>
       </View>
     );
@@ -30,18 +31,21 @@ const DetectDisease = ({ disease, setDisease }: Props) => {
         <Text fontWeight='$bold' fontSize={"$lg"}>
           صحة النبات :
         </Text>{" "}
-        {disease.isHealthy ? "سليم" : "مريض"}
+        {disease?.isHealthy ? "سليم" : "مريض"}
       </Text>
 
       <Text m={10} mb={0} fontWeight='900' fontSize={"$lg"}>
         الإمراض المقترحة
       </Text>
-      <VStack mt={"$1"} mb={"$16"} mx={"$2"} gap={"$5"}>
-        {disease.suggestions.map((dis) => {
-          return <DiseaseSuggest key={dis.name} dis={dis} />;
-        })}
-      </VStack>
-      <Button mb={"$16"} onPress={() => setDisease(null)}>
+      {disease?.suggestions && disease?.suggestions.length > 0 && (
+        <VStack mt={"$1"} mb={"$16"} mx={"$2"} gap={"$5"}>
+          {disease?.suggestions.map((dis) => {
+            return <DiseaseSuggest key={dis.name} dis={dis} />;
+          })}
+        </VStack>
+      )}
+
+      <Button mb={"$16"} onPress={() => setDisease(undefined)}>
         <ButtonText>تحديد مرض اخر</ButtonText>
       </Button>
     </ScrollView>

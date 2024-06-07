@@ -14,22 +14,32 @@ import React from "react";
 import { StyleSheet } from "react-native";
 
 type Props = {
-  plant: IdentifyPlant;
-  setPlant: (val: IdentifyPlant | null) => void;
+  plant?: IdentifyPlant;
+  err?: string;
+  setPlant: (val?: IdentifyPlant) => void;
 };
 
-const IdentifyPlant = ({ plant: res, setPlant }: Props) => {
+const IdentifyPlant = ({ plant: res, setPlant, err }: Props) => {
+  if (err) {
+    return (
+      <View flex={1} display='flex' justifyContent='center' alignItems='center'>
+        <Text fontSize='$xl' textAlign='center' fontWeight='bold'>
+          {err || "الرجاء تصوير نبات حقيقي لتحديد نوع المرض"}
+        </Text>
+      </View>
+    );
+  }
   return (
     <ScrollView flex={1} pt={"$10"} px={"$2"}>
       <Text mx={10} fontWeight='900' fontSize={"$lg"}>
         النباتات المقترحة
       </Text>
       <VStack mt={"$5"} mb={"$16"} mx={"$2"} gap={"$5"}>
-        {res.suggestions.map((sugg) => {
+        {res?.suggestions.map((sugg) => {
           return <PlantSuggest key={sugg.imageUrl} sugg={sugg} />;
         })}
       </VStack>
-      <Button mb={"$16"} onPress={() => setPlant(null)}>
+      <Button mb={"$16"} onPress={() => setPlant(undefined)}>
         <ButtonText>تحديد نبات اخر</ButtonText>
       </Button>
     </ScrollView>

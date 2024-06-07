@@ -6,14 +6,15 @@ import { useDetectDisease } from "@/hooks/useScan";
 import DetectDisease from "./DetectDisease";
 
 const HandleDiseaseScan = () => {
-  const [disease, setDisease] = useState<DetectDisease | null>(null);
+  const [disease, setDisease] = useState<DetectDisease | undefined>(undefined);
+  const [err, setErr] = useState<string | undefined>(undefined);
   const detectDisease = useDetectDisease();
   const [isLoading, setIsLoading] = useState(false);
   const handlePicture = async (takenPic: any) => {
     try {
       setIsLoading(true);
       const data = await detectDisease.mutateAsync({ img: takenPic });
-      setDisease(data);
+      typeof data === "string" ? setErr(data) : setDisease(data!);
       setIsLoading(false);
     } catch (error) {
       console.error("Error Detecting Disease:", error);
@@ -23,10 +24,10 @@ const HandleDiseaseScan = () => {
 
   return isLoading ? (
     <Loading />
-  ) : !disease ? (
+  ) : !disease && !err ? (
     <TakePhoto action={handlePicture} />
   ) : (
-    <DetectDisease disease={disease} setDisease={setDisease} />
+    <DetectDisease disease={disease} setDisease={setDisease} err={err} />
   );
 };
 
