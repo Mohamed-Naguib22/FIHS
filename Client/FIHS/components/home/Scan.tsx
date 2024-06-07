@@ -36,7 +36,6 @@ const Scan = (props: Props) => {
             alignItems='center'
             justifyContent='center'
           >
-     
             <Button
               variant='outline'
               rounded={"$2xl"}
@@ -51,6 +50,7 @@ const Scan = (props: Props) => {
                 <Image
                   style={{ width: 125, height: 125, objectFit: "cover" }}
                   source={require("@/assets/images/idnetify-disease.png")}
+                  alt='identify diseases'
                 />
                 <ButtonText>تحديد مرض النبات</ButtonText>
               </VStack>
@@ -69,6 +69,7 @@ const Scan = (props: Props) => {
                 <Image
                   style={{ width: 125, height: 125, objectFit: "cover" }}
                   source={require("@/assets/images/identify-plant.png")}
+                  alt='identify plant'
                 />
                 <ButtonText>التعرف علي النبات</ButtonText>
               </VStack>

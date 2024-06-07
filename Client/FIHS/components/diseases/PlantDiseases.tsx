@@ -29,12 +29,13 @@ const PlantDiseases = (props: Props) => {
         <TouchableOpacity
           activeOpacity={1}
           style={styles.diseasesDiv}
-          onPress={() => router.push("/(diseasesType)/(diseases)/")}
+          onPress={() => router.push("/(diseasesType)/diseases")}
         >
           <VStack gap={"$0.5"} alignItems='center'>
             <Image
               style={{ width: 125, height: 125, objectFit: "cover" }}
               source={require("@/assets/images/diseases.png")}
+              alt='diseases'
             />
             <ButtonText color='#298578' fontSize={18} fontWeight='800'>
               الأمراض
@@ -44,7 +45,7 @@ const PlantDiseases = (props: Props) => {
         <TouchableOpacity
           activeOpacity={1}
           style={styles.diseasesDiv}
-          onPress={() => router.push("/(diseasesType)/(pests)/")}
+          onPress={() => router.push("/(diseasesType)/pests")}
         >
           <VStack gap={"$0.5"} alignItems='center'>
             <Image

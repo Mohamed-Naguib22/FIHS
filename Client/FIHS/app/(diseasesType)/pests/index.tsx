@@ -67,7 +67,7 @@ const Pest = ({ pest }: { pest: Pest }) => {
         borderWidth: 1,
         marginVertical: 1,
       }}
-      onPress={() => router.push(`/(diseasesType)/(pests)/${pest.id}`)}
+      onPress={() => router.push(`/(diseasesType)/pests/${pest.id}`)}
     >
       <Image
         style={styles.plantDiseasesImage}

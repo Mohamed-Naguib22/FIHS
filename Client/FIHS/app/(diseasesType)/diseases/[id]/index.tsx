@@ -39,21 +39,23 @@ const Disease = (props: Props) => {
     <ScrollView px={"$4"}>
       <Image
         style={styles.articlePhotoId}
-        source={disease?.imageUrl}
+        source={{ uri: disease?.imageUrl }}
         alt={disease?.name}
       />
       <VStack>
         <Text fontSize={20} fontWeight='900' color='#000' mr={9} mt={20}>
           {disease?.name}
         </Text>
-        <Text fontWeight='800' mr={8} mt={5}>الاسم العلمي للمرض</Text>
+        <Text fontWeight='800' mr={8} mt={5}>
+          الاسم العلمي للمرض
+        </Text>
         <HStack
           justifyContent='flex-end'
           alignItems='center'
           gap={9}
           mt={8}
           pr={5}
-          >
+        >
           {disease?.scientificName && (
             <Text
               bg='rgba(41, 133, 120,.3)'
@@ -67,7 +69,6 @@ const Disease = (props: Props) => {
               {disease?.scientificName}
             </Text>
           )}
-
 
           {disease?.species && (
             <Text
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     borderRadius: 10,
-    marginTop:4
+    marginTop: 4,
   },
   similar: {
     width: "100%",

@@ -55,7 +55,11 @@ const PlantSuggest = ({ sugg }: { sugg: PlantSuggestion }) => {
       p={"$2"}
       rounded={"$sm"}
     >
-      <Image source={{ uri: sugg.imageUrl }} style={styles.Photo} />
+      <Image
+        source={{ uri: sugg.imageUrl }}
+        style={styles.Photo}
+        alt='suggest plant'
+      />
       <VStack gap={"$2"} my={"$2"} w={"100%"}>
         <Text>
           <Text fontWeight='$bold' fontSize={"$lg"}>

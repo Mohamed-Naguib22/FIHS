@@ -45,7 +45,7 @@ const PlantType = ({ type }: { type: PlantType }) => {
         borderColor: "rgba(41, 133, 120,0.4)",
         borderWidth: 1,
       }}
-      onPress={() => router.push(`/(plants)/types/${type.id}`)}
+      onPress={() => router.push(`/(plants)/types/${type.id}/`)}
     >
       <Image
         style={styles.PlantsTypesImage}
@@ -53,6 +53,7 @@ const PlantType = ({ type }: { type: PlantType }) => {
         rounded={"$md"}
         borderBottomLeftRadius={0}
         borderBottomRightRadius={0}
+        alt='types'
       />
       <Text
         textAlign='center'

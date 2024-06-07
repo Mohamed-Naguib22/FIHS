@@ -28,7 +28,7 @@ export const SmallCard = ({
       }}
       onPress={() => router.push(url as any)}
     >
-      <Image style={styles.similar} source={{ uri: img }} />
+      <Image style={styles.similar} source={{ uri: img }} alt={name} />
       <Text
         textAlign='center'
         color='#000'

@@ -21,7 +21,6 @@ import { RegisterSchema } from "@/models/Register";
 import { useRegister } from "@/hooks/useLogin";
 import Logo from "@/components/layout/Logo";
 
-
 type Props = {};
 
 const Register = (props: Props) => {
@@ -36,8 +35,9 @@ const Register = (props: Props) => {
         width: "100%",
       }}
       source={require("@/assets/images/LoginBG.png")}
+      alt='background image'
     >
-       <View
+      <View
         position='absolute'
         top={40}
         left={"$1/2"}
@@ -59,7 +59,7 @@ const Register = (props: Props) => {
           اهلا بك في FIHS !
         </Text>
         <Text textAlign='center' color='$textDark300' size='sm'>
-          انشئ حساب  الان في FIHS لتتمتع بكامل المزايا المتوفرة في التطبيق!
+          انشئ حساب الان في FIHS لتتمتع بكامل المزايا المتوفرة في التطبيق!
         </Text>
       </View>
       <SafeAreaView

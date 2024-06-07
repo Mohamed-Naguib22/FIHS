@@ -13,7 +13,7 @@ const Dashboard = (props: Props) => {
     <VStack gap={"$5"} py={"$4"} p={"$3"}>
       {AdminPages.map((page) => {
         return (
-          <VStack gap={"$1"}>
+          <VStack key={page.name} gap={"$1"}>
             <Text fontSize={"$lg"} fontWeight='$bold'>
               {page.name}
             </Text>

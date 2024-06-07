@@ -65,7 +65,7 @@ const Disease = ({ disease }: { disease: Disease }) => {
         borderWidth: 1,
         marginVertical: 10,
       }}
-      onPress={() => router.push(`/(diseasesType)/(diseases)/${disease.id}`)}
+      onPress={() => router.push(`/(diseasesType)/diseases/${disease.id}`)}
     >
       <Image
       

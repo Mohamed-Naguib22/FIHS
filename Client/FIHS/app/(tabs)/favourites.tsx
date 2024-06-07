@@ -4,7 +4,7 @@ import TabsPageContainer from "@/components/layout/TabsPageContainer";
 import ScreenHeader from "@/components/layout/ScreenHeader";
 import { VStack } from "@gluestack-ui/themed";
 import FavouriteCard from "@/components/favourites/FavouriteCard";
-import { useFavourite } from "./../../../hooks/useFavourite";
+import { useFavourite } from "../../hooks/useFavourite";
 import useSession from "@/hooks/state/useSession";
 import Loading from "@/components/layout/Loading";
 import { Text, View } from "@gluestack-ui/themed";

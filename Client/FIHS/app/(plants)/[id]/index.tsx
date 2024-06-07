@@ -24,7 +24,7 @@ import CommentCard from "@/components/comments/CommentCard";
 import CommentForm from "@/components/comments/CommentForm";
 type Props = {};
 
-const Plant = () => {
+const PlantScreen = () => {
   const { id } = useLocalSearchParams();
   const navigate = useNavigation();
   const { favouriteId } = useSession();
@@ -97,7 +97,6 @@ const Plant = () => {
                 borderRadius={5}
                 // textAlign='center'
                 fontSize={16}
-                
                 fontWeight='600'
               >
                 {type.name}
@@ -116,9 +115,9 @@ const Plant = () => {
             {pt?.description}
           </Text>
         </VStack>
-          <Text fontSize={18} fontWeight='900' color='#000' mt={10} mr={3}>
-            خصائص النبات 
-          </Text>
+        <Text fontSize={18} fontWeight='900' color='#000' mt={10} mr={3}>
+          خصائص النبات
+        </Text>
 
         <HStack
           justifyContent='space-evenly'
@@ -126,9 +125,9 @@ const Plant = () => {
           gap={9}
           mt={8}
           pr={5}
-          borderColor="rgba(41, 133, 120,.3)"
+          borderColor='rgba(41, 133, 120,.3)'
           borderWidth={1}
-          bg="#fff"
+          bg='#fff'
           rounded={"$md"}
           p={10}
         >
@@ -195,8 +194,7 @@ const Plant = () => {
         </HStack>
         <VStack>
           <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
-            مواسم الزراعه والحصاد
-            {" "}
+            مواسم الزراعه والحصاد{" "}
           </Text>
           <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.plantingSeason} - {pt?.harvistingSeason}
@@ -204,8 +202,7 @@ const Plant = () => {
         </VStack>
         <VStack>
           <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
-            الاسمده
-            {" "}
+            الاسمده{" "}
           </Text>
           <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             سماد عضوي
@@ -214,7 +211,6 @@ const Plant = () => {
         <VStack>
           <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
             نوع التربه{" "}
-            {" "}
           </Text>
           <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.soils.map((soil) => soil.texture).join("، ")}
@@ -222,8 +218,7 @@ const Plant = () => {
         </VStack>
         <VStack>
           <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
-            القيمه الغذائيه
-            {" "}
+            القيمه الغذائيه{" "}
           </Text>
           <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.nutritionalValue}
@@ -231,8 +226,7 @@ const Plant = () => {
         </VStack>
         <VStack>
           <Text fontSize={18} fontWeight='900' color='#000' mt={20} mr={3}>
-            الاستخدامات
-            {" "}
+            الاستخدامات{" "}
           </Text>
           <Text fontSize={16} fontWeight='500' color='#000' mt={10} mr={3}>
             {pt?.commonUses}
@@ -268,7 +262,7 @@ const Plant = () => {
           })
         ) : (
           <View>
-            <Text textAlign="center">لا توجد تعليقات</Text>
+            <Text textAlign='center'>لا توجد تعليقات</Text>
           </View>
         )}
       </VStack>
@@ -279,7 +273,7 @@ const styles = StyleSheet.create({
   articlePhotoId: {
     width: "100%",
     height: 200,
-    marginTop:8,
+    marginTop: 8,
     // borderTopEndRadius:10,
     // borderTopStartRadius:10,
     borderRadius: 10,
@@ -297,4 +291,4 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 10,
   },
 });
-export default Plant;
+export default PlantScreen;

@@ -44,33 +44,32 @@ const Articles = (props: Props) => {
       </Text>
       </HStack> */}
       <ScrollView horizontal>
-
-      <HStack justifyContent='flex-end' mb={"$2"} alignItems='flex-start'>
-        <HStack gap={10} flexWrap='wrap'>
-          {topics?.map((topic) => (
-            <Text
-              key={topic.id}
-              bg='rgba(41, 133, 120,0.6)'
-              p={5}
-              borderRadius={7}
-              onPress={() => {
-                setIsArtsLoading(true);
-                getArticles.mutateAsync(
-                  { topic: topic.name!, amount: 10 },
-                  {
-                    onSuccess(data, variables, context) {
-                      setArticles(data);
-                      setIsArtsLoading(false);
-                    },
-                  }
-                );
-              }}
-            >
-              {topic.name}
-            </Text>
-          ))}
+        <HStack justifyContent='flex-end' mb={"$2"} alignItems='flex-start'>
+          <HStack gap={10} flexWrap='wrap'>
+            {topics?.map((topic) => (
+              <Text
+                key={topic.id}
+                bg='rgba(41, 133, 120,0.6)'
+                p={5}
+                borderRadius={7}
+                onPress={() => {
+                  setIsArtsLoading(true);
+                  getArticles.mutateAsync(
+                    { topic: topic.name!, amount: 10 },
+                    {
+                      onSuccess(data, variables, context) {
+                        setArticles(data);
+                        setIsArtsLoading(false);
+                      },
+                    }
+                  );
+                }}
+              >
+                {topic.name}
+              </Text>
+            ))}
+          </HStack>
         </HStack>
-      </HStack>
       </ScrollView>
       <ScrollView>
         <VStack my={"$3"} gap={10} alignSelf='flex-start'>
@@ -106,7 +105,7 @@ const Articles = (props: Props) => {
             })
           ) : (
             <View>
-              <Text fontWeight="$bold">إختار موضوع لعرض مقالاته</Text>
+              <Text fontWeight='$bold'>إختار موضوع لعرض مقالاته</Text>
             </View>
           )}
         </VStack>
@@ -114,3 +113,5 @@ const Articles = (props: Props) => {
     </View>
   );
 };
+
+export default Articles;

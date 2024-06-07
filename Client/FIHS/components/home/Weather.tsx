@@ -34,7 +34,11 @@ const Weather = () => {
           </Text>
         </VStack>
         <VStack gap={"$3"} justifyContent='center' alignItems='center'>
-          <Image source={weather?.icon} style={{ width: 100, height: 75 }} />
+          <Image
+            source={weather?.icon}
+            style={{ width: 100, height: 75 }}
+            alt='weather icon'
+          />
           <Text color='$white' fontSize={"$xl"} fontWeight='$bold'>
             {weather?.description}
           </Text>

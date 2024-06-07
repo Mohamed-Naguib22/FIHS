@@ -33,6 +33,7 @@ const LoginPage = (props: Props) => {
         width: "100%",
       }}
       source={require("@/assets/images/LoginBG.png")}
+      alt='background image'
     >
       <StatusBar style='light' />
       <View
@@ -199,7 +200,7 @@ const LoginPage = (props: Props) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                
+
                     {errors.password && (
                       <HStack gap={"$1"} my={"$1.5"} mx={"$3"}>
                         <Text size='xs' color='$textLight200'>

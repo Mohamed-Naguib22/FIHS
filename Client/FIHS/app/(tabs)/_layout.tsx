@@ -19,12 +19,12 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { imgUrl } = useSession();
+  const { imgUrl, firstName, lastName } = useSession();
   const segments = useSegments();
-  const noHeader = ["(scan)", "(profile)", "favourites", "diseases"];
+  const noHeader = ["(scan)", "profile", "favourites", "diseases"];
   return (
     <Tabs
-      initialRouteName='home/index'
+      initialRouteName='home'
       tabBar={segments[1] === "(scan)" ? () => <View /> : undefined}
       screenOptions={{
         tabBarStyle: {
@@ -52,9 +52,8 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}
     >
-   
-        <Tabs.Screen
-        name='(profile)'
+      <Tabs.Screen
+        name='profile'
         options={{
           title: "",
           tabBarIcon: ({ color }) =>
@@ -66,12 +65,12 @@ export default function TabLayout() {
                 alignSelf='center'
               >
                 <AvatarFallbackText></AvatarFallbackText>
-                <AvatarImage alt='يوسف محمد' source={imgUrl} />
+                <AvatarImage alt={firstName + " " + lastName} source={imgUrl} />
               </Avatar>
             ),
         }}
       />
-    
+
       <Tabs.Screen
         name='(scan)'
         options={{
@@ -91,7 +90,6 @@ export default function TabLayout() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            
           },
           tabBarIconStyle: {
             width: "100%",
@@ -100,8 +98,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Scan />,
         }}
       />
-       <Tabs.Screen
-        name='favourites/index'
+      <Tabs.Screen
+        name='favourites'
         options={{
           title: "",
           tabBarItemStyle: {
@@ -110,8 +108,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name='heart' color={color} />,
         }}
       />
-        <Tabs.Screen
-        name='diseases/index'
+      <Tabs.Screen
+        name='diseases'
         options={{
           title: "",
           tabBarItemStyle: {
@@ -121,16 +119,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name='leaf' color={color} />,
         }}
       />
-     
 
-    <Tabs.Screen
-            name='home/index'
-            options={{
-              title: "",
-              tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
-            }}
-          />
-    
+      <Tabs.Screen
+        name='home'
+        options={{
+          title: "",
+          tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
+        }}
+      />
     </Tabs>
   );
 }

@@ -27,6 +27,7 @@ export default function index() {
         width: "100%",
       }}
       source={require("@/assets/images/LoginBG.png")}
+      alt='background image'
     >
       <SafeAreaView
         style={{

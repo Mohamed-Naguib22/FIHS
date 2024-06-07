@@ -85,7 +85,7 @@ const AdminFertilizer = ({
         borderWidth: 1,
         marginVertical: 10,
       }}
-      onPress={() => router.push(`/(diseasesType)/(diseases)/${fertilizer.id}`)}
+      // onPress={() => router.push(`/fertilizers/${fertilizer.id}`)}
     >
       <Image
         style={styles.plantFertilizersImage}
