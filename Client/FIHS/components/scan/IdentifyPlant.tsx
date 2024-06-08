@@ -61,9 +61,9 @@ const PlantSuggest = ({ sugg }: { sugg: PlantSuggestion }) => {
     <VStack
       gap={"$1"}
       alignItems='flex-start'
-      bg='$backgroundDark200'
+      bgColor='#fff'
       p={"$2"}
-      rounded={"$sm"}
+      rounded={"$lg"}
     >
       <Image
         source={{ uri: sugg.imageUrl }}
@@ -108,7 +108,7 @@ const PlantSuggest = ({ sugg }: { sugg: PlantSuggestion }) => {
         </Text>
         <Link alignSelf='center' my={"$1"} href={sugg.wikiUrl}>
           <LinkText fontWeight='$bold' fontSize={"$lg"}>
-            عرض المزيد
+            الاطلاع علي المزيد
           </LinkText>
         </Link>
       </VStack>
