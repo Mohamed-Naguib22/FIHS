@@ -7,9 +7,9 @@ import {
   Button,
   ButtonText,
 } from "@gluestack-ui/themed";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
 import AutoFetching from "@/components/layout/AutoFetching";
@@ -17,6 +17,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { DeleteFertilizer, useFertilizers } from "@/hooks/useFertilizer";
 
 export default function AdminFertilizers() {
+  const navigate = useNavigation();
+  useEffect(() => {
+    navigate.setOptions({
+      title: "كل الاسمدة",
+    });
+  }, []);
   const {
     data: fertilizers,
     isLoading,

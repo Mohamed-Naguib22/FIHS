@@ -15,7 +15,7 @@ export default function UserAllPlantTypes() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = usePlantTypes(6);
+  } = usePlantTypes();
   if (isLoading && !types) {
     return <Loading />;
   }

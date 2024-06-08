@@ -70,7 +70,7 @@ const FavouriteCard = ({ plant, refresh }: Props) => {
           {plant.plant.name}
         </Text>
         <TouchableOpacity
-          onPress={() => router.push(`/(plants)/${plant.plant.id}`)}
+          onPress={() => router.push(`/plants/${plant.plant.id}`)}
         >
           <Text color='$textDark800'>مزيد من التفاصيل -{">"}</Text>
         </TouchableOpacity>

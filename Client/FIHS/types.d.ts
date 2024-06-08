@@ -84,11 +84,12 @@ type Plant = HasImage & {
     temperature: string,
     harvistingSeason: string,
     culivationTips: string,
-    imageUrl: string
+    imageUrl: string,
+    color: string,
+    scientificName: string
 }
 
 type FullPlant = Plant & {
-    color: string,
     isFav: boolean,
     plantTypes: PlantType[],
     soils: Soil[],

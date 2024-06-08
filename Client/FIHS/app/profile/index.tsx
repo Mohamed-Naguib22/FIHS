@@ -15,7 +15,7 @@ import { Logout } from "@/hooks/useLogin";
 type Panel = { name: string; icon: React.ReactNode; action: () => void };
 
 export default function ProfileScreen() {
-  const { imgUrl, firstName, lastName } = useSession();
+  const { imgUrl, firstName, lastName, roles } = useSession();
   const router = useRouter();
   const logout = Logout();
   const panels: Panel[] = [
@@ -56,10 +56,14 @@ export default function ProfileScreen() {
         <Text alignSelf='flex-end' fontWeight='$bold' px={"$6"} py={"$5"}>
           الخيارات
         </Text>
-        <VStack w={"$full"}  gap={"$3"} px={"$6"}>
-          {panels.map((panel) => (
-            <Panel key={panel.name} panel={panel} />
-          ))}
+        <VStack w={"$full"} gap={"$3"} px={"$6"}>
+          {panels.map((panel) =>
+            panel.name === "لوحة التحكم" && roles.includes("Admin") ? (
+              <Panel key={panel.name} panel={panel} />
+            ) : panel.name != "لوحة التحكم" ? (
+              <Panel key={panel.name} panel={panel} />
+            ) : null
+          )}
         </VStack>
       </VStack>
     </VStack>
@@ -72,7 +76,7 @@ const Panel = ({ panel }: { panel: Panel }) => {
       <HStack
         p={"$2"}
         alignItems='center'
-        justifyContent="flex-end"
+        justifyContent='flex-end'
         gap={"$3"}
         rounded={"$md"}
         bg='$backgroundDark200'
