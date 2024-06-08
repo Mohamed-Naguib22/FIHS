@@ -22,13 +22,27 @@ import useSession from "@/hooks/state/useSession";
 import useComments, { UpdateComment } from "@/hooks/useComment";
 import CommentCard from "@/components/comments/CommentCard";
 import CommentForm from "@/components/comments/CommentForm";
+import { useQuery } from "@tanstack/react-query";
+import { userApi } from "@/utils/api";
 type Props = {};
 
-const PlantScreen = () => {
+const UserPlantIDScreen = () => {
   const { id } = useLocalSearchParams();
   const navigate = useNavigation();
-  const { favouriteId } = useSession();
-  const { data: pt, isLoading, refetch } = usePlant(id as string);
+  const { favouriteId, token } = useSession();
+  const {
+    data: pt,
+    isLoading,
+    refetch,
+  } = useQuery<FullPlant>({
+    queryKey: ["plants", id],
+    queryFn: () =>
+      userApi(token)
+        .get<FullPlant>(`/Plant/GetPlantById/${id}?favId=${favouriteId}`)
+        .then((res) => {
+          return res.data;
+        }),
+  });
   const { data: comments, refetch: refetchComments } = useComments(
     +(id as string),
     "plant"
@@ -291,4 +305,4 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 10,
   },
 });
-export default PlantScreen;
+export default UserPlantIDScreen;

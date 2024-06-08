@@ -107,7 +107,6 @@ function RootLayoutNav(props: { token: string }) {
             >
               <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
               <Stack.Screen name='articles' options={{ headerShown: false }} />
-              <Stack.Screen name='(plants)' options={{ headerShown: false }} />
             </Stack>
             <Toast />
           </ThemeProvider>

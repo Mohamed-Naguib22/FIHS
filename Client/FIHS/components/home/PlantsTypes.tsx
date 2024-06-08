@@ -45,7 +45,7 @@ const PlantType = ({ type }: { type: PlantType }) => {
         borderColor: "rgba(41, 133, 120,0.4)",
         borderWidth: 1,
       }}
-      onPress={() => router.push(`/(plants)/types/${type.id}/`)}
+      onPress={() => router.push(`/plant-types/${type.id}`)}
     >
       <Image
         style={styles.PlantsTypesImage}

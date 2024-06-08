@@ -135,7 +135,7 @@ const TabsHeader = () => {
             return (
               <TouchableOpacity
                 key={plant.id}
-                onPress={() => router.push(`/(plants)/${plant.id}`)}
+                onPress={() => router.push(`/(user-plants)/types`)}
               >
                 <HStack
                   bg='$backgroundDark200'
