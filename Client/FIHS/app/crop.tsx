@@ -11,8 +11,10 @@ import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { StyleSheet, Modal } from "react-native";
+import { StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
+import { useRouter } from "expo-router";
+
 import {
   CropRecommendation,
   CropRecommendationSchema,
@@ -26,6 +28,8 @@ import Loading from "@/components/layout/Loading";
 import Toast from "react-native-toast-message";
 
 export default function crop() {
+  const router = useRouter();
+
   const [isMFocus, setIsMFocus] = useState(false);
   const [isCFocus, setIsCFocus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -342,8 +346,8 @@ export default function crop() {
       <Modal visible={isModalVisible} animationType='slide'>
         <View
           flex={1}
-          backgroundColor='rgba(41, 133, 120,0.6)'
-          padding={50}
+          backgroundColor='#F9F9F9'
+          padding={20}
           borderTopEndRadius={30}
           borderTopStartRadius={30}
         >
@@ -352,7 +356,7 @@ export default function crop() {
               mt={20}
               w={60}
               h={"$12"}
-              backgroundColor='$white'
+              backgroundColor='rgba(41, 133, 120,0.6)'
               mb={20}
               borderBottomStartRadius={10}
               borderTopEndRadius={10}
@@ -361,26 +365,61 @@ export default function crop() {
                 setIsModalVisible(false);
               }}
             >
-              <ButtonText color='#000'>X</ButtonText>
+              <ButtonText color='#fff'>X</ButtonText>
             </Button>
             <Text
               textAlign='center'
               fontWeight='$bold'
               size='lg'
-              color='$white'
+              color='$000'
             >
               نتائج الاقتراح
             </Text>
           </HStack>
-          <VStack gap={20}>
+          <VStack  gap={20}>
             {crops.map(({ crop, probability }, i) => {
               return (
-                <View key={crop}>
-                  <Text color='$white'>المحصول المقترح :{crop}</Text>
-                  <Text color='$white'>نسبه التوقع :{probability}%</Text>
-                </View>
+                <VStack  bg="#fff" borderColor="#298578" borderWidth={2} rounded={"$md"} p={10}   key={crop}>
+                  <Text  color='$#000'
+                  >
+                    <Text fontWeight="$semibold">
+                      المحصول:
+                      </Text> {crop}</Text>
+                  <Text color='$#000'
+                  >
+                    <Text fontWeight="$semibold">
+                    نسبه اقتراحه:
+                      </Text> {probability *100}%</Text>
+                </VStack>
               );
             })}
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => router.push(`/(tabs)/home` as any)}
+
+              
+            >
+              <View
+              // flex={1}
+              justifyContent="center"
+              alignItems="center"
+              >
+
+              <Text
+                py={10}
+                bg='rgba(41, 133, 120,0.6)'
+                color="#fff"
+              w={140}
+              // h={60}
+              p={2}
+              rounded={'$md'}
+             textAlign="center"
+              >
+                الصفحه الرئيسيه
+              </Text>
+                </View>
+
+            </TouchableOpacity>
           </VStack>
         </View>
       </Modal>
