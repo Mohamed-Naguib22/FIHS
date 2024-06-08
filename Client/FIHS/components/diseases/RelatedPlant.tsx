@@ -17,7 +17,7 @@ export const RelatedPlant = ({ plant }: { plant: Plant }) => {
         marginRight: 5,
         marginVertical: 1,
       }}
-      onPress={() => router.push(`/(plants)/${plant.id}`)}
+      onPress={() => router.push(`/plants/${plant.id}`)}
     >
       <Image
         style={styles.similar}

@@ -8,7 +8,7 @@ import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
 import AutoFetching from "@/components/layout/AutoFetching";
 
-export default function AllPlantTypes() {
+export default function UserAllPlantTypes() {
   const {
     data: types,
     isLoading,
@@ -64,7 +64,7 @@ const PlantType = ({ type }: { type: PlantType }) => {
         borderColor: "rgba(41, 133, 120,0.4)",
         borderWidth: 1,
       }}
-      onPress={() => router.push(`/(plants)/types/${type.id}`)}
+      onPress={() => router.push(`/plant-types/${type.id}`)}
     >
       <Image
         style={styles.PlantsTypesImage}

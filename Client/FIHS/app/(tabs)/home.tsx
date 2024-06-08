@@ -16,7 +16,7 @@ export default function TabOneScreen() {
     <TabsPageContainer>
       <Weather />
       <ArticleCard />
-      <Section name='أنواع النباتات' link='/(plants)/types' swipe={false}>
+      <Section name='أنواع النباتات' link='/plant-types/' swipe={false}>
         <PlantsTypes />
       </Section>
     </TabsPageContainer>
