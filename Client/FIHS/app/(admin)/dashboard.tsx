@@ -19,8 +19,7 @@ const Dashboard = (props: Props) => {
             </Text>
             <VStack gap={"$1"}>
               <Button
-              bg="#fff"
-
+                bg='#fff'
                 onPress={() => router.push(`/(admin)/${page.link}` as any)}
                 justifyContent='flex-end'
                 size='sm'
@@ -36,7 +35,7 @@ const Dashboard = (props: Props) => {
                 </ButtonText>
               </Button>
               <Button
-              bg="#fff"
+                bg='#fff'
                 onPress={() => router.push(`/(admin)/${page.link}/new` as any)}
                 justifyContent='flex-end'
                 size='sm'
@@ -55,6 +54,45 @@ const Dashboard = (props: Props) => {
           </VStack>
         );
       })}
+      <VStack gap={"$1"}>
+        <Text fontSize={"$lg"} fontWeight='$bold'>
+          المقالات
+        </Text>
+        <VStack gap={"$1"}>
+          <Button
+            bg='#fff'
+            onPress={() => router.push(`/(admin)/articles-topics`)}
+            justifyContent='flex-end'
+            size='sm'
+          >
+            <ButtonText>
+              <HStack gap={"$2.5"}>
+                <Text color='#298578' fontWeight='$bold'>
+                  {" "}
+                  كل مواضيع المقالات
+                </Text>
+                <Ionicons name='grid' size={18} color={"#298578"} />
+              </HStack>
+            </ButtonText>
+          </Button>
+          <Button
+            bg='#fff'
+            onPress={() => router.push(`/(admin)/articles-topics/new` as any)}
+            justifyContent='flex-end'
+            size='sm'
+          >
+            <ButtonText>
+              <HStack gap={"$2.5"} alignItems='center'>
+                <Text color='#298578' fontWeight='$bold'>
+                  إضافة موضوع جديد
+                </Text>
+                <Ionicons name='add-circle' size={18} color={"#298578"} />
+              </HStack>
+            </ButtonText>
+            <ButtonText></ButtonText>
+          </Button>
+        </VStack>
+      </VStack>
     </VStack>
   );
 };

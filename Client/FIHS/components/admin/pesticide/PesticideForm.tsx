@@ -5,7 +5,7 @@ import { HStack } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import { useNavigation, useRouter } from "expo-router";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormInput from "../FormInput";
 import {
   PesticideSchema,
@@ -22,9 +22,11 @@ const PesticideForm = ({ initial }: Props) => {
   const router = useRouter();
   const postPesticide = PostPesticide();
   const updatePesticide = UpdatePesticide();
-  navigate.setOptions({
-    title: initial?.id ? `تعديل مبيد ${initial.name}` : "مبيد جديد",
-  });
+  useEffect(() => {
+    navigate.setOptions({
+      title: initial?.id ? `تعديل مبيد ${initial.name}` : "مبيد جديد",
+    });
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
   return (
     <ScrollView flex={1}>
@@ -84,7 +86,7 @@ const PesticideForm = ({ initial }: Props) => {
               />
               <FormInput<TPesticideForm> field='name' name='الإسم' />
               <FormInput<TPesticideForm> field='manufactuer' name='المُصنع' />
-              <FormInput<TPesticideForm> field='type' name='النوع' />ؤ
+              <FormInput<TPesticideForm> field='type' name='النوع' />
               <FormInput<TPesticideForm>
                 field='description'
                 name='الوصف'

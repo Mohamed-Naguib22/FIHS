@@ -26,6 +26,8 @@ export const usePlants = (id: string, amount: number = 10) => useInfiniteQuery<P
     getNextPageParam: (lastPage) => lastPage.nextPage > 0 ? lastPage.nextPage : null
 })
 
+export type TPostPlantForm = Omit<{ [K in keyof Plant as Capitalize<K>]: Plant[K] }, 'Id' | 'ImageUrl' | 'ImgUrl'> & { PlantTypesId: string, SoilsId: string, ImgFile: any }
+
 export const PostPlant = () => {
     const { token } = useSession()
     let localRt = storage.load<string>({
@@ -34,13 +36,13 @@ export const PostPlant = () => {
     const queryClient = useQueryClient()
     const refresh = RefreshToken()
     return useMutation({
-        mutationFn: async (data: Omit<{ [K in keyof Plant as Capitalize<K>]: Plant[K] }, 'Id'> & { PlantTypesId: string, SoilsId: string }) => {
+        mutationFn: async (data: TPostPlantForm) => {
             const fd = new FormData()
             Object.keys(data).map((k) => {
                 if (k === 'ImgFile') {
                     fd.append("ImgFile", ConvertImg((data[(k as keyof typeof data)] as string) as unknown as ImagePickerAsset) as any)
-                } else {
-                    fd.append(k, data[(k as keyof typeof data)] as string)
+                } else if (k === 'PlantTypesId') { fd.append(k, `${[data[(k as keyof typeof data)] as string]}`) } else {
+                    fd.append(k, `${data[(k as keyof typeof data)]}`)
                 }
             })
             return userApi(token, await localRt).post(`/Plant/AddPlant`, fd, { headers: { "Content-Type": "multipart/form-data" } }).then((res) => {
@@ -96,12 +98,12 @@ export const DeletePlant = () => {
 
 
 
-export const useAllPlantTypes = useQuery<PlantType[]>({
+export const useAllPlantTypes = () => useQuery<PlantType[]>({
     queryKey: ['all-plant-types'],
     queryFn: () => api.get<PlantType[]>(`/Plant/AllPlantTypes`).then((res) => res.data)
 })
 
-export const useSoils = useQuery<Soil[]>({
+export const useSoils = () => useQuery<Soil[]>({
     queryKey: ['soils'],
     queryFn: () => api.get<Soil[]>(`/Plant/AllSoils`).then((res) => res.data)
 })

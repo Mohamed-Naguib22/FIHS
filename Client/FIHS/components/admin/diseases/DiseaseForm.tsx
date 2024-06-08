@@ -6,7 +6,7 @@ import { HStack } from "@gluestack-ui/themed";
 import { FormControl } from "@gluestack-ui/themed";
 import { useNavigation, useRouter } from "expo-router";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PostDisease, UpdateDisease } from "@/hooks/useDisease";
 import FormInput from "../FormInput";
 
@@ -19,9 +19,12 @@ const DiseaseForm = ({ initial }: Props) => {
   const router = useRouter();
   const postDisease = PostDisease();
   const updateDisease = UpdateDisease();
-  navigate.setOptions({
-    title: initial?.id ? `تعديل مرض ${initial.name}` : "مرض جديد",
-  });
+  useEffect(() => {
+    navigate.setOptions({
+      title: initial?.id ? `تعديل مرض ${initial.name}` : "مرض جديد",
+    });
+  }, []);
+
   const [isLoading, setIsLoading] = useState(false);
   return (
     <ScrollView flex={1}>

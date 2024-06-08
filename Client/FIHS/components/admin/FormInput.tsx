@@ -24,7 +24,7 @@ function FormInput<T>({
 }: {
   name: string;
   field: keyof T;
-  type?: "text" | "textare" | "image";
+  type?: "text" | "textare" | "image" | "number";
 }) {
   const { setFieldValue, handleBlur, values, errors } = useFormikContext<T>();
   const pickImage = async () => {
@@ -84,7 +84,8 @@ function FormInput<T>({
           isReadOnly={false}
         >
           <InputField
-            type={"text"}
+            keyboardType={type === "number" ? "number-pad" : undefined}
+            type={type === "text" ? "text" : undefined}
             textAlign={"right"}
             direction='rtl'
             onChangeText={(e) => setFieldValue(field as string, e) as any}

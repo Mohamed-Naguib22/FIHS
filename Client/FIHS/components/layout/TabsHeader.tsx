@@ -30,7 +30,21 @@ const TabsHeader = () => {
   }, [isTop]);
   const { name } = useTabsHeaderName();
   const search = useSearch();
+  const [searchVal, setSearchVal] = useState("");
   const [resaults, setResaults] = useState<FullPlant[]>([]);
+  useEffect(() => {
+    search.mutate(
+      { term: searchVal },
+      {
+        onSuccess(data, variables, context) {
+          setResaults(data);
+        },
+        onError(error, variables, context) {
+          setResaults([]);
+        },
+      }
+    );
+  }, [searchVal]);
   return (
     <MotiView
       transition={{ type: "spring", damping: 50, delay: isTop ? 150 : 200 }}
@@ -93,19 +107,8 @@ const TabsHeader = () => {
                   borderColor='$primary500'
                   direction='rtl'
                   placeholder='بحث'
-                  onChangeText={(e) =>
-                    search.mutate(
-                      { term: e },
-                      {
-                        onSuccess(data, variables, context) {
-                          setResaults(data);
-                        },
-                        onError(error, variables, context) {
-                          setResaults([]);
-                        },
-                      }
-                    )
-                  }
+                  value={searchVal}
+                  onChangeText={(e) => setSearchVal(e)}
                 />
                 <InputSlot backgroundColor='$white'>
                   <Feather
@@ -135,7 +138,11 @@ const TabsHeader = () => {
             return (
               <TouchableOpacity
                 key={plant.id}
-                onPress={() => router.push(`/(user-plants)/types`)}
+                onPress={() => {
+                  setResaults([]);
+                  setSearchVal("");
+                  router.push(`/plants/${plant.id}`);
+                }}
               >
                 <HStack
                   bg='$backgroundDark200'

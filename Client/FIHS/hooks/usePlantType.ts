@@ -26,7 +26,7 @@ export const usePlantTypesStatic = (amount: number = 6) => useQuery<Paginate<Pla
     queryFn: () => api.get<Paginate<PlantType, 'plantTypes'>>(`/PlantType/GetAllPlantTypes?offset=1&limit=${amount}`).then((res) => res.data),
 })
 
-
+export type TPostPlantType = Omit<{ [K in keyof PlantType as K extends 'imgURL' ? 'Image' : Capitalize<K>]: PlantType[K] }, 'Id'>
 export const PostPlantType = () => {
     const { token } = useSession()
     let localRt = storage.load<string>({
@@ -35,7 +35,7 @@ export const PostPlantType = () => {
     const queryClient = useQueryClient()
     const refresh = RefreshToken()
     return useMutation({
-        mutationFn: async (data: Omit<{ [K in keyof PlantType as K extends 'imgURL' ? 'Image' : Capitalize<K>]: PlantType[K] }, 'Id'>) => {
+        mutationFn: async (data: TPostPlantType) => {
             const fd = new FormData()
             Object.keys(data).map((k) => {
                 if (k === 'Image') {

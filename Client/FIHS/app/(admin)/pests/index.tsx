@@ -1,7 +1,7 @@
 import { Text, VStack, View, Image } from "@gluestack-ui/themed";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { DeletePest, usePests } from "@/hooks/usePest";
 import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
@@ -14,6 +14,12 @@ import { FontAwesome } from "@expo/vector-icons";
 type Props = {};
 
 const Peats = (props: Props) => {
+  const navigate = useNavigation();
+  useEffect(() => {
+    navigate.setOptions({
+      title: "كل الأفات",
+    });
+  }, []);
   const {
     data: pests,
     isLoading,

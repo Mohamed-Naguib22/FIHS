@@ -10,29 +10,28 @@ import {
 import React, { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
-import { DeleteDisease, useDiseases } from "@/hooks/useDisease";
 import Loading from "@/components/layout/Loading";
 import SmallCardContainer from "@/components/layout/SmallCardContainer";
 import AutoFetching from "@/components/layout/AutoFetching";
 import { FontAwesome } from "@expo/vector-icons";
+import { DeletePlantType, usePlantTypes } from "@/hooks/usePlantType";
 
-export default function AdminDiseases() {
+export default function AdminPlantTypes() {
   const navigate = useNavigation();
   useEffect(() => {
     navigate.setOptions({
-      title: "كل الامراض",
+      title: "كل انواع النباتات",
     });
   }, []);
 
   const {
-    data: diseases,
+    data: types,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useDiseases();
-
-  if (isLoading && !diseases) {
+  } = usePlantTypes();
+  if (isLoading && !types) {
     return <Loading />;
   }
 
@@ -44,14 +43,12 @@ export default function AdminDiseases() {
     >
       <View py={"$6"} px={"$2"}>
         <Text mt={10} mb={10} mx={10} fontWeight='900' fontSize={"$lg"}>
-          الأمراض
+          انواع النباتات
         </Text>
         <SmallCardContainer>
-          {diseases?.pages.map((page) =>
-            page.diseases.map((disease, i, arr) => {
-              return (
-                <AdminDisease key={disease.id} disease={disease} admin={true} />
-              );
+          {types?.pages?.map((page) =>
+            page.plantTypes.map((type) => {
+              return <AdminPlantType key={type.id} type={type} />;
             })
           )}
         </SmallCardContainer>
@@ -67,15 +64,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const AdminDisease = ({
-  disease,
-  admin,
-}: {
-  disease: Disease;
-  admin: boolean;
-}) => {
+const AdminPlantType = ({ type }: { type: PlantType }) => {
   const router = useRouter();
-  const deleteDisease = DeleteDisease();
+  const deletePlantType = DeletePlantType();
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -88,51 +79,46 @@ const AdminDisease = ({
         borderWidth: 1,
         marginVertical: 10,
       }}
-      onPress={() => router.push(`/(diseasesType)/diseases/${disease.id}`)}
+      onPress={() => router.push(`/(admin)/plantTypes/${type.id}`)}
     >
       <Image
         style={styles.plantDiseasesImage}
-        source={disease.imageUrl}
-        alt={disease.name}
+        source={type.imgURL}
+        alt={type.name}
       />
       <VStack justifyContent='center' alignItems='flex-end' pr={6} py={"$1"}>
-        <Text fontSize={"$xs"} textAlign='center' color='#000' pt={6}>
-          {disease.species}
-        </Text>
         <Text fontSize={"$sm"} textAlign='center' color='#000' fontWeight='700'>
-          {disease.name}
+          {type.name}
         </Text>
       </VStack>
-      {admin && (
-        <HStack>
-          <Button
-            action='primary'
-            size='sm'
-            borderTopRightRadius={0}
-            borderTopLeftRadius={0}
-            borderBottomRightRadius={0}
-            onPress={() => router.push(`/(admin)/diseases/${disease.id}`)}
-          >
-            <ButtonText>
-              <FontAwesome name='pencil' size={16} />
-              تعديل
-            </ButtonText>
-          </Button>
-          <Button
-            action='negative'
-            size='sm'
-            borderTopRightRadius={0}
-            borderTopLeftRadius={0}
-            borderBottomLeftRadius={0}
-            onPress={() => deleteDisease.mutate({ id: disease.id })}
-          >
-            <ButtonText>
-              <FontAwesome name='trash' size={16} />
-              حذف
-            </ButtonText>
-          </Button>
-        </HStack>
-      )}
+      <HStack>
+        <Button
+          action='primary'
+          size='sm'
+          borderTopRightRadius={0}
+          borderTopLeftRadius={0}
+          borderBottomRightRadius={0}
+          disabled={true}
+        >
+          <ButtonText>
+            <FontAwesome name='pencil' size={16} />
+            تعديل
+          </ButtonText>
+        </Button>
+        <Button
+          action='negative'
+          size='sm'
+          borderTopRightRadius={0}
+          borderTopLeftRadius={0}
+          borderBottomLeftRadius={0}
+          onPress={() => deletePlantType.mutate({ id: type.id })}
+        >
+          <ButtonText>
+            <FontAwesome name='trash' size={16} />
+            حذف
+          </ButtonText>
+        </Button>
+      </HStack>
     </TouchableOpacity>
   );
 };
