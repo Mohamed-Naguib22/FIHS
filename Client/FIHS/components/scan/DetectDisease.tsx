@@ -56,40 +56,34 @@ export default DetectDisease;
 
 const DiseaseSuggest = ({ dis }: { dis: DiseaseSuggestion }) => {
   return (
-    <VStack
-      gap={"$1"}
-      alignItems='flex-start'
-      bg='$backgroundDark200'
-      p={"$2"}
-      rounded={"$sm"}
-    >
-      <Text>
-        <Text fontWeight='$bold' fontSize={"$lg"}>
-          إسم المرض :
-        </Text>{" "}
-        {dis.name}
-      </Text>
-      <Text>
-        <Text fontWeight='$bold' fontSize={"$lg"}>
-          الإسم العلمي :
-        </Text>{" "}
-        {dis.scientificName}
-      </Text>
-      <Text>
-        <Text fontWeight='$bold' fontSize={"$lg"}>
-          الإحتمالية :
-        </Text>{" "}
-        {dis.probability}
-      </Text>
-      <Text>
-        <Text fontWeight='$bold' fontSize={"$lg"}>
-          الوصف :
-        </Text>{" "}
-        {dis.description}
-      </Text>
-      {dis?.treatment?.prevention && dis?.treatment?.prevention.length > 0 && (
-        <VStack>
+    <VStack gap={"$1"} alignItems='flex-end' bg='#fff' p={"$2"} rounded={"$lg"}>
+      <VStack mt={5} gap={6} mb={10}>
+        <Text>
           <Text fontWeight='$bold' fontSize={"$lg"}>
+            إسم المرض :
+          </Text>{" "}
+          {dis.name}
+        </Text>
+        <Text>
+          <Text fontWeight='$bold' fontSize={"$lg"}>
+            الإسم العلمي :
+          </Text>{" "}
+          {dis.scientificName}
+        </Text>
+        <Text>
+          <Text fontWeight='$bold' fontSize={"$lg"}>
+            الإحتمالية :
+          </Text>{" "}
+          {dis.probability}
+        </Text>
+      </VStack>
+      <Text fontWeight='$bold' fontSize={"$lg"}>
+        الوصف :
+      </Text>
+      <Text> {dis.description}</Text>
+      {dis?.treatment?.prevention && dis?.treatment?.prevention.length > 0 && (
+        <VStack my={10}>
+          <Text my={10} fontWeight='$bold' fontSize={"$lg"}>
             طرق الوقاية :
           </Text>
           <VStack gap={"$2"} p={"$1"}>
@@ -100,8 +94,8 @@ const DiseaseSuggest = ({ dis }: { dis: DiseaseSuggestion }) => {
         </VStack>
       )}
       {dis?.treatment?.biological && dis?.treatment?.biological.length > 0 && (
-        <VStack justifyContent='flex-start'>
-          <Text fontWeight='$bold' fontSize={"$lg"}>
+        <VStack my={10} justifyContent='flex-start'>
+          <Text my={10} fontWeight='$bold' fontSize={"$lg"}>
             طرق العلاج البيولوجية :
           </Text>
           <VStack gap={"$2"} p={"$1"}>
@@ -112,8 +106,8 @@ const DiseaseSuggest = ({ dis }: { dis: DiseaseSuggestion }) => {
         </VStack>
       )}
       {dis?.treatment?.chemical && dis?.treatment?.chemical.length > 0 && (
-        <VStack justifyContent='flex-start'>
-          <Text fontWeight='$bold' fontSize={"$lg"}>
+        <VStack my={10} justifyContent='flex-start'>
+          <Text my={10} fontWeight='$bold' fontSize={"$lg"}>
             طرق العلاج الكيميائية :
           </Text>
           <VStack gap={"$2"} p={"$1"}>
